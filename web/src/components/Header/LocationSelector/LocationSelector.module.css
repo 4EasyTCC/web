@@ -1,0 +1,138 @@
+.locationSelector {
+  position: relative;
+  transition: var(--transition);
+}
+
+.locationDropdown {
+  display: flex;
+  align-items: center;
+  background-color: var(--white);
+  border-radius: 30px;
+  padding: 0.5rem 1rem;
+  transition: var(--transition);
+  box-shadow: var(--shadow);
+}
+
+.locationSelector.default .locationDropdown {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.locationSelector.default .locationDropdown:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.locationIcon {
+  width: 18px;
+  height: 18px;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+}
+
+.locationSelector.default .locationIcon,
+.locationSelector.default .dropdownIcon {
+  fill: var(--white);
+}
+
+.locationSelector:not(.default) .locationIcon,
+.locationSelector:not(.default) .dropdownIcon {
+  fill: var(--primary-color);
+}
+
+.locationSelect {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0.5rem 1.5rem 0.5rem 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  min-width: 180px;
+  color: inherit;
+  outline: none;
+}
+
+.locationSelector.default .locationSelect {
+  color: var(--white);
+}
+
+.locationSelector:not(.default) .locationSelect {
+  color: var(--text-color);
+}
+
+.locationSelect option {
+  color: var(--text-color);
+  background: var(--white);
+}
+
+.dropdownIcon {
+  position: absolute;
+  right: 12px;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.locationSelector.filter {
+  width: auto;
+  min-width: 200px;
+}
+
+.locationSelector.filter .locationDropdown {
+  background-color: var(--white);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.locationSelector.filter .locationSelect {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  min-width: 180px;
+}
+
+.locationSelector.filter .locationIcon {
+  fill: var(--primary-color);
+}
+
+.locationSelector.filter .dropdownIcon {
+  fill: var(--text-light);
+}
+
+/* Variant styles */
+.locationSelector.menu {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.locationSelector.menu .locationDropdown {
+  width: 100%;
+  border-radius: 8px;
+  background-color: var(--white);
+  padding: 0.8rem 1rem;
+}
+
+.locationSelector.menu .locationSelect {
+  width: 100%;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .locationDropdown {
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .locationSelect {
+    min-width: 140px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .locationSelector:not(.menu) {
+    display: none;
+  }
+  
+  .locationSelector.menu {
+    display: block;
+  }
+}

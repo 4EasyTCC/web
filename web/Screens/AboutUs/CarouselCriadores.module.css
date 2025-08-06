@@ -1,0 +1,98 @@
+.carouselContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 85vh;
+  margin: 0 auto;
+  max-height: fit-content;
+
+}
+
+.carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 50vh;  
+
+}
+
+.slide {
+  position: absolute;
+  transition: all 0.5s ease;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.slide img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.slideInfo {
+  padding: 15px;
+  background: white;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.slideInfo h3 {
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.slideInfo p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9em;
+}
+
+.centerSlide {
+  transform: translateX(0) scale(1);
+  z-index: 10;
+  opacity: 1;
+  width: 30vh;
+  height: 40vh;
+}
+
+.leftSlide {
+  transform: translateX(-80%) scale(0.8);
+  opacity: 0.6;
+  z-index: 1;
+  filter: blur(1px);
+}
+
+.rightSlide {
+  transform: translateX(80%) scale(0.8);
+  opacity: 0.6;
+  z-index: 1;
+  filter: blur(1px);
+}
+
+.navButton {
+  background: #634b98; /* Cor normal */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  padding: 0;
+  z-index: 20;
+}
+
+.navButton:hover {
+  background: #ffffff;
+  color: #ae00ff;
+}

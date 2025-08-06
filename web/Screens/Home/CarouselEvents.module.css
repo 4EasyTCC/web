@@ -1,0 +1,185 @@
+.carouselWrapper {
+  width: 100%;
+  padding: 80px 0 40px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.carouselContainer {
+  position: relative;
+  width: 100%;
+  height: clamp(300px, 30vw, 450px);
+  margin-bottom: 40px;
+  /* Adicione estas linhas: */
+  display: flex;
+  justify-content: center;
+  perspective: 1000px; /* Adiciona profundidade 3D */
+}
+
+
+.slide {
+  position: absolute;
+  top: 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); /* Suavização melhorada */
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  will-change: transform;
+}
+
+.eventImage {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.eventImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.slide[style*="scale(1.1)"] .eventImage img {
+  transform: scale(1.05);
+}
+
+/* Descrição do evento atual */
+.currentEventInfo {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.currentEventInfo h3 {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  margin: 0 0 15px 0;
+  color: #333;
+}
+
+.currentEventInfo .artist {
+  font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+  color: #666;
+  margin: 0 0 20px 0;
+}
+
+.eventDetails {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  font-size: clamp(0.9rem, 1.4vw, 1.2rem);
+  color: #888;
+}
+
+/* Setas customizadas */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4vw;
+  background: #1400b4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  border: none;
+  cursor: pointer;
+  z-index: 30;
+  transition: all 0.3s ease;
+}
+
+.arrow:hover {
+  background: #0d0080;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.arrow svg {
+  width: 24px;
+  height: 24px;
+}
+
+.arrowPrev {
+  left: 5%;
+}
+
+.arrowNext {
+  right: 5%;
+}
+
+/* Dots de navegação */
+.dotsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 30px 0;
+  z-index: 10;
+}
+
+.dot {
+  width: clamp(5px, 0.6vw, 7px);
+  height: clamp(5px, 0.6vw, 7px)  ;
+  border-radius: 50%;
+  background-color: #ccc;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.dot:hover {
+  background-color: #aaa;
+}
+
+.activeDot {
+  background-color: #1400b4;
+  transform: scale(1.3);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .carouselWrapper {
+    padding: 60px 0 30px;
+  }
+  
+  .carouselContainer {
+    height: 250px;
+    margin-bottom: 30px;
+  }
+  
+  .arrow {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .arrow svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .arrowPrev {
+    left: 3%;
+  }
+  
+  .arrowNext {
+    right: 3%;
+  }
+  
+  .currentEventInfo {
+    padding: 0 20px;
+  }
+  
+  .eventDetails {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .dotsContainer {
+    margin: 20px 0;
+  }
+}

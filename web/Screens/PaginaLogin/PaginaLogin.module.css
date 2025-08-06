@@ -1,0 +1,250 @@
+* {
+  padding: 0 auto;
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2vh;
+  min-height: 80vh; /* Altura mínima da viewport */
+  margin-bottom: 2vh;
+}
+.pattern {
+  opacity: 0.8;
+}
+
+.pageContainer {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.pageContainer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("../../src/assets/images/placeholders/pattern.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2; /* ajuste a opacidade aqui (0 a 1) */
+  z-index: -1; /* coloca atrás do conteúdo */
+}
+
+.loginWrapper {
+  display: flex;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+  max-width: 800px;
+}
+.logoImage {
+  max-width: 180px; /* Ajuste este valor conforme necessário */
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.logoSide {
+  width: 40%;
+  background: linear-gradient(135deg, #1400b4 0%, #09004e 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logoPlaceholder {
+  width: 100%;
+  max-width: 200px;
+  aspect-ratio: 1/1;
+  background: linear-gradient(135deg, #1400b4 0%, #09004e 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+  font-size: 1.2rem;
+}
+
+.loginContainer {
+  width: 60%;
+  margin: 1em;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  padding-top: 2vh;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: bold;
+}
+
+.formGroup input[type="email"],
+.formGroup input[type="password"] {
+  width: 100%;
+  height: 2em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background-color: #f6f6f6;
+  color: black;
+}
+
+.options {
+  display: flex;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.leftOptions {
+  display: flex;
+  box-sizing: border-box;
+  gap: 14em;
+  justify-content: space-between;
+}
+
+.rememberMe {
+  display: flex;
+  align-items: center;
+  color: #65558f;
+}
+
+.rememberMe input {
+  margin-right: 0.5rem;
+}
+
+.forgotPassword {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: bold;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.forgotPassword:hover {
+  text-decoration: underline;
+}
+
+.registerContainer {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #65558f;
+}
+
+.registerLink {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: bold;
+  background-color: white;
+}
+
+.registerLink:hover {
+  text-decoration: underline;
+}
+
+.loginButton {
+  width: 100%;
+
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.loginButton:hover {
+  background-color: #0052a3;
+}
+
+/*Parte Mobile*/
+
+@media (max-width: 768px) {
+  * {
+    padding: 0 auto !important;
+  }
+
+  .pageContainer {
+    background-attachment: scroll; /* Melhora performance em mobile */
+    background-size: contain; /* Alternativa para padrões pequenos */
+  }
+
+  .loginWrapper {
+    flex-direction: column;
+    max-width: 100%;
+    margin: 0 15px;
+  }
+
+  .logoSide {
+    width: 100%;
+
+    background: linear-gradient(135deg, #1400b4 0%, #09004e 100%);
+  }
+
+  .logoImage {
+    max-width: 120px;
+  }
+
+  .loginContainer {
+    width: 100%;
+    margin: 0;
+    padding: 30px;
+    box-sizing: border-box;
+  }
+
+  .options {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .leftOptions {
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  .forgotPassword {
+    text-align: right;
+  }
+
+  .rememberMe {
+    font-size: 0.85rem;
+  }
+
+  .formGroup input[type="email"],
+  .formGroup input[type="password"] {
+    font-size: 0.9rem;
+  }
+
+  .loginButton {
+    font-size: 0.9rem;
+  }
+}
+
+.errorMessage {
+  color: #ff3333;
+  background-color: #ffebeb;
+  padding: 10px 15px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ff9999;
+  text-align: center;
+  font-size: 0.9rem;
+}

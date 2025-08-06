@@ -1,0 +1,156 @@
+.eventsSection {
+  position: relative;
+  z-index: 1;
+  margin-top: calc(-1 * var(--header-scrolled-height));
+  padding-top: var(--header-scrolled-height);
+}
+
+.homeContainer {
+  position: relative;
+  z-index: 1;
+  margin-top: -50px; /* Ajuste conforme necessário */
+  padding-top: 50px;
+}
+.container {
+  max-width: 100%;
+  padding: 20px;
+  text-align: center;
+}
+.secondPart{
+  background-color: rgb(243, 243, 243);
+  width: 100%;
+  height: auto;
+  text-align: center;
+  justify-content: center;
+}
+.carouselWrapper {
+  margin: 30px 0;
+}
+
+.title {
+  color: black;
+  margin-bottom: 20px;
+}
+
+.button {
+  margin-top: 30px;
+  padding: 10px 20px;
+  background-color: #1400b4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  
+}
+.subtitle {
+  color: rgb(0, 0, 0);
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.featureSection {
+  align-items: center;
+  background-color: rgba(88, 71, 227, 0.4);
+  width: 60%;
+  align-self: center;
+  border-radius: 30px 30px;
+  padding: 20px;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  
+}
+
+.featureContent, .featureContent2 {
+  width: 80%;
+  text-align: center;
+  flex:50%;
+  align-self: center;
+}
+
+.featureIcon2 {
+  width: 20em;
+  height: auto;
+  margin-bottom: 20px;
+  
+}
+
+
+
+.mainTitle {
+  color: #2816b2;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.subTitle {
+  color: #2816b2;
+  font-size: 1.8rem;
+  margin-bottom: 40px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.featureBoxes {
+  display: flex;
+  justify-content:space-around;
+
+
+  
+}
+
+.featureBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.featureIcon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+}
+
+.featureText {
+  color: #000000;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.actionButton {
+  padding: 12px 24px;
+  background-color: rgba(77, 55, 253, 0.4);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.actionButton:hover {
+  background-color: #ffffff;
+  transform: translateY(-2px);
+  color: black;
+}
+
+@media (max-width: 1024px){
+  *{
+  box-sizing: border-box;
+  }
+
+  .featureSection{
+    flex-direction: column;
+    width: 90%;
+  }
+}
