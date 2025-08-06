@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
 import whiteLogo from '@images/logos/Logo4eBranco.png';
 import apple from '@images/apps/appStore.png';
@@ -100,11 +101,14 @@ export default function Footer() {
           <div className={styles.linksColumn}>
             <h4>Ajuda</h4>
             <ul>
-              {['SAC', 'Perguntas Frequentes', 'Contato', 'Termos de Uso', 'Política de Privacidade'].map((item, index) => (
-                <li key={index}>
+              {['Perguntas Frequentes', 'Contato', 'Termos de Uso', 'Política de Privacidade'].map((item, index) => (
+                <li key={index + 1}>
                   <a href="#" className={styles.link}>{item}</a>
                 </li>
               ))}
+              <li>
+                <Link to="/Feedback" className={styles.link}>SAC</Link>
+              </li>
             </ul>
           </div>
 
