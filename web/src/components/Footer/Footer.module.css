@@ -169,6 +169,7 @@
   font-size: 0.9rem;
   background: rgba(255, 255, 255, 0.9);
   transition: all 0.3s ease;
+  color:black;
 }
 
 .emailInput:focus {

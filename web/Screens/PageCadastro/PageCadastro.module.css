@@ -25,7 +25,7 @@
 
 .pageContainer::before {
   content: "";
-  position: absolute;
+  position: fixed; /* Alterado de absolute para fixed */
   top: 0;
   left: 0;
   width: 100%;
@@ -33,6 +33,7 @@
   background-image: url("../../src/assets/images/placeholders/pattern.png");
   background-size: cover;
   background-position: center;
+  background-attachment: fixed; /* Garante que a imagem cubra toda a área */
   opacity: 0.2;
   z-index: -1;
 }
