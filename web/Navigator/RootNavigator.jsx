@@ -9,6 +9,7 @@ import ScrollToTop from "@/components/ScrollToTop/ScrollToTop";
 import Contact from "../Screens/Contact/Contact.jsx";
 import Feedback from "../Screens/Feedback/Feedback.jsx";
 import PageTransition from "@/components/PageTransition/PageTransition";
+import Feedback from "../Screens/Feedback/Feedback.jsx";
 
 function AnimatedRoutes() {
   const location = useLocation();
