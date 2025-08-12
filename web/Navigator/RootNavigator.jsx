@@ -9,7 +9,7 @@ import ScrollToTop from "@/components/ScrollToTop/ScrollToTop";
 import Contact from "../Screens/Contact/Contact.jsx";
 import Feedback from "../Screens/Feedback/Feedback.jsx";
 import PageTransition from "@/components/PageTransition/PageTransition";
-import Feedback from "../Screens/Feedback/Feedback.jsx";
+import MoreQuestions from "../Screens/MoreQuestions/MoreQuestions.jsx";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -18,7 +18,7 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <PageTransition key={location.pathname}>
         <Routes location={location}>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<MoreQuestions />} />
           <Route path="/home" element={<Home />} />
           <Route path="/paginaLogin" element={<PaginaLogin />} />
           <Route path="/aboutUs" element={<AboutUs />} />
@@ -26,6 +26,7 @@ function AnimatedRoutes() {
           <Route path="/InfoPage" element={<InfoPage />} />
           <Route path="/Contact" element={<Contact />} />
           <Route path="/Feedback" element={<Feedback />} />
+          <Route path="/MoreQuestions" element={<MoreQuestions />} />
         </Routes>
       </PageTransition>
     </AnimatePresence>

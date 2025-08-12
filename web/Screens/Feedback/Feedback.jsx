@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styles from './Feedback.module.css';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
-import { FaPaperPlane, FaChevronDown, FaCube, FaArrowRight, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaPaperPlane, FaChevronDown, FaArrowRight } from 'react-icons/fa';
+import { Link } from "react-router-dom";
 
 const Feedback = () => {
     const [feedback, setFeedback] = useState('');
@@ -14,7 +15,6 @@ const Feedback = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Lógica para enviar o feedback
         alert('Obrigado pelo seu feedback!');
         setFeedback('');
     };
@@ -35,70 +35,77 @@ const Feedback = () => {
     ];
 
     return (
-        <><Header />
-        <div className={styles.pageContainer}>
+        <>
+            <Header />
+            <div className={styles.pageContainer}>
+                <main className={styles.mainContent}>
+                    <div className={styles.feedbackContainer}>
+                        <div className={styles.feedbackHeader}>
+                            <h1 className={styles.feedbackTitle}>AJUDE-NOS A MELHORAR</h1>
+                            <p className={styles.feedbackSubtitle}>Sua opinião é valiosa para nós</p>
+                        </div>
 
-            <main className={styles.mainContent}>
-                <div className={styles.feedbackContainer}>
-                    <div className={styles.feedbackHeader}>
-                        <h1 className={styles.feedbackTitle}>AJUDE-NOS A MELHORAR</h1>
-                        <p className={styles.feedbackSubtitle}>Sua opinião é valiosa para nós</p>
-                    </div>
-
-                    <div className={styles.feedbackBody}>
-                        <form onSubmit={handleSubmit} className={styles.feedbackForm}>
-                            <div className={styles.formGroup}>
-                                <label htmlFor="feedback" className={styles.formLabel}>Reclamação ou Feedback</label>
-                                <textarea
-                                    id="feedback"
-                                    className={styles.formTextarea}
-                                    value={feedback}
-                                    onChange={(e) => setFeedback(e.target.value)}
-                                    placeholder="Descreva sua experiência, reclamação ou sugestão de melhoria..."
-                                    rows={5} />
-                            </div>
-                            <button type="submit" className={styles.submitButton}>
-                                <FaPaperPlane className={styles.buttonIcon} />
-                                Enviar Feedback
-                            </button>
-                        </form>
-
-                        <section className={styles.faqSection}>
-                            <h2 className={styles.sectionTitle}>Perguntas Frequentes</h2>
-
-                            {faqItems.map((item, index) => (
-                                <div
-                                    key={index}
-                                    className={`${styles.faqItem} ${activeFAQ === index ? styles.active : ''}`}
-                                    onClick={() => toggleFAQ(index)}
-                                >
-                                    <div className={styles.faqQuestion}>
-                                        <span>{item.question}</span>
-                                        <FaChevronDown className={styles.faqIcon} />
-                                    </div>
-                                    {activeFAQ === index && (
-                                        <div className={styles.faqAnswer}>
-                                            <div className={styles.faqAnswerContent}>
-                                                <p>{item.answer}</p>
-                                            </div>
-                                        </div>
-                                    )}
+                        <div className={styles.feedbackBody}>
+                            <form onSubmit={handleSubmit} className={styles.feedbackForm}>
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="feedback" className={styles.formLabel}>Reclamação ou Feedback</label>
+                                    <textarea
+                                        id="feedback"
+                                        className={styles.formTextarea}
+                                        value={feedback}
+                                        onChange={(e) => setFeedback(e.target.value)}
+                                        placeholder="Descreva sua experiência, reclamação ou sugestão de melhoria..."
+                                        rows={5} />
                                 </div>
-                            ))}
+                                <button type="submit" className={styles.submitButton}>
+                                    <FaPaperPlane className={styles.buttonIcon} />
+                                    Enviar Feedback
+                                </button>
+                            </form>
 
-                            <div className={styles.moreQuestions}>
-                                <a href="#" className={styles.moreLink}>
-                                    Ver mais perguntas frequentes
-                                    <FaArrowRight className={styles.arrowIcon} />
-                                </a>
-                            </div>
-                        </section>
+                            <section className={styles.faqSection}>
+                                <h2 className={styles.sectionTitle}>Perguntas Frequentes</h2>
+
+
+                                
+
+                                {faqItems.map((item, index) => (
+                                    <div
+                                        key={index}
+                                        className={`${styles.faqItem} ${activeFAQ === index ? styles.active : ''}`}
+                                        onClick={() => toggleFAQ(index)}
+                                    >
+                                        <div className={styles.faqQuestion}>
+                                            <span>{item.question}</span>
+                                            <FaChevronDown className={styles.faqIcon} />
+                                        </div>
+                                        {activeFAQ === index && (
+                                            <div className={styles.faqAnswer}>
+                                                <div className={styles.faqAnswerContent}>
+                                                    <p>{item.answer}</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    
+                                ))}
+
+<Link to="/MoreQuestions" className={styles.moreLink}>
+    Ver mais perguntas frequentes
+    <FaArrowRight className={styles.arrowIcon} />
+</Link>
+                            </section>
+                        </div>
+                        
                     </div>
-                </div>
-            </main>
-            <Footer />
+                    
+                </main>
 
-        </div></>
+                
+                <Footer />
+            </div>
+        </>
     );
 };
 
