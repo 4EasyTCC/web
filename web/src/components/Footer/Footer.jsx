@@ -107,6 +107,9 @@ export default function Footer() {
                 </li>
               ))}
               <li>
+                <Link to="/Contact" className={styles.link}>Contato</Link>
+              </li>
+              <li>
                 <Link to="/Feedback" className={styles.link}>SAC</Link>
               </li>
             </ul>

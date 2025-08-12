@@ -150,12 +150,12 @@
   transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.header.scrolled + .headerSpacer {
+.headerSpacer.scrolled {
   height: var(--header-scrolled-height);
 }
 
 :root {
-  --header-height: 180px;
+  --header-height: 220px;
   --header-scrolled-height: 70px;
 }
 

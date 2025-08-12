@@ -1,10 +1,9 @@
-.bannerSection{
+.bannerSection {
     width: 100%;
     height: 70vh;
-    background: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url('../src/assets/images/placeholders/partyBanner.png') center/cover no-repeat;
+    background: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)),
+     url('../src/assets/images/placeholders/partyBanner.png') center/cover no-repeat;
 }
-
-
 
 .boxContainer,
 .boxContainer2 {
@@ -16,7 +15,6 @@
     padding: 10vh;
 
 }
-
 
 .boxContainer2 {
     background-color: rgb(255, 255, 255);

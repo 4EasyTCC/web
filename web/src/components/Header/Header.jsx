@@ -17,7 +17,6 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const headerRef = useRef(null);
   const animationFrameId = useRef(null);
-  const lastScrollY = useRef(0);
 
   // Inicialização do estado de scroll
   useEffect(() => {
@@ -26,21 +25,14 @@ export default function Header() {
 
   // Handler de scroll otimizado
   const handleScroll = useCallback(() => {
-    const currentScrollY = window.scrollY;
-    lastScrollY.current = currentScrollY;
-    
     if (animationFrameId.current) {
       cancelAnimationFrame(animationFrameId.current);
     }
 
     animationFrameId.current = requestAnimationFrame(() => {
+      const currentScrollY = window.scrollY;
       const shouldBeScrolled = currentScrollY > 50;
       if (shouldBeScrolled !== isScrolled) {
-        // Força um reflow antes da atualização
-        if (headerRef.current) {
-          headerRef.current.style.willChange = 'transform, background';
-          headerRef.current.getBoundingClientRect();
-        }
         setIsScrolled(shouldBeScrolled);
       }
     });
@@ -49,14 +41,9 @@ export default function Header() {
   useEffect(() => {
     if (!isHomePage) return;
 
-    // Debounce para evitar chamadas excessivas
-    const debouncedScroll = () => {
-      setTimeout(handleScroll, 10);
-    };
-
-    window.addEventListener('scroll', debouncedScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', debouncedScroll);
+      window.removeEventListener('scroll', handleScroll);
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current);
       }
@@ -77,19 +64,9 @@ export default function Header() {
 
   return (
     <>
-      {!isScrolled && isHomePage && (
-        <div style={{ 
-          height: '180px',
-          position: 'relative',
-          zIndex: -1,
-          pointerEvents: 'none'
-        }} />
-      )}
-
       <header
         ref={headerRef}
         className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}
-        style={{ zIndex: 1000 }}
       >
         <div className={styles.headerContent}>
           <div className={styles.logoContainer}>
@@ -151,13 +128,12 @@ export default function Header() {
         )}
       </header>
 
+      <div className={`${styles.headerSpacer} ${isScrolled ? styles.scrolled : ''}`} />
+
       <MenuDropdown
         isOpen={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
-        style={{ zIndex: 1001 }}
       />
-
-      <div className={styles.headerSpacer} />
     </>
   );
 }

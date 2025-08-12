@@ -16,15 +16,17 @@
   /* Adicione estas linhas: */
   display: flex;
   justify-content: center;
-  perspective: 1000px; /* Adiciona profundidade 3D */
+  perspective: 1000px;
+  /* Adiciona profundidade 3D */
 }
 
 
 .slide {
   position: absolute;
   top: 0;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); /* Suavização melhorada */
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Suavização melhorada */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   border-radius: 12px;
   overflow: hidden;
   background: white;
@@ -78,20 +80,23 @@
 
 /* Setas customizadas */
 .arrow {
+  background: #1400b4;
+  z-index: 30;
+  color: white;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 4vw;
-  background: #1400b4;
+  border: none;
   border-radius: 50%;
+  width: clamp(30px, 3vw, 36px);
+  height: clamp(30px, 3vw, 36px);
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  border: none;
-  cursor: pointer;
-  z-index: 30;
   transition: all 0.3s ease;
+  padding: 0;
 }
 
 .arrow:hover {
@@ -123,7 +128,7 @@
 
 .dot {
   width: clamp(5px, 0.6vw, 7px);
-  height: clamp(5px, 0.6vw, 7px)  ;
+  height: clamp(5px, 0.6vw, 7px);
   border-radius: 50%;
   background-color: #ccc;
   border: none;
@@ -146,39 +151,39 @@
   .carouselWrapper {
     padding: 60px 0 30px;
   }
-  
+
   .carouselContainer {
     height: 250px;
     margin-bottom: 30px;
   }
-  
+
   .arrow {
     width: 36px;
     height: 36px;
   }
-  
+
   .arrow svg {
     width: 20px;
     height: 20px;
   }
-  
+
   .arrowPrev {
     left: 3%;
   }
-  
+
   .arrowNext {
     right: 3%;
   }
-  
+
   .currentEventInfo {
     padding: 0 20px;
   }
-  
+
   .eventDetails {
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .dotsContainer {
     margin: 20px 0;
   }

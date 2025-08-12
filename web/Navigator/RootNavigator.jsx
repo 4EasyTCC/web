@@ -20,7 +20,7 @@ function RootNavigator() {
         <Route path="/aboutUs" element={<AboutUs />} />
         <Route path="/pageCadastro" element={<PageCadastro />} />
         <Route path="/InfoPage" element={<InfoPage />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/Contact" element={<Contact />} />
         <Route path="/Feedback" element={<Feedback />} />
       </Routes>
     </BrowserRouter>
