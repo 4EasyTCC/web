@@ -18,7 +18,7 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <PageTransition key={location.pathname}>
         <Routes location={location}>
-          <Route path="/" element={<MoreQuestions />} />
+          <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/paginaLogin" element={<PaginaLogin />} />
           <Route path="/aboutUs" element={<AboutUs />} />
