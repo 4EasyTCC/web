@@ -138,6 +138,7 @@ main {
   outline: none;
   font-size: 14px;
   color: #000;
+  background-color: #fff;
 }
 
 textarea {
