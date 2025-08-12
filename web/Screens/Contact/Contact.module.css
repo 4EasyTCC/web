@@ -23,15 +23,18 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 80px 100px;
+  padding: 80px 160px;
   position: relative;
   z-index: 1;
-  gap: 60px;
+  gap: 30px;
+  text-align: center;
+  align-items: center;
 }
 
 .leftContent {
   flex: 1;
   max-width: 600px;
+
 }
 
 .leftContent h1 {
@@ -57,6 +60,8 @@ main {
   cursor: pointer;
   transition: 0.3s;
   margin-bottom: 50px;
+  color: black;
+
 }
 
 .leftContent button:hover {
@@ -69,6 +74,9 @@ main {
   border-radius: 10px;
   width: fit-content;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 0 auto; /* Centraliza horizontalmente */
+  max-width: 100%; /* Garante que não ultrapasse o container pai */
+  
 }
 
 .socialContainer p {
@@ -80,8 +88,8 @@ main {
 
 .iconsGrid {
   display: grid;
-  grid-template-columns: repeat(6, 30px);
-  gap: 15px 15px;
+  grid-template-columns: repeat(6, 32px);
+  gap: 18px 18px;
 }
 
 .iconsGrid i,
@@ -106,6 +114,7 @@ main {
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
   max-width: 420px;
   width: 100%;
+  margin-left: -30px;
 }
 
 .rightForm h3 {
