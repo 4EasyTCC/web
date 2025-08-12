@@ -1,9 +1,8 @@
-/* CarouselColecao.module.css */
+/* CarouselElements.module.css */
 .container {
-  width:90%;
+  max-width: 1200px;
   margin: 2rem auto;
-  padding: 0 1%;
-  
+  padding: 0 20px;
 }
 
 .header {
@@ -11,20 +10,19 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-  gap: 1%;
 }
 
 .title {
-  font-size: clamp(1.5rem, 4vw, 1.8rem);
+  font-size: 1.5rem;
   color: #333;
-  font-weight: bold;
+  font-weight: 700;
   margin: 0;
 }
 
 .controls {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .arrows {
@@ -37,167 +35,151 @@
   color: white;
   border: none;
   border-radius: 50%;
-  width: clamp(30px, 3vw, 36px);
-  height: clamp(30px, 3vw, 36px);
-  font-size: clamp(0.9rem, 2vw, 1rem);
-  cursor: pointer;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s;
+  cursor: pointer;
+  transition: all 0.3s ease;
   padding: 0;
 }
 
 .navButton:hover:not(.disabledButton) {
   background: #0d008c;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
+.navButton svg {
+  transition: transform 0.2s ease;
+}
+
+.navButton:hover:not(.disabledButton) svg {
+  transform: translateX(-2px);
+}
+
+.navButton:last-child:hover:not(.disabledButton) svg {
+  transform: translateX(2px);
+}
+
+.disabledButton {
+  background-color: #e0e0e0 !important;
+  color: #a0a0a0 !important;
+  cursor: not-allowed !important;
+}
+
+/* Ajustes principais no espaçamento vertical */
 .carouselWrapper {
   width: 100%;
-  overflow: hidden;
+  margin: 0 auto;
+  height: 220px; /* Altura aumentada */
+  display: flex;
+  align-items: center;
 }
 
 .carouselContainer {
   width: 100%;
-  margin: 0 auto;
-  height: auto;
+  padding: 20px 0; /* Padding vertical aumentado */
 }
 
-.collectionsTrack {
-  display: flex;
+.eventItem {
+  padding: 0 10px;
+  display: flex !important;
   justify-content: center;
-  gap: 2%;
-  padding: 1% 0;
-  flex-wrap: wrap;
+  height: 100%;
 }
 
-.collectionItem {
-  flex: 0 0 18%; /* Aproximadamente 5 itens por linha (100%/5 = 20% - gap) */
-  max-width: 18%;
-  display: flex;
-  justify-content: center;
-}
-
-.events {
-  width: clamp(200px, 20vw, 200px); 
-  height: auto; 
-  min-height: 150px; 
-  border-radius: 8px; 
-  background-color: #f0f0f0;
+.eventCard {
+  width: 220px;
+  height: 180px; /* Altura aumentada */
+  border-radius: 8px;
+  background-color: #f5f5f5;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 15px; 
-  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
-  transition: all 0.3s;
-  margin: 10px; 
-  flex-direction: column; 
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  padding: 20px; /* Padding interno aumentado */
 }
 
-.events:hover {
-  transform: scale(1.05);
-}
-
-.finalItemContainer {
-  flex: 0 0 18%;
-  max-width: 18%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.eventCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  background-color: #1400b4;
+  color: white;
 }
 
 .finalButton {
-    width: clamp(80px, 10vw, 100px);
-  height: clamp(80px, 10vw, 100px);
-  border-radius: 50%;
+  width: 220px;
+  height: 180px; /* Altura aumentada para corresponder */
+  border-radius: 8px;
   background-color: #1400b4;
   color: white;
   border: none;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 1%;
-  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s; 
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  gap: 8px;
+  padding: 20px; /* Padding interno aumentado */
 }
 
 .finalButton:hover {
-  transform: scale(1.05);
+  background-color: #0d008c;
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.finalButton svg {
+  transition: transform 0.3s ease;
+}
+
+.finalButton:hover svg {
+  transform: translateX(3px);
 }
 
 .seeAllButton {
   background: none;
   border: none;
-  color: black;
-  text-decoration: underline;
+  color: #1400b4;
   cursor: pointer;
-  font-size: clamp(0.9rem, 2vw, 1rem);
-  padding: 0.5rem 1rem;
-  transition: color 0.3s;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  padding: 8px 12px;
+  border-radius: 20px;
 }
 
 .seeAllButton:hover {
-  color: #0d008c;
-  text-decoration: none;
+  background-color: #f0f0ff;
 }
 
-/* Travar botao */
-
-.navButton {
-  background: #1400b4; /* Cor normal */
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-size: 1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s;
-  padding: 0;
-  
+.seeAllButton svg {
+  transition: transform 0.3s ease;
 }
 
-.navButton:hover:not(.disabledButton) {
-  background: #0d008c;
-  transform: scale(1.1);
+.seeAllButton:hover svg {
+  transform: translateX(3px);
 }
 
-.disabledButton {
-  background-color: #e0e0e0 !important; /* Cinza quando desativado */
-  color: #a0a0a0 !important;
-  cursor: not-allowed !important;
-}
-
-
-
-.carouselWrapper {
-  width: 100%;
-
-}
-
-.carouselContainer {
-  width: 100%;
-  overflow: visible; /* Permite que as bolas saiam do container */
-}
-
-/* Ajustes do Slick */
+/* Slick overrides */
 .slick-list {
-  overflow: visible; /* Importante para não cortar as bolas */
-  padding: 0 !important;
+  margin: 0 -10px;
+  padding: 20px 0 !important;
 }
 
 .slick-slide {
-  padding: 0 5px; /* Espaço entre as bolas */
-  display: flex;
-  justify-content: center;
+  padding: 10px 0;
+  height: auto;
 }
 
 .slick-track {
@@ -205,4 +187,50 @@
   align-items: center;
 }
 
-/* Mantenha todos os outros estilos existentes */ 
+@media (max-width: 1024px) {
+  .carouselWrapper {
+    height: 200px;
+  }
+  
+  .eventCard, .finalButton {
+    height: 160px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .carouselWrapper {
+    height: 180px;
+  }
+  
+  .eventCard, .finalButton {
+    width: 180px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carouselWrapper {
+    height: 160px;
+  }
+  
+  .eventCard, .finalButton {
+    width: 160px;
+    height: 140px;
+    font-size: 0.9rem;
+  }
+  
+  .seeAllButton {
+    font-size: 0.9rem;
+  }
+}

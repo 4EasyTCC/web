@@ -13,7 +13,7 @@
 .searchBar {
   display: flex;
   align-items: center;
-  background-color: var(--white);
+  background-color: white;
   border-radius: 30px;
   padding: 0.5rem 1rem;
   box-shadow: var(--shadow);

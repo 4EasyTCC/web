@@ -1,31 +1,28 @@
 /* CarouselColecao.module.css */
 .container {
-  width: 100%;
+  max-width: 1200px;
   margin: 2rem auto;
+  padding: 0 20px;
 }
 
 .header {
-  
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
-  gap: 1%;
-  width: 80%;
+  margin-bottom: 1rem;
 }
 
 .title {
-  font-size: clamp(1.5rem, 4vw, 1.8rem);
+  font-size: 1.5rem;
   color: #333;
-  font-weight: bold;
+  font-weight: 700;
   margin: 0;
-  margin-left: 1vw;
 }
 
 .controls {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .arrows {
@@ -38,158 +35,154 @@
   color: white;
   border: none;
   border-radius: 50%;
-  width: clamp(30px, 3vw, 36px);
-  height: clamp(30px, 3vw, 36px);
-  font-size: clamp(0.9rem, 2vw, 1rem);
-  cursor: pointer;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s;
+  cursor: pointer;
+  transition: all 0.3s ease;
   padding: 0;
 }
 
 .navButton:hover:not(.disabledButton) {
   background: #0d008c;
-  transform: scale(1.1);
+  transform: scale(1.05);
+}
+
+.navButton svg {
+  transition: transform 0.2s ease;
+}
+
+.navButton:hover:not(.disabledButton) svg {
+  transform: translateX(-2px);
+}
+
+.navButton:last-child:hover:not(.disabledButton) svg {
+  transform: translateX(2px);
+}
+
+.disabledButton {
+  background-color: #e0e0e0 !important;
+  color: #a0a0a0 !important;
+  cursor: not-allowed !important;
 }
 
 .carouselWrapper {
   width: 100%;
-  overflow: hidden;
-  margin-bottom: 10vh;
+  margin: 0 auto;
+  height: 180px;
+  display: flex;
+  align-items: center;
 }
 
 .carouselContainer {
   width: 100%;
-  overflow: hidden;
-}
-
-.collectionsTrack {
-  display: flex;
-  justify-content: center;
-  gap: 2%;
-  padding: 1% 0;
-  flex-wrap: wrap;
+  padding: 15px 0;
 }
 
 .collectionItem {
-  flex: 0 0 18%; /* Aproximadamente 5 itens por linha (100%/5 = 20% - gap) */
-  max-width: 18%;
-  display: flex;
+  padding: 0 8px;
+  display: flex !important;
   justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .ball {
-  width: clamp(80px, 10vw, 100px);
-  height: clamp(80px, 10vw, 100px);
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
-  background-color: #f0f0f0;
+  background-color: #f5f5f5;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 1%;
-  font-size: clamp(0.8rem, 2vw, 1rem);
-  transition: all 0.3s;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  margin: 10px 0;
 }
 
 .ball:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  background-color: #1400b4;
+  color: white;
 }
 
-.finalItemContainer {
-    flex: 0 0 18%;
-  max-width: 18%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.ball span {
+  padding: 0 10px;
 }
 
 .finalButton {
-  width: clamp(80px, 10vw, 100px);
-  height: clamp(80px, 10vw, 100px);
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   background-color: #1400b4;
   color: white;
   border: none;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 1%;
-  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  gap: 5px;
+  margin: 10px 0;
 }
 
 .finalButton:hover {
   background-color: #0d008c;
-  transform: scale(1.05);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.finalButton svg {
+  transition: transform 0.3s ease;
+}
+
+.finalButton:hover svg {
+  transform: translateX(3px);
 }
 
 .seeAllButton {
   background: none;
   border: none;
-  color: #000000;
-  text-decoration: underline;
+  color: #1400b4;
   cursor: pointer;
-  font-size: clamp(0.9rem, 2vw, 1rem);
-  padding: 0.5rem 1rem;
-  transition: color 0.3s;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  padding: 8px 12px;
+  border-radius: 20px;
 }
 
 .seeAllButton:hover {
-  color: #0d008c;
-  text-decoration: none;
+  background-color: #f0f0ff;
 }
 
-/* Travar botao */
-
-.navButton {
-  background: #1400b4; /* Cor normal */
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-size: 1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s;
-  padding: 0;
+.seeAllButton svg {
+  transition: transform 0.3s ease;
 }
 
-.navButton:hover:not(.disabledButton) {
-  background: #0d008c;
-  transform: scale(1.1);
+.seeAllButton:hover svg {
+  transform: translateX(3px);
 }
 
-.disabledButton {
-  background-color: #e0e0e0 !important; 
-  color: #a0a0a0 !important;
-  cursor: not-allowed !important;
-}
-
-
-
-.carouselContainer {
-  width: 100%;
-  overflow: visible; /* Permite que as bolas saiam do container */
-}
-
-/* Ajustes do Slick */
+/* Slick overrides */
 .slick-list {
-  overflow: hidden; /* Importante para não cortar as bolas */
-  padding: 0 !important;
-  box-sizing: border-box;
+  margin: 0 -8px;
+  padding: 20px 0 !important;
 }
 
 .slick-slide {
-  padding: 0 8px; /* Espaço entre as bolas */
-  box-sizing: border-box;
+  padding: 10px 0;
 }
 
 .slick-track {
@@ -197,4 +190,52 @@
   align-items: center;
 }
 
-/* Mantenha todos os outros estilos existentes */ 
+@media (max-width: 1024px) {
+  .carouselWrapper {
+    height: 160px;
+  }
+  
+  .ball, .finalButton {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .carouselWrapper {
+    height: 150px;
+  }
+  
+  .ball, .finalButton {
+    width: 90px;
+    height: 90px;
+    font-size: 0.8rem;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 480px) {
+  .carouselWrapper {
+    height: 140px;
+  }
+  
+  .ball, .finalButton {
+    width: 80px;
+    height: 80px;
+    font-size: 0.7rem;
+  }
+  
+  .seeAllButton {
+    font-size: 0.9rem;
+  }
+}

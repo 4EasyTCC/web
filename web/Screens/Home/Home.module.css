@@ -1,156 +1,268 @@
-.eventsSection {
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   position: relative;
-  z-index: 1;
-  margin-top: calc(-1 * var(--header-scrolled-height));
-  padding-top: var(--header-scrolled-height);
 }
 
-.homeContainer {
-  position: relative;
-  z-index: 1;
-  margin-top: -50px; /* Ajuste conforme necessário */
-  padding-top: 50px;
-}
-.container {
-  max-width: 100%;
-  padding: 20px;
-  text-align: center;
-}
-.secondPart{
-  background-color: rgb(243, 243, 243);
+.pageContainer::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: auto;
-  text-align: center;
-  justify-content: center;
-}
-.carouselWrapper {
-  margin: 30px 0;
-}
-
-.title {
-  color: black;
-  margin-bottom: 20px;
+  height: 100%;
+  background-image: url("../../src/assets/images/placeholders/pattern.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  opacity: 0.2;
+  z-index: -1;
 }
 
-.button {
-  margin-top: 30px;
-  padding: 10px 20px;
-  background-color: #1400b4;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  
-}
-.subtitle {
-  color: rgb(0, 0, 0);
-  margin-bottom: 20px;
-  text-align: left;
-}
-
-.featureSection {
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  background-color: rgba(88, 71, 227, 0.4);
-  width: 60%;
-  align-self: center;
-  border-radius: 30px 30px;
-  padding: 20px;
-  margin: 20px;
+  padding: 20px 0;
+}
+
+.eventsSection {
+  width: 100%;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.contentWithBackground {
+  width: 100%;
+  position: relative;
+  background-color: white;
+  padding: 20px 0 40px;
+}
+
+.carouselWrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Feature Section Styles */
+.featureSection {
   display: flex;
   justify-content: center;
-  
+  align-items: center;
+  background: linear-gradient(135deg, rgba(88, 71, 227, 0.1) 0%, rgba(40, 22, 178, 0.15) 100%);
+  width: 90%;
+  max-width: 1200px;
+  border-radius: 30px;
+  padding: 50px 40px;
+  margin: 50px auto;
+  gap: 60px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 1;
 }
-
-.featureContent, .featureContent2 {
-  width: 80%;
-  text-align: center;
-  flex:50%;
-  align-self: center;
-}
-
-.featureIcon2 {
-  width: 20em;
-  height: auto;
-  margin-bottom: 20px;
-  
-}
-
-
 
 .mainTitle {
   color: #2816b2;
   font-size: 2.5rem;
-  margin-bottom: 20px;
   font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 20px;
 }
 
 .subTitle {
   color: #2816b2;
   font-size: 1.8rem;
-  margin-bottom: 40px;
   font-weight: 600;
-  text-align: left;
+  margin-bottom: 40px;
 }
 
 .featureBoxes {
   display: flex;
-  justify-content:space-around;
-
-
-  
+  gap: 30px;
+  margin-top: 30px;
 }
 
 .featureBox {
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
+}
 
+.iconWrapper {
+  background-color: white;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .featureIcon {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 20px;
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
 }
 
 .featureText {
-  color: #000000;
+  color: #333;
   font-size: 1.2rem;
   font-weight: 500;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.highlight {
+  color: #2816b2;
+  font-weight: 600;
+}
+
+.featureImageContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 400px;
+}
+
+.featurePhone {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  margin-bottom: 30px;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
 }
 
 .actionButtons {
   display: flex;
-  justify-content: center;
   gap: 20px;
+  width: 100%;
+  justify-content: center;
   flex-wrap: wrap;
 }
 
-.actionButton {
-  padding: 12px 24px;
-  background-color: rgba(77, 55, 253, 0.4);
+.primaryButton {
+  padding: 14px 28px;
+  background-color: #2816b2;
   color: white;
   border: none;
-  border-radius: 25px;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(40, 22, 178, 0.3);
 }
 
-.actionButton:hover {
-  background-color: #ffffff;
+.primaryButton:hover {
+  background-color: #1a108f;
   transform: translateY(-2px);
-  color: black;
 }
 
-@media (max-width: 1024px){
-  *{
-  box-sizing: border-box;
+.secondaryButton {
+  padding: 14px 28px;
+  background-color: white;
+  color: #2816b2;
+  border: 2px solid #2816b2;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.secondaryButton:hover {
+  background-color: #f8f8ff;
+  transform: translateY(-2px);
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .featureSection {
+    flex-direction: column;
+    gap: 40px;
+    padding: 40px 30px;
   }
 
-  .featureSection{
+  .featureContent {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .subTitle {
+    text-align: center;
+  }
+
+  .featureBoxes {
+    justify-content: center;
+  }
+
+  .featurePhone {
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainTitle {
+    font-size: 2rem;
+  }
+
+  .subTitle {
+    font-size: 1.5rem;
+  }
+
+  .featureBoxes {
     flex-direction: column;
-    width: 90%;
+    gap: 20px;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .featureSection {
+    width: 95%;
+    padding: 30px 20px;
+  }
+
+  .mainTitle {
+    font-size: 1.8rem;
+  }
+
+  .subTitle {
+    font-size: 1.3rem;
+  }
+
+  .iconWrapper {
+    width: 80px;
+    height: 80px;
+  }
+
+  .featureIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .featureText {
+    font-size: 1rem;
   }
 }

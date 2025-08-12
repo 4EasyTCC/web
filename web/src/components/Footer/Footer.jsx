@@ -101,7 +101,7 @@ export default function Footer() {
           <div className={styles.linksColumn}>
             <h4>Ajuda</h4>
             <ul>
-              {['Perguntas Frequentes', 'Contato', 'Termos de Uso', 'Política de Privacidade'].map((item, index) => (
+              {['Perguntas Frequentes', 'Termos de Uso', 'Política de Privacidade'].map((item, index) => (
                 <li key={index + 1}>
                   <a href="#" className={styles.link}>{item}</a>
                 </li>

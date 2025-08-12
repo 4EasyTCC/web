@@ -3,10 +3,12 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import '@/App.css'
 import RootNavigator from '../Navigator/RootNavigator';
+import PageTransition from './components/PageTransition/PageTransition';
 
 
 function App() {
   const [count, setCount] = useState(0)
+  
 
 return <RootNavigator/>
 

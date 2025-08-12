@@ -7,8 +7,6 @@ import Jorge from '@images/team/Jorge.png'
 import Leandro from '@images/team/Lele.png';
 import Yasmin from '@images/team/Yasmin.png';
 import Trajetoria from '@images/placeholders/Trajetoria.png';
-
-
 import CarouselCriadores from './CarouselCriadores.jsx';
 
 export default function AboutUs() {

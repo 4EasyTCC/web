@@ -1,5 +1,5 @@
-// App.jsx
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import Home from "../Screens/Home/Home.jsx";
 import PaginaLogin from "../Screens/PaginaLogin/PaginaLogin.jsx";
 import AboutUs from "../Screens/AboutUs/AboutUs.jsx";
@@ -8,21 +8,34 @@ import InfoPage from "../Screens/InfoPage/InfoPage.jsx";
 import ScrollToTop from "@/components/ScrollToTop/ScrollToTop";
 import Contact from "../Screens/Contact/Contact.jsx";
 import Feedback from "../Screens/Feedback/Feedback.jsx";
+import PageTransition from "@/components/PageTransition/PageTransition";
+
+function AnimatedRoutes() {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <PageTransition key={location.pathname}>
+        <Routes location={location}>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/paginaLogin" element={<PaginaLogin />} />
+          <Route path="/aboutUs" element={<AboutUs />} />
+          <Route path="/pageCadastro" element={<PageCadastro />} />
+          <Route path="/InfoPage" element={<InfoPage />} />
+          <Route path="/Contact" element={<Contact />} />
+          <Route path="/Feedback" element={<Feedback />} />
+        </Routes>
+      </PageTransition>
+    </AnimatePresence>
+  );
+}
 
 function RootNavigator() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Home />} /> {/* Rota raiz */}
-        <Route path="/home" element={<Home />} /> {/* Rota alternativa */}
-        <Route path="/paginaLogin" element={<PaginaLogin />} />
-        <Route path="/aboutUs" element={<AboutUs />} />
-        <Route path="/pageCadastro" element={<PageCadastro />} />
-        <Route path="/InfoPage" element={<InfoPage />} />
-        <Route path="/Contact" element={<Contact />} />
-        <Route path="/Feedback" element={<Feedback />} />
-      </Routes>
+      <AnimatedRoutes />
     </BrowserRouter>
   );
 }

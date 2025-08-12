@@ -45,13 +45,13 @@
 }
 
 .logo {
-  height: 60px;
+  height: 100px;
   transform: translateZ(0);
   transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .header.scrolled .logo {
-  height: 45px;
+  height: 70px;
 }
 
 .logoLink {
@@ -116,9 +116,9 @@
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 24px;
-  width: 30px;
+  justify-content: space-around;
+  height:30px;
+  width: 35px;
   position: relative;
   z-index: 1100;
 }
@@ -155,7 +155,7 @@
 }
 
 :root {
-  --header-height: 220px;
+  --header-height: 260px;
   --header-scrolled-height: 70px;
 }
 
