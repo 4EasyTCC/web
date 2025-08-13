@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import styles from "./Contact.module.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
@@ -21,7 +22,14 @@ export default function Contact() {
     email: "",
     documento: "",
     proposta: "",
-  });
+  })
+  const navigate = useNavigate();
+  
+    const navigateTo = (path) => {
+      navigate(path);
+      onClose();
+
+  } 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,7 +54,7 @@ export default function Contact() {
         <div className={styles.leftContent}>
           <h1>Vamos falar de negócios?</h1>
           <h2>Diga-nos a sua proposta.</h2>
-          <button>Vamos crescer juntos!</button>
+          <button onClick={() => navigateTo('/PageSponsor')}>Vamos crescer juntos!</button>
 
           <div className={styles.socialContainer}>
             <p>Nossas redes sociais:</p>

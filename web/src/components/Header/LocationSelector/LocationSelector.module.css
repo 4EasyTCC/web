@@ -10,7 +10,7 @@
   border-radius: 30px;
   padding: 0.5rem 1rem;
   transition: var(--transition);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow);  
 }
 
 .locationSelector.default .locationDropdown {
@@ -78,7 +78,7 @@
 }
 
 .locationSelector.filter .locationDropdown {
-  background-color: var(--white);
+  background-color: white;
   border-radius: 8px;
   padding: 0.6rem 1rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);

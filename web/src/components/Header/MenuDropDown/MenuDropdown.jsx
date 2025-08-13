@@ -50,7 +50,7 @@ const MenuDropdown = ({ isOpen, onClose }) => {
           </ul>
           <div className={styles.menuAuthButtons}>
             <button
-              onClick={() => navigateTo('/pageLogin')}
+              onClick={() => navigateTo('/paginaLogin')}
               className={styles.menuLoginButton}
             >
               Login
