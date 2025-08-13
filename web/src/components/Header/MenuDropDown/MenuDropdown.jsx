@@ -61,6 +61,12 @@ const MenuDropdown = ({ isOpen, onClose }) => {
             >
               Cadastre-se
             </button>
+            <button
+              onClick={() => navigateTo('/Profile')}
+              className={styles.menuRegisterButton}
+            >
+              Meu Perfil
+            </button>
           </div>
         </div>
       </div>
