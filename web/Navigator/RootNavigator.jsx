@@ -10,7 +10,7 @@ import Contact from "../Screens/Contact/Contact.jsx";
 import Feedback from "../Screens/Feedback/Feedback.jsx";
 import PageTransition from "@/components/PageTransition/PageTransition";
 import MoreQuestions from "../Screens/MoreQuestions/MoreQuestions.jsx";
-
+import Profile from "../Screens/Profile/Profile.jsx";
 function AnimatedRoutes() {
   const location = useLocation();
 
@@ -27,6 +27,7 @@ function AnimatedRoutes() {
           <Route path="/Contact" element={<Contact />} />
           <Route path="/Feedback" element={<Feedback />} />
           <Route path="/MoreQuestions" element={<MoreQuestions />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </PageTransition>
     </AnimatePresence>
