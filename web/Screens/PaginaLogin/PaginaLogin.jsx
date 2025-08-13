@@ -41,7 +41,7 @@ export default function PaginaLogin() {
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.convidado));
-        navigate("/home");
+        navigate("/profile");
       } else {
         setError(response.data.message || "Erro ao fazer login");
       }
