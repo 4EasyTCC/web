@@ -54,13 +54,6 @@
   transition: transform 0.2s ease;
 }
 
-.navButton:hover:not(.disabledButton) svg {
-  transform: translateX(-2px);
-}
-
-.navButton:last-child:hover:not(.disabledButton) svg {
-  transform: translateX(2px);
-}
 
 .disabledButton {
   background-color: #e0e0e0 !important;
@@ -148,7 +141,7 @@
 .seeAllButton {
   background: none;
   border: none;
-  color: #1400b4;
+  color: #000000;
   cursor: pointer;
   font-size: 1rem;
   display: flex;
@@ -165,6 +158,7 @@
 
 .seeAllButton svg {
   transition: transform 0.3s ease;
+  color: black;
 }
 
 .seeAllButton:hover svg {

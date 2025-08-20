@@ -46,21 +46,15 @@
 }
 
 .navButton:hover:not(.disabledButton) {
-  background: #0d008c;
   transform: scale(1.05);
+  background: #0d008c;
 }
 
 .navButton svg {
   transition: transform 0.2s ease;
+  
 }
 
-.navButton:hover:not(.disabledButton) svg {
-  transform: translateX(-2px);
-}
-
-.navButton:last-child:hover:not(.disabledButton) svg {
-  transform: translateX(2px);
-}
 
 .disabledButton {
   background-color: #e0e0e0 !important;
@@ -89,37 +83,52 @@
   height: 100%;
 }
 
-.ball {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  background-color: #f5f5f5;
+/* Quadrados em vez de bolas */
+.square {
+  width: 130px;
+  height: 130px;
+  border-radius: 8px;
+  background-color: #ebebeb;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   font-size: 0.9rem;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   cursor: pointer;
   margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #eee;
 }
 
-.ball:hover {
+.square:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-  background-color: #1400b4;
-  color: white;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+  background-color: #f0f0f0;
 }
 
-.ball span {
-  padding: 0 10px;
+.collectionName {
+  color: #000;
+  font-weight: 500;
+  margin-top: 8px;
+  line-height: 1.2;
 }
 
-.finalButton {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+  height: 30px;
+}
+
+/* Botão final quadrado */
+.finalSquare {
+  width: 130px;
+  height: 130px;
+  border-radius: 8px;
   background-color: #1400b4;
   color: white;
   border: none;
@@ -133,26 +142,22 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   gap: 5px;
   margin: 10px 0;
+  padding: 10px;
 }
 
-.finalButton:hover {
-  background-color: #0d008c;
+.finalSquare:hover { 
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
-.finalButton svg {
-  transition: transform 0.3s ease;
-}
-
-.finalButton:hover svg {
-  transform: translateX(3px);
+.finalSquare svg {
+  stroke: white;
 }
 
 .seeAllButton {
   background: none;
   border: none;
-  color: #1400b4;
+  color: #000;
   cursor: pointer;
   font-size: 1rem;
   display: flex;
@@ -164,11 +169,12 @@
 }
 
 .seeAllButton:hover {
-  background-color: #f0f0ff;
+  background-color: #f0f0f0;
 }
 
 .seeAllButton svg {
   transition: transform 0.3s ease;
+  stroke: #000000;
 }
 
 .seeAllButton:hover svg {
@@ -195,9 +201,9 @@
     height: 160px;
   }
   
-  .ball, .finalButton {
-    width: 100px;
-    height: 100px;
+  .square, .finalSquare {
+    width: 120px;
+    height: 120px;
   }
 }
 
@@ -206,9 +212,9 @@
     height: 150px;
   }
   
-  .ball, .finalButton {
-    width: 90px;
-    height: 90px;
+  .square, .finalSquare {
+    width: 110px;
+    height: 110px;
     font-size: 0.8rem;
   }
   
@@ -229,9 +235,9 @@
     height: 140px;
   }
   
-  .ball, .finalButton {
-    width: 80px;
-    height: 80px;
+  .square, .finalSquare {
+    width: 100px;
+    height: 100px;
     font-size: 0.7rem;
   }
   

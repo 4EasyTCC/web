@@ -12,6 +12,7 @@ import PageTransition from "@/components/PageTransition/PageTransition";
 import MoreQuestions from "../Screens/MoreQuestions/MoreQuestions.jsx";
 import Profile from "../Screens/Profile/Profile.jsx";
 import PageSponsor from "../Screens/PageSponsor/PageSponsor.jsx";
+import PageColecoes from "../Screens/PageColecoes/PageColecoes.jsx";
 function AnimatedRoutes() {
   const location = useLocation();
 
@@ -30,6 +31,7 @@ function AnimatedRoutes() {
           <Route path="/MoreQuestions" element={<MoreQuestions />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/PageSponsor" element={<PageSponsor />} />
+          <Route path="/PageColecoes" element={<PageColecoes />} />
         </Routes>
       </PageTransition>
     </AnimatePresence>

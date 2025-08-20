@@ -1,22 +1,21 @@
-import React, { useRef, useState, useEffect } from 'react';
-import Slider from 'react-slick';
+import React from "react";
 import { useNavigate } from 'react-router-dom';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import styles from './CarouselColecao.module.css';
+import styles from "./PageColecoes.module.css";
+import Header from "@/components/Header/Header";
+import Footer from "@/components/Footer/Footer";
 
-const CollectionsCarousel = () => {
+export default function Collections() {
   const navigate = useNavigate();
-
+  
   const navigateTo = (path) => {
     navigate(path);
   };
 
   // Funções para renderizar os ícones SVG
   const renderIcon = (iconName) => {
-    const iconSize = 24;
-    const iconColor = "#000000"; // Alterado para preto
-
+    const iconSize = 32;
+    const iconColor = "#000000";
+    
     const icons = {
       "Arte, Cultura e Lazer": (
         <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -139,157 +138,52 @@ const CollectionsCarousel = () => {
     );
   };
 
-  // Coleções atualizadas
-  const allCollections = [
-    "Arte, Cultura e Lazer",
-    "Congressos e Palestras",
-    "Cursos e Workshops",
-    "Esporte",
-    "Festas e Shows",
-    "Gastronomia",
-    "Games e Geek",
-    "Grátis",
-    "Infantil",
-    "Moda e Beleza",
-    "Passeios e Tours",
-    "Religião e Espiritualidade",
-    "Saúde e Bem-Estar",
-    "Teatros e Espetáculos"
+  // Novas coleções
+  const collections = [
+    { id: 1, name: "Arte, Cultura e Lazer" },
+    { id: 2, name: "Congressos e Palestras" },
+    { id: 3, name: "Cursos e Workshops" },
+    { id: 4, name: "Esporte" },
+    { id: 5, name: "Festas e Shows" },
+    { id: 6, name: "Gastronomia" },
+    { id: 7, name: "Games e Geek" },
+    { id: 8, name: "Grátis" },
+    { id: 9, name: "Infantil" },
+    { id: 10, name: "Moda e Beleza" },
+    { id: 11, name: "Passeios e Tours" },
+    { id: 12, name: "Religião e Espiritualidade" },
+    { id: 13, name: "Saúde e Bem-Estar" },
+    { id: 14, name: "Teatros e Espetáculos" }
   ];
 
-  const sliderRef = useRef();
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [slidesToShow, setSlidesToShow] = useState(5);
-
-  const settings = {
-    dots: false,
-    infinite: false,
-    speed: 300,
-    slidesToShow: 5,
-    slidesToScroll: 5,
-    arrows: false,
-    beforeChange: (_, next) => setCurrentSlide(next),
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3
-        }
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1
-        }
-      }
-    ]
-  };
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setSlidesToShow(5);
-      } else if (window.innerWidth >= 768) {
-        setSlidesToShow(3);
-      } else if (window.innerWidth >= 480) {
-        setSlidesToShow(2);
-      } else {
-        setSlidesToShow(1);
-      }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const goToNext = () => sliderRef.current.slickNext();
-  const goToPrev = () => sliderRef.current.slickPrev();
-
-  const isFirstSlide = currentSlide === 0;
-  const isLastSlide = currentSlide + slidesToShow >= allCollections.length;
-
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h2 className={styles.title}>COLEÇÕES</h2>
-        <div className={styles.controls}>
-          <div className={styles.arrows}>
-            <button
-              onClick={goToPrev}
-              className={`${styles.navButton} ${isFirstSlide ? styles.disabledButton : ''}`}
-              disabled={isFirstSlide}
-              aria-label="Slide anterior"
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
-            </button>
-            <button
-              onClick={goToNext}
-              className={`${styles.navButton} ${isLastSlide ? styles.disabledButton : ''}`}
-              disabled={isLastSlide}
-              aria-label="Próximo slide"
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 18l6-6-6-6" />
-              </svg>
-            </button>
-          </div>
-          <button
-            className={styles.seeAllButton}
-            onClick={() => navigateTo('/PageColecoes')}
-          >
-            <b>Ver tudo</b>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
-      </div>
+    <div className={styles.pageContainer}>
+      <Header />
+      <div className={styles.backgroundPattern}></div>
 
-      <div className={styles.carouselWrapper}>
-        <div className={styles.carouselContainer}>
-          <Slider ref={sliderRef} {...settings}>
-            {allCollections.map((item, index) => (
-              <div key={index} className={styles.collectionItem}>
-                <div className={styles.square}>
-                  <div className={styles.iconContainer}>
-                    {renderIcon(item)}
-                  </div>
-                  <span className={styles.collectionName}>{item}</span>
-                </div>
-              </div>
-            ))}
-            <div className={styles.collectionItem}>
-              <button
-                className={styles.finalSquare}
-                onClick={() => navigateTo('/PageColecoes')}
-              >
-                <div className={styles.iconContainer}>
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="16"></line>
-                    <line x1="8" y1="12" x2="16" y2="12"></line>
-                  </svg>
-                </div>
-                Ver tudo
-              </button>
-            </div>
-          </Slider>
+      <main className={styles.mainContent}>
+        <div className={styles.pageHeader}>
+          <h1>Coleções</h1>
+          <p className={styles.pageSubtitle}>Explore nossas categorias e encontre eventos incríveis</p>
         </div>
-      </div>
+        
+        <div className={styles.collectionsGrid}>
+          {collections.map(collection => (
+            <div 
+              key={collection.id} 
+              className={styles.collectionCard}
+              onClick={() => navigateTo(`/colecao/${collection.id}`)}
+            >
+              <div className={styles.collectionIcon}>
+                {renderIcon(collection.name)}
+              </div>
+              <span className={styles.collectionName}>{collection.name}</span>
+            </div>
+          ))}
+        </div>
+      </main>
+
+      <Footer />
     </div>
   );
-};
-
-export default CollectionsCarousel;
+}

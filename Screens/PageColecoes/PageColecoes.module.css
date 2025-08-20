@@ -1,0 +1,239 @@
+/* PageColecoes.module.css */
+.pageContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+}
+
+.backgroundPattern {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 15% 50%, rgba(255, 119, 87, 0.08), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(87, 203, 255, 0.08), transparent 25%),
+    linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  z-index: -1;
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.pageHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.pageHeader h1 {
+  font-size: 2.8rem;
+  color: #2d3748;
+  font-weight: 800;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, #1400b4 0%, #667eea 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pageSubtitle {
+  font-size: 1.1rem;
+  color: #718096;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.collectionsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  justify-content: center;
+}
+
+.collectionCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.06),
+    0 1px 4px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  text-align: center;
+  min-height: 180px;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  position: relative;
+  overflow: hidden;
+}
+
+.collectionCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #1400b4, #667eea);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.collectionCard:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.12),
+    0 4px 8px rgba(0, 0, 0, 0.06);
+  background-color: #ffffff;
+}
+
+.collectionCard:hover::before {
+  transform: scaleX(1);
+}
+
+.collectionIcon {
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  transition: all 0.3s ease;
+}
+
+.collectionCard:hover .collectionIcon {
+  background: linear-gradient(135deg, #1400b4 0%, #667eea 100%);
+  transform: scale(1.1) rotate(5deg);
+}
+
+.collectionCard:hover .collectionIcon svg {
+  stroke: white;
+}
+
+.collectionName {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #2d3748;
+  line-height: 1.4;
+  transition: color 0.3s ease;
+}
+
+.collectionCard:hover .collectionName {
+  color: #1400b4;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .collectionsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    padding: 2rem 1.5rem;
+  }
+  
+  .pageHeader h1 {
+    font-size: 2.2rem;
+  }
+  
+  .collectionsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
+  
+  .collectionCard {
+    padding: 1.5rem 1rem;
+    min-height: 160px;
+  }
+  
+  .collectionIcon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 1rem;
+  }
+  
+  .collectionName {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .collectionsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .pageHeader h1 {
+    font-size: 2rem;
+  }
+  
+  .pageSubtitle {
+    font-size: 0.95rem;
+  }
+  
+  .collectionCard {
+    padding: 1.25rem 0.75rem;
+    min-height: 140px;
+  }
+  
+  .collectionIcon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.8rem;
+  }
+  
+  .collectionName {
+    font-size: 0.85rem;
+  }
+}
+
+/* Animação de entrada suave */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.collectionCard {
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
+}
+
+.collectionCard:nth-child(1) { animation-delay: 0.05s; }
+.collectionCard:nth-child(2) { animation-delay: 0.1s; }
+.collectionCard:nth-child(3) { animation-delay: 0.15s; }
+.collectionCard:nth-child(4) { animation-delay: 0.2s; }
+.collectionCard:nth-child(5) { animation-delay: 0.25s; }
+.collectionCard:nth-child(6) { animation-delay: 0.3s; }
+.collectionCard:nth-child(7) { animation-delay: 0.35s; }
+.collectionCard:nth-child(8) { animation-delay: 0.4s; }
+.collectionCard:nth-child(9) { animation-delay: 0.45s; }
+.collection极:nth-child(10) { animation-delay: 0.5s; }
+.collectionCard:nth-child(11) { animation-delay: 0.55s; }
+.collectionCard:nth-child(12) { animation-delay: 0.6s; }
+.collectionCard:nth-child(13) { animation-delay: 0.65s; }
+.collectionCard:nth-child(14) { animation-delay: 0.7s; }
