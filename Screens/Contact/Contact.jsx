@@ -50,7 +50,7 @@ export default function Contact() {
       <Header />
       <div className={styles.backgroundPattern}></div>
 
-      <main>
+      <div className="mainContainer">
         <div className={styles.leftContent}>
           <h1>Vamos falar de negócios?</h1>
           <h2>Diga-nos a sua proposta.</h2>
@@ -106,7 +106,7 @@ export default function Contact() {
           </div>
           <button type="submit">Enviar</button>
         </form>
-      </main>
+      </div>
 
       <Footer />
     </div>

@@ -19,7 +19,7 @@
   z-index:1;
 }
 
-main {
+.mainContainer {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
