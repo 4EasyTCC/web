@@ -14,6 +14,7 @@ import Profile from "../Screens/Profile/Profile.jsx";
 import PageSponsor from "../Screens/PageSponsor/PageSponsor.jsx";
 import PageColecoes from "../Screens/PageColecoes/PageColecoes.jsx";
 import Eventos from "../Screens/Eventos/Eventos.jsx";
+import SearchEvents from "../Screens/SearchEvents/SearchEvents.jsx";
 function AnimatedRoutes() {
   const location = useLocation();
 
@@ -34,6 +35,7 @@ function AnimatedRoutes() {
           <Route path="/PageSponsor" element={<PageSponsor />} />
           <Route path="/PageColecoes" element={<PageColecoes />} />
           <Route path="/Eventos" element={<Eventos />} />
+          <Route path="/SearchEvents" element={<SearchEvents />} />
         </Routes>
       </PageTransition>
     </AnimatePresence>

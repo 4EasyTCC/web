@@ -29,8 +29,8 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       {/* Botão de voltar ao topo */}
-      <button 
-        onClick={scrollToTop} 
+      <button
+        onClick={scrollToTop}
         className={`${styles.backToTop} ${visible ? styles.show : ''}`}
         aria-label="Voltar ao topo"
       >
@@ -42,28 +42,28 @@ export default function Footer() {
         {/* Seção de download */}
         <div className={styles.downloadSection}>
           <div className={styles.logoSection}>
-            <img 
-              src={whiteLogo} 
-              alt="4e" 
+            <img
+              src={whiteLogo}
+              alt="4e"
               className={styles.logo}
               loading="lazy"
             />
             <p className={styles.tagline}>Conectando você aos melhores eventos</p>
           </div>
-          
+
           <div className={styles.appDownload}>
             <h3>Baixe nosso aplicativo</h3>
             <div className={styles.appButtons}>
               <a href="#" className={styles.storeLink}>
-                <img 
-                  src={googlePlay} 
+                <img
+                  src={googlePlay}
                   alt="Disponível no Google Play"
                   className={styles.badge}
                   loading="lazy"
                 />
               </a>
               <a href="#" className={styles.storeLink}>
-                <img 
+                <img
                   src={apple}
                   alt="Disponível na App Store"
                   className={styles.badge}
@@ -86,22 +86,35 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-          
+
           <div className={styles.linksColumn}>
             <h4>Categorias</h4>
             <ul>
-              {['Restaurantes', 'Lojas', 'Serviços', 'Eventos', 'Promoções'].map((category, index) => (
-                <li key={index}>
-                  <a href="#" className={styles.link}>{category}</a>
-                </li>
-              ))}
+              {['Arte, Cultura e Lazer',
+                'Congressos e Palestras',
+                'Cursos e Workshops',
+                'Esporte',
+                'Festas e Shows',
+                'Gastronomia',
+                'Games e Geek',
+                'Grátis',
+                'Infantil',
+                'Moda e Beleza',
+                'Passeios e Tours',
+                'Religião e Espiritualidade',
+                'Saúde e Bem-Estar',
+                'Teatros e Espetáculos'].map((category, index) => (
+                  <li key={index}>
+                    <a href="#" className={styles.link}>{category}</a>
+                  </li>
+                ))}
             </ul>
           </div>
-          
+
           <div className={styles.linksColumn}>
             <h4>Ajuda</h4>
             <ul>
-              {['Perguntas Frequentes', 'Termos de Uso', 'Política de Privacidade'].map((item, index) => (
+              {['Termos de Uso', 'Política de Privacidade'].map((item, index) => (
                 <li key={index + 1}>
                   <a href="#" className={styles.link}>{item}</a>
                 </li>
@@ -118,9 +131,9 @@ export default function Footer() {
           <div className={styles.newsletter}>
             <h4>Receba nossas novidades</h4>
             <form className={styles.newsletterForm}>
-              <input 
-                type="email" 
-                placeholder="Seu melhor e-mail" 
+              <input
+                type="email"
+                placeholder="Seu melhor e-mail"
                 className={styles.emailInput}
                 required
               />
@@ -137,7 +150,7 @@ export default function Footer() {
         <span className={styles.copyright}>
           © {new Date().getFullYear()} 4Easy. Todos os direitos reservados.
         </span>
-        
+
         <div className={styles.socialLinks}>
           <a href="#" aria-label="Facebook" className={styles.socialLink}>
             <FaFacebook className={styles.socialIcon} />

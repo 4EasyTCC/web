@@ -20,7 +20,7 @@ const ElementsCarousel = () => {
 
   const handleSeeAllClick = () => {
     // Redirecionar para página com todos os eventos
-    window.location.href = '/todos-eventos';
+    window.location.href = '/SearchEvents';
   };
 
   const settings = {

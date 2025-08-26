@@ -22,14 +22,13 @@ export default function Contact() {
     email: "",
     documento: "",
     proposta: "",
-  })
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   
-    const navigateTo = (path) => {
-      navigate(path);
-      onClose();
-
-  } 
+  const navigateTo = (path) => {
+    navigate(path);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,76 +38,116 @@ export default function Contact() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Simulação de envio
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
     console.log("Dados do formulário:", formData);
     alert("Proposta enviada com sucesso!");
+    setIsSubmitting(false);
+    
+    // Reset do formulário após envio
+    setFormData({
+      nome: "",
+      email: "",
+      documento: "",
+      proposta: "",
+    });
   };
 
   return (
-    <div className={styles.pageContainer}>
+    <>
       <Header />
-      <div className={styles.backgroundPattern}></div>
+      <div className={styles.pageContainer}>
+        <div className={styles.mainContainer}>
+          <div className={styles.leftContent}>
+            <div className={styles.contentWrapper}>
+              <h1>Vamos falar de <span className={styles.highlight}>negócios</span>?</h1>
+              <h2>Conte-nos sobre sua proposta e descubra como podemos crescer juntos.</h2>
+              
+              <button 
+                className={styles.ctaButton}
+                onClick={() => navigateTo('/PageSponsor')}
+              >
+                Seja um parceiro
+                <span className={styles.buttonArrow}>→</span>
+              </button>
 
-      <div className="mainContainer">
-        <div className={styles.leftContent}>
-          <h1>Vamos falar de negócios?</h1>
-          <h2>Diga-nos a sua proposta.</h2>
-          <button onClick={() => navigateTo('/PageSponsor')}>Vamos crescer juntos!</button>
-
-          <div className={styles.socialContainer}>
-            <p>Nossas redes sociais:</p>
-            <div className={styles.iconsGrid}>
-              <FaFacebookF />
-              <FaInstagram />
-              <FaLinkedinIn />
-              <FaTwitter />
-              <FaYoutube />
-              <FaWhatsapp />
-              <FaTiktok />
-              <FaPinterestP />
-              <FaSnapchatGhost />
-              <FaTelegramPlane />
+              <div className={styles.socialContainer}>
+                <p>Conecte-se conosco</p>
+                <div className={styles.iconsGrid}>
+                  <a href="#" aria-label="Facebook"><FaFacebookF /></a>
+                  <a href="#" aria-label="Instagram"><FaInstagram /></a>
+                  <a href="#" aria-label="LinkedIn"><FaLinkedinIn /></a>
+                  <a href="#" aria-label="Twitter"><FaTwitter /></a>
+                  <a href="#" aria-label="YouTube"><FaYoutube /></a>
+                  <a href="#" aria-label="WhatsApp"><FaWhatsapp /></a>
+                  <a href="#" aria-label="TikTok"><FaTiktok /></a>
+                  <a href="#" aria-label="Pinterest"><FaPinterestP /></a>
+                  <a href="#" aria-label="Snapchat"><FaSnapchatGhost /></a>
+                  <a href="#" aria-label="Telegram"><FaTelegramPlane /></a>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <form className={styles.rightForm} onSubmit={handleSubmit}>
-          <h3>Contate-nos</h3>
-          <div className={styles.formGroup}>
-            <input
-              type="text"
-              name="nome"
-              placeholder="Nome completo*"
-              value={formData.nome}
-              onChange={handleChange}
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Endereço de e-mail*"
-              value={formData.email}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="documento"
-              placeholder="CPF ou CPNJ*"
-              value={formData.documento}
-              onChange={handleChange}
-            />
-            <textarea
-              name="proposta"
-              placeholder="Diga-nos sobre a sua proposta:"
-              value={formData.proposta}
-              onChange={handleChange}
-            />
+          <div className={styles.rightContent}>
+            <form className={styles.contactForm} onSubmit={handleSubmit}>
+              <h3>Entre em contato</h3>
+              <p className={styles.formSubtitle}>Preencha os dados abaixo e retornaremos em breve</p>
+              
+              <div className={styles.formGroup}>
+                <input
+                  type="text"
+                  name="nome"
+                  placeholder="Nome completo*"
+                  value={formData.nome}
+                  onChange={handleChange}
+                  required
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Endereço de e-mail*"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+                <input
+                  type="text"
+                  name="documento"
+                  placeholder="CPF ou CNPJ*"
+                  value={formData.documento}
+                  onChange={handleChange}
+                  required
+                />
+                <textarea
+                  name="proposta"
+                  placeholder="Descreva sua proposta com detalhes*"
+                  value={formData.proposta}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <button 
+                type="submit" 
+                className={styles.submitButton}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <span className={styles.spinner}></span>
+                ) : (
+                  'Enviar proposta'
+                )}
+              </button>
+            </form>
           </div>
-          <button type="submit">Enviar</button>
-        </form>
+        </div>
       </div>
-
       <Footer />
-    </div>
+    </>
   );
 }
