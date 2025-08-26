@@ -2,15 +2,12 @@ import React, { useState, useEffect } from 'react';
 import styles from './Eventos.module.css';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const Eventos = () => {
     const { eventoId } = useParams();
+    const navigate = useNavigate();
     const [evento, setEvento] = useState(null);
-    const [localizacao, setLocalizacao] = useState(null);
-    const [organizador, setOrganizador] = useState(null);
-    const [midias, setMidias] = useState([]);
-    const [ingressos, setIngressos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -18,47 +15,92 @@ const Eventos = () => {
         const fetchEventoData = async () => {
             try {
                 setLoading(true);
-                // Buscar dados do evento
-                const eventoResponse = await fetch(`/api/eventos/${eventoId}`);
-                if (!eventoResponse.ok) throw new Error('Evento não encontrado');
-                const eventoData = await eventoResponse.json();
-                setEvento(eventoData);
-
-                // Buscar localização
-                if (eventoData.localizacaoId) {
-                    const localizacaoResponse = await fetch(`/api/localizacoes/${eventoData.localizacaoId}`);
-                    if (localizacaoResponse.ok) {
-                        const localizacaoData = await localizacaoResponse.json();
-                        setLocalizacao(localizacaoData);
+                setError(null);
+                
+                // Buscar dados do evento com todas as informações incluídas
+                const response = await fetch(`/api/eventos/${eventoId}`);
+                
+                if (!response.ok) {
+                    // Se a API não estiver disponível, usar dados mockados
+                    if (response.status === 404) {
+                        throw new Error('Evento não encontrado');
                     }
+                    throw new Error('Erro ao carregar evento');
                 }
-
-                // Buscar organizador
-                if (eventoData.organizadorId) {
-                    const organizadorResponse = await fetch(`/api/organizadores/${eventoData.organizadorId}`);
-                    if (organizadorResponse.ok) {
-                        const organizadorData = await organizadorResponse.json();
-                        setOrganizador(organizadorData);
-                    }
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.message || 'Erro ao carregar evento');
                 }
-
-                // Buscar mídias
-                const midiasResponse = await fetch(`/api/eventos/${eventoId}/midias`);
-                if (midiasResponse.ok) {
-                    const midiasData = await midiasResponse.json();
-                    setMidias(midiasData);
-                }
-
-                // Buscar ingressos
-                const ingressosResponse = await fetch(`/api/eventos/${eventoId}/ingressos`);
-                if (ingressosResponse.ok) {
-                    const ingressosData = await ingressosResponse.json();
-                    setIngressos(ingressosData);
-                }
-
+                
+                setEvento(data.evento);
                 setLoading(false);
             } catch (err) {
-                setError(err.message);
+                console.error('Erro ao carregar evento:', err);
+                
+                // Dados mockados para desenvolvimento
+                if (process.env.NODE_ENV === 'development') {
+                    const eventoMockado = {
+                        eventoId: parseInt(eventoId),
+                        nomeEvento: `Evento de Exemplo ${eventoId}`,
+                        descEvento: 'Este é um evento de exemplo com descrição detalhada para demonstração das funcionalidades do sistema.',
+                        tipoEvento: 'Festas e Shows',
+                        privacidadeEvento: 'Público',
+                        dataInicio: '2024-03-15',
+                        horaInicio: '19:00',
+                        dataFim: '2024-03-16',
+                        horaFim: '02:00',
+                        statusEvento: 'ativo',
+                        localizacao: {
+                            endereco: 'Avenida Paulista, 1000',
+                            cidade: 'São Paulo',
+                            estado: 'SP',
+                            cep: '01310-100',
+                            complemento: 'Próximo ao metrô Trianon-MASP'
+                        },
+                        organizador: {
+                            organizadorId: 1,
+                            nome: 'Produtor Exemplo',
+                            email: 'produtor@exemplo.com',
+                            avatarUrl: null
+                        },
+                        Ingressos: [
+                            {
+                                ingressoId: 1,
+                                nome: 'Pista',
+                                descricao: 'Acesso à área principal do evento',
+                                preco: 50.00,
+                                quantidade: 100,
+                                dataLimite: '2024-03-14'
+                            },
+                            {
+                                ingressoId: 2,
+                                nome: 'VIP',
+                                descricao: 'Área exclusiva com open bar',
+                                preco: 120.00,
+                                quantidade: 50,
+                                dataLimite: '2024-03-14'
+                            }
+                        ],
+                        Midia: [
+                            {
+                                midiaId: 1,
+                                url: '/placeholder-event.jpg',
+                                tipo: 'imagem'
+                            },
+                            {
+                                midiaId: 2,
+                                url: '/placeholder-event-2.jpg',
+                                tipo: 'imagem'
+                            }
+                        ]
+                    };
+                    setEvento(eventoMockado);
+                    setError('Usando dados de demonstração - API não disponível');
+                } else {
+                    setError(err.message);
+                }
                 setLoading(false);
             }
         };
@@ -68,24 +110,93 @@ const Eventos = () => {
         }
     }, [eventoId]);
 
-    if (loading) return <div className={styles.loading}>Carregando evento...</div>;
-    if (error) return <div className={styles.error}>Erro: {error}</div>;
-    if (!evento) return <div className={styles.error}>Evento não encontrado</div>;
+    const handleComprarIngresso = (ingresso) => {
+        // Lógica para compra de ingresso
+        console.log('Comprando ingresso:', ingresso);
+        alert(`Redirecionando para compra do ingresso: ${ingresso.nome}`);
+    };
 
-    // Formatar datas
     const formatarData = (dataString) => {
-        const data = new Date(dataString);
-        return data.toLocaleDateString('pt-BR', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        });
+        if (!dataString) return 'Data não definida';
+        
+        try {
+            const data = new Date(dataString);
+            if (isNaN(data.getTime())) return 'Data inválida';
+            
+            return data.toLocaleDateString('pt-BR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        } catch (error) {
+            console.error('Erro ao formatar data:', error);
+            return 'Data inválida';
+        }
     };
 
     const formatarHora = (horaString) => {
         if (!horaString) return '';
-        return horaString.substring(0, 5);
+        
+        try {
+            const [hours, minutes] = horaString.split(':');
+            return `${hours}:${minutes}h`;
+        } catch (error) {
+            console.error('Erro ao formatar hora:', error);
+            return '';
+        }
     };
+
+    const formatarPreco = (preco) => {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(preco);
+    };
+
+    if (loading) {
+        return (
+            <>
+                <Header />
+                <div className={styles.loadingContainer}>
+                    <div className={styles.spinner}></div>
+                    <p>Carregando evento...</p>
+                </div>
+                <Footer />
+            </>
+        );
+    }
+
+    if (error && !evento) {
+        return (
+            <>
+                <Header />
+                <div className={styles.errorContainer}>
+                    <h2>Erro ao carregar evento</h2>
+                    <p>{error}</p>
+                    <button onClick={() => navigate('/eventos')} className={styles.backButton}>
+                        Voltar para eventos
+                    </button>
+                </div>
+                <Footer />
+            </>
+        );
+    }
+
+    if (!evento) {
+        return (
+            <>
+                <Header />
+                <div className={styles.errorContainer}>
+                    <h2>Evento não encontrado</h2>
+                    <p>O evento solicitado não existe ou não está disponível.</p>
+                    <button onClick={() => navigate('/eventos')} className={styles.backButton}>
+                        Voltar para eventos
+                    </button>
+                </div>
+                <Footer />
+            </>
+        );
+    }
 
     return (
         <>
@@ -94,12 +205,17 @@ const Eventos = () => {
             {/* Hero Section - Banner do Evento */}
             <section className={styles.hero}>
                 <div className={styles.heroImage} 
-                     style={{ backgroundImage: `url(${midias.length > 0 ? midias[0].url : '/default-banner.jpg'})` }}>
+                     style={{ 
+                         backgroundImage: `url(${evento.Midia && evento.Midia.length > 0 ? evento.Midia[0].url : '/default-banner.jpg'})`
+                     }}>
                     <div className={styles.heroOverlay}>
                         <div className={styles.heroContent}>
+                            <button onClick={() => navigate(-1)} className={styles.backButton}>
+                                ← Voltar
+                            </button>
                             <h1 className={styles.eventTitle}>{evento.nomeEvento}</h1>
                             <h2 className={styles.eventCity}>
-                                {localizacao ? `${localizacao.cidade}, ${localizacao.estado}` : 'Local a definir'}
+                                {evento.localizacao ? `${evento.localizacao.cidade}, ${evento.localizacao.estado}` : 'Local a definir'}
                             </h2>
                             <div className={styles.eventDate}>
                                 {evento.dataInicio && (
@@ -108,7 +224,7 @@ const Eventos = () => {
                                         {evento.horaInicio && ` às ${formatarHora(evento.horaInicio)}`}
                                     </>
                                 )}
-                                {evento.dataFim && (
+                                {evento.dataFim && evento.dataFim !== evento.dataInicio && (
                                     <>
                                         {' até '}
                                         {formatarData(evento.dataFim)}
@@ -117,7 +233,7 @@ const Eventos = () => {
                                 )}
                             </div>
                             <div className={styles.eventLocation}>
-                                {localizacao && localizacao.endereco}
+                                {evento.localizacao && evento.localizacao.endereco}
                             </div>
                         </div>
                     </div>
@@ -128,19 +244,25 @@ const Eventos = () => {
                 <div className={styles.mainContent}>
                     {/* Descrição do Evento */}
                     <section className={styles.descriptionSection}>
-                        <h2 className={styles.sectionTitle}>Descrição do evento</h2>
+                        <h2 className={styles.sectionTitle}>Sobre o evento</h2>
                         <p className={styles.eventDescription}>
                             {evento.descEvento || 'Este evento ainda não possui uma descrição detalhada.'}
                         </p>
                         
                         {/* Galeria de Mídias */}
-                        {midias.length > 0 && (
+                        {evento.Midia && evento.Midia.length > 0 && (
                             <div className={styles.mediaGallery}>
                                 <h3 className={styles.galleryTitle}>Galeria</h3>
                                 <div className={styles.galleryGrid}>
-                                    {midias.map((midia, index) => (
-                                        <div key={index} className={styles.galleryItem}>
-                                            <img src={midia.url} alt={`Mídia ${index + 1}`} />
+                                    {evento.Midia.map((midia, index) => (
+                                        <div key={midia.midiaId || index} className={styles.galleryItem}>
+                                            <img 
+                                                src={midia.url} 
+                                                alt={`${evento.nomeEvento} - Imagem ${index + 1}`}
+                                                onError={(e) => {
+                                                    e.target.src = '/placeholder-event.jpg';
+                                                }}
+                                            />
                                         </div>
                                     ))}
                                 </div>
@@ -152,36 +274,64 @@ const Eventos = () => {
                     <section className={styles.infoSection}>
                         <h2 className={styles.sectionTitle}>Informações</h2>
                         
-                        <div className={styles.infoItem}>
-                            <strong>Tipo de Evento:</strong> {evento.tipoEvento}
-                        </div>
-                        
-                        <div className={styles.infoItem}>
-                            <strong>Privacidade:</strong> {evento.privacidadeEvento}
-                        </div>
-                        
-                        {ingressos.length > 0 && (
+                        <div className={styles.infoGrid}>
                             <div className={styles.infoItem}>
-                                <strong>Ingressos disponíveis:</strong>
-                                <ul className={styles.ticketList}>
-                                    {ingressos.map((ingresso, index) => (
-                                        <li key={index}>
-                                            {ingresso.nome} - R$ {ingresso.preco}
-                                        </li>
-                                    ))}
-                                </ul>
+                                <strong>🎭 Tipo de Evento:</strong>
+                                <span>{evento.tipoEvento || 'Não especificado'}</span>
                             </div>
-                        )}
+                            
+                            <div className={styles.infoItem}>
+                                <strong>🔒 Privacidade:</strong>
+                                <span>{evento.privacidadeEvento || 'Público'}</span>
+                            </div>
+                            
+                            <div className={styles.infoItem}>
+                                <strong>📅 Data de Início:</strong>
+                                <span>
+                                    {evento.dataInicio ? formatarData(evento.dataInicio) : 'Não definida'}
+                                    {evento.horaInicio && ` às ${formatarHora(evento.horaInicio)}`}
+                                </span>
+                            </div>
+                            
+                            {evento.dataFim && (
+                                <div className={styles.infoItem}>
+                                    <strong>📅 Data de Término:</strong>
+                                    <span>
+                                        {formatarData(evento.dataFim)}
+                                        {evento.horaFim && ` às ${formatarHora(evento.horaFim)}`}
+                                    </span>
+                                </div>
+                            )}
+                            
+                            <div className={styles.infoItem}>
+                                <strong>📊 Status:</strong>
+                                <span className={evento.statusEvento === 'ativo' ? styles.statusAtivo : styles.statusInativo}>
+                                    {evento.statusEvento === 'ativo' ? 'Ativo' : 'Inativo'}
+                                </span>
+                            </div>
+                        </div>
                     </section>
 
                     {/* Política do Evento */}
                     <section className={styles.policySection}>
-                        <h2 className={styles.sectionTitle}>Política do evento</h2>
+                        <h2 className={styles.sectionTitle}>Políticas do evento</h2>
                         <div className={styles.policyContent}>
-                            <p>• Entrada permitida apenas para maiores de 18 anos</p>
-                            <p>• É proibida a entrada com alimentos e bebidas</p>
-                            <p>• Reservamo-nos o direito de entrada</p>
-                            <p>• Em caso de cancelamento, os valores serão reembolsados</p>
+                            <div className={styles.policyItem}>
+                                <strong>🎫 Entrada:</strong>
+                                <span>Permitida apenas para maiores de 18 anos</span>
+                            </div>
+                            <div className={styles.policyItem}>
+                                <strong>🚫 Restrições:</strong>
+                                <span>É proibida a entrada com alimentos e bebidas externas</span>
+                            </div>
+                            <div className={styles.policyItem}>
+                                <strong>⚖️ Direito de Admissão:</strong>
+                                <span>Reservamo-nos o direito de entrada</span>
+                            </div>
+                            <div className={styles.policyItem}>
+                                <strong>💵 Reembolso:</strong>
+                                <span>Em caso de cancelamento, os valores serão reembolsados em até 30 dias</span>
+                            </div>
                         </div>
                     </section>
                 </div>
@@ -189,34 +339,62 @@ const Eventos = () => {
                 <div className={styles.sidebar}>
                     {/* Organizador/Produtor */}
                     <div className={styles.organizerCard}>
-                        <h3 className={styles.sidebarTitle}>Produtor</h3>
+                        <h3 className={styles.sidebarTitle}>🎤 Produtor</h3>
                         <div className={styles.organizerInfo}>
                             <div className={styles.organizerLogo}>
-                                {organizador ? (
-                                    <span className={styles.organizerInitial}>
-                                        {organizador.nome.charAt(0)}
-                                    </span>
+                                {evento.organizador ? (
+                                    evento.organizador.avatarUrl ? (
+                                        <img 
+                                            src={evento.organizador.avatarUrl} 
+                                            alt={evento.organizador.nome}
+                                            onError={(e) => {
+                                                e.target.src = '/placeholder-avatar.jpg';
+                                            }}
+                                        />
+                                    ) : (
+                                        <span className={styles.organizerInitial}>
+                                            {evento.organizador.nome.charAt(0).toUpperCase()}
+                                        </span>
+                                    )
                                 ) : (
                                     <span className={styles.organizerInitial}>O</span>
                                 )}
                             </div>
                             <div className={styles.organizerDetails}>
-                                <h4>{organizador ? organizador.nome : 'Organizador'}</h4>
+                                <h4>{evento.organizador ? evento.organizador.nome : 'Organizador'}</h4>
                                 <p>Responsável pelo evento</p>
+                                {evento.organizador && evento.organizador.email && (
+                                    <p className={styles.organizerEmail}>{evento.organizador.email}</p>
+                                )}
                             </div>
                         </div>
                     </div>
 
                     {/* Ingressos */}
-                    {ingressos.length > 0 && (
+                    {evento.Ingressos && evento.Ingressos.length > 0 && (
                         <div className={styles.ticketCard}>
-                            <h3 className={styles.sidebarTitle}>Ingressos</h3>
+                            <h3 className={styles.sidebarTitle}>🎫 Ingressos</h3>
                             <div className={styles.ticketOptions}>
-                                {ingressos.map((ingresso, index) => (
-                                    <div key={index} className={styles.ticketOption}>
-                                        <div className={styles.ticketName}>{ingresso.nome}</div>
-                                        <div className={styles.ticketPrice}>R$ {ingresso.preco}</div>
-                                        <button className={styles.buyButton}>Comprar</button>
+                                {evento.Ingressos.map((ingresso, index) => (
+                                    <div key={ingresso.ingressoId || index} className={styles.ticketOption}>
+                                        <div className={styles.ticketHeader}>
+                                            <div className={styles.ticketName}>{ingresso.nome}</div>
+                                            <div className={styles.ticketPrice}>{formatarPreco(ingresso.preco)}</div>
+                                        </div>
+                                        {ingresso.descricao && (
+                                            <div className={styles.ticketDescription}>{ingresso.descricao}</div>
+                                        )}
+                                        {ingresso.dataLimite && (
+                                            <div className={styles.ticketDeadline}>
+                                                Venda até: {formatarData(ingresso.dataLimite)}
+                                            </div>
+                                        )}
+                                        <button 
+                                            className={styles.buyButton}
+                                            onClick={() => handleComprarIngresso(ingresso)}
+                                        >
+                                            Comprar Ingresso
+                                        </button>
                                     </div>
                                 ))}
                             </div>
@@ -224,22 +402,32 @@ const Eventos = () => {
                     )}
 
                     {/* Localização */}
-                    {localizacao && (
+                    {evento.localizacao && (
                         <div className={styles.locationCard}>
-                            <h3 className={styles.sidebarTitle}>Localização</h3>
-                            <p>{localizacao.endereco}</p>
-                            {localizacao.complemento && <p>{localizacao.complemento}</p>}
-                            <p>
-                                {localizacao.cidade && `${localizacao.cidade}, `}
-                                {localizacao.estado && `${localizacao.estado} `}
-                                {localizacao.cep && `- ${localizacao.cep}`}
-                            </p>
+                            <h3 className={styles.sidebarTitle}>📍 Localização</h3>
+                            <div className={styles.locationInfo}>
+                                <p className={styles.locationAddress}>
+                                    <strong>Endereço:</strong><br />
+                                    {evento.localizacao.endereco}
+                                </p>
+                                {evento.localizacao.complemento && (
+                                    <p className={styles.locationComplement}>
+                                        {evento.localizacao.complemento}
+                                    </p>
+                                )}
+                                <p className={styles.locationCity}>
+                                    {evento.localizacao.cidade && `${evento.localizacao.cidade}, `}
+                                    {evento.localizacao.estado && `${evento.localizacao.estado} `}
+                                    {evento.localizacao.cep && `- ${evento.localizacao.cep}`}
+                                </p>
+                            </div>
                         </div>
                     )}
 
                     {/* Download App */}
                     <div className={styles.appCard}>
-                        <h3 className={styles.sidebarTitle}>Baixe nosso aplicativo</h3>
+                        <h3 className={styles.sidebarTitle}>📱 Baixe nosso app</h3>
+                        <p className={styles.appDescription}>Tenha acesso a todos os eventos e compre ingressos com facilidade</p>
                         <div className={styles.appButtons}>
                             <button className={styles.appButton}>
                                 <span>Google Play</span>

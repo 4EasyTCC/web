@@ -1,19 +1,63 @@
 /* Eventos.module.css */
-
-.loading, .error {
-    text-align: center;
-    padding: 2rem;
-    font-size: 1.2rem;
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    gap: 20px;
 }
 
-.error {
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #4a3aff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.errorContainer {
+    text-align: center;
+    padding: 3rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.errorContainer h2 {
     color: #d32f2f;
+    margin-bottom: 1rem;
+}
+
+.errorContainer p {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.backButton {
+    padding: 10px 20px;
+    background-color: #4a3aff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.backButton:hover {
+    background-color: #3a2adf;
 }
 
 /* Hero Section */
 .hero {
     width: 100%;
-    height: 70vh;
+    height: 60vh;
     position: relative;
 }
 
@@ -31,7 +75,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8));
     display: flex;
     align-items: flex-end;
     padding: 2rem;
@@ -44,103 +88,171 @@
     width: 100%;
 }
 
+.heroContent .backButton {
+    margin-bottom: 1rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.heroContent .backButton:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
 .eventTitle {
-    font-size: 3rem;
+    font-size: 2.5rem;
     margin-bottom: 0.5rem;
     font-weight: bold;
+    line-height: 1.2;
 }
 
 .eventCity {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin-bottom: 1rem;
     opacity: 0.9;
+    font-weight: 500;
 }
 
 .eventDate, .eventLocation {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin-bottom: 0.5rem;
+    opacity: 0.9;
 }
 
 /* Main Layout */
 .container {
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
+    margin: 2rem auto;
+    padding: 0 1rem;
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 350px;
     gap: 2rem;
 }
 
 /* Main Content */
+.mainContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
 .sectionTitle {
     font-size: 1.8rem;
     margin-bottom: 1rem;
-    color: #333;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 0.5rem;
+    color: #1a1a40;
+    font-weight: 600;
 }
 
 .eventDescription {
     font-size: 1.1rem;
     line-height: 1.6;
-    margin-bottom: 2rem;
-    color: #555;
+    color: #4a5568;
+    margin-bottom: 1rem;
 }
 
 .mediaGallery {
-    margin: 2rem 0;
+    margin: 1rem 0;
 }
 
 .galleryTitle {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: #333;
+    color: #1a1a40;
+    font-weight: 600;
 }
 
 .galleryGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1rem;
+}
+
+.galleryItem {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.galleryItem:hover {
+    transform: translateY(-2px);
 }
 
 .galleryItem img {
     width: 100%;
-    height: 150px;
+    height: 200px;
     object-fit: cover;
-    border-radius: 8px;
 }
 
-.infoSection, .policySection {
-    margin: 2rem 0;
+.infoSection {
+    background: #f8f9ff;
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.infoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
 }
 
 .infoItem {
-    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     padding: 1rem;
-    background: #f9f9f9;
+    background: white;
     border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.ticketList {
-    list-style: none;
-    padding: 0;
-    margin: 0.5rem 0 0 0;
+.infoItem strong {
+    color: #4a3aff;
+    font-weight: 600;
 }
 
-.ticketList li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #eee;
+.infoItem span {
+    color: #4a5568;
+}
+
+.statusAtivo {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.statusInativo {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.policySection {
+    background: #fff8f8;
+    padding: 1.5rem;
+    border-radius: 12px;
 }
 
 .policyContent {
-    background: #f9f9f9;
-    padding: 1.5rem;
-    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-.policyContent p {
-    margin-bottom: 0.5rem;
-    color: #555;
+.policyItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.policyItem strong {
+    color: #e53e3e;
+    font-weight: 600;
+}
+
+.policyItem span {
+    color: #4a5568;
 }
 
 /* Sidebar */
@@ -148,19 +260,23 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
 }
 
 .sidebarTitle {
     font-size: 1.3rem;
     margin-bottom: 1rem;
-    color: #333;
+    color: #1a1a40;
+    font-weight: 600;
 }
 
 .organizerCard, .ticketCard, .locationCard, .appCard {
     background: white;
     padding: 1.5rem;
     border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .organizerInfo {
@@ -173,24 +289,38 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: #007bff;
+    background: linear-gradient(135deg, #4a3aff, #6c63ff);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-size: 1.5rem;
     font-weight: bold;
+    flex-shrink: 0;
+}
+
+.organizerLogo img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .organizerDetails h4 {
     margin: 0 0 0.3rem 0;
-    color: #333;
+    color: #1a1a40;
+    font-weight: 600;
 }
 
 .organizerDetails p {
     margin: 0;
     color: #666;
     font-size: 0.9rem;
+}
+
+.organizerEmail {
+    color: #4a3aff !important;
+    font-size: 0.8rem !important;
 }
 
 .ticketOptions {
@@ -200,40 +330,89 @@
 }
 
 .ticketOption {
-    padding: 1rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    padding: 1.2rem;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    transition: border-color 0.2s ease;
+}
+
+.ticketOption:hover {
+    border-color: #4a3aff;
+}
+
+.ticketHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
 }
 
 .ticketName {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #1a1a40;
+    font-size: 1.1rem;
 }
 
 .ticketPrice {
-    font-size: 1.2rem;
-    color: #007bff;
-    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+    color: #4a3aff;
+    font-weight: 700;
+}
+
+.ticketDescription {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+}
+
+.ticketDeadline {
+    color: #e53e3e;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
 }
 
 .buyButton {
     width: 100%;
-    padding: 0.7rem;
-    background: #007bff;
+    padding: 0.8rem;
+    background: linear-gradient(135deg, #4a3aff, #6c63ff);
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 600;
+    transition: transform 0.2s ease;
 }
 
 .buyButton:hover {
-    background: #0056b3;
+    transform: translateY(-2px);
 }
 
-.locationCard p {
-    margin: 0.5rem 0;
-    color: #555;
+.locationInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.locationAddress, .locationComplement, .locationCity {
+    margin: 0;
+    color: #4a5568;
+    line-height: 1.4;
+}
+
+.locationAddress strong {
+    color: #1a1a40;
+}
+
+.appCard {
+    text-align: center;
+}
+
+.appDescription {
+    color: #666;
+    margin-bottom: 1.2rem;
+    font-size: 0.9rem;
 }
 
 .appButtons {
@@ -244,23 +423,29 @@
 
 .appButton {
     padding: 1rem;
-    background: #333;
+    background: #1a1a40;
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
 }
 
 .appButton:hover {
-    background: #555;
+    background: #2a2a60;
 }
 
 /* Responsividade */
-@media (max-width: 768px) {
+@media (max-width: 968px) {
     .container {
         grid-template-columns: 1fr;
-        padding: 1rem;
+        gap: 1.5rem;
+    }
+    
+    .sidebar {
+        position: static;
+        order: -1;
     }
     
     .eventTitle {
@@ -270,8 +455,48 @@
     .hero {
         height: 50vh;
     }
+}
+
+@media (max-width: 768px) {
+    .heroContent {
+        padding: 1rem;
+    }
+    
+    .eventTitle {
+        font-size: 1.8rem;
+    }
+    
+    .infoGrid {
+        grid-template-columns: 1fr;
+    }
     
     .galleryGrid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .container {
+        padding: 0 0.5rem;
+        margin: 1rem auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .eventTitle {
+        font-size: 1.5rem;
+    }
+    
+    .hero {
+        height: 40vh;
+    }
+    
+    .organizerInfo {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .ticketHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
     }
 }

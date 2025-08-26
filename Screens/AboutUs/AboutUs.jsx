@@ -35,7 +35,7 @@ export default function AboutUs() {
     {
       image: Yasmin,
       alt: 'Foto da Yasmin',
-      nome: 'Yasmin Oliveira',
+      nome: 'Yasmin Carvalho',
       cargo: 'Diretora Backend',
       descricao: 'Foca na construção de lógicas estruradas da aplicação.'
     },
