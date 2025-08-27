@@ -1,24 +1,22 @@
-import React from 'react';
+// Home.jsx
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as Select from '@radix-ui/react-select';
+import { ChevronDownIcon, ChevronUpIcon, CheckIcon } from '@radix-ui/react-icons';
 import styles from "./Home.module.css";
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
-import CarouselColecao from './CarouselColecao';
-import CarouselElements from './CarouselElements';
-import CarouselEvents from './CarouselEvents';
+import CategoryCarousel from '@/components/CategoryCarousel/CategoryCarousel';
+import HeroCarousel from '@/components/HeroCarousel/HeroCarousel';
 import img1 from '@images/placeholders/img1.png';
 import img2 from '@images/placeholders/img2.png';
 import img3 from '@images/placeholders/img3.jpg';
-import img4 from '@images/placeholders/img4.png';
-import img5 from '@images/placeholders/img5.png';
-import img6 from '@images/placeholders/img6.png';
-import img7 from '@images/placeholders/img7.png';
 import cellphone from '@images/placeholders/cellphone.png';
 import cellphone4easy from '@images/placeholders/cellPhone4easy.png';
 import money from '@images/placeholders/money.png';
-import pattern from '@images/placeholders/pattern.png';
 
-const events = [
+// Dados estáticos para o carousel hero (como fallback)
+const heroEvents = [
   {
     image: img1,
     alt: "Evento 1",
@@ -39,58 +37,100 @@ const events = [
     nome: "Nome do Evento 3",
     local: "São Paulo",
     data: "sexta-feira, 12 de Fev às 20:00"
-  },
-  {
-    image: img4,
-    alt: "Evento 4",
-    nome: "Nome do Evento 4",
-    local: "São Paulo",
-    data: "sexta-feira, 12 de Fev às 20:00"
-  },
-  {
-    image: img5,
-    alt: "Evento 5",
-    nome: "Nome do Evento 5",
-    local: "São Paulo",
-    data: "sexta-feira, 12 de Fev às 20:00"
-  },
-  {
-    image: img6,
-    alt: "Evento 6",
-    nome: "Nome do Evento 6",
-    local: "São Paulo",
-    data: "sexta-feira, 12 de Fev às 20:00"
-  },
-  {
-    image: img7,
-    alt: "Evento 7",
-    nome: "Nome do Evento 7",
-    local: "São Paulo",
-    data: "sexta-feira, 12 de Fev às 20:00"
-  },
+  }
 ];
 
 export default function Home() {
   const navigate = useNavigate();
+  const [periodoSelecionado, setPeriodoSelecionado] = useState('hoje');
+
+  const opcoesPeriodo = [
+    { valor: 'hoje', label: 'Hoje' },
+    { valor: 'amanha', label: 'Amanhã' },
+    { valor: 'esta-semana', label: 'Esta semana' },
+    { valor: 'proxima-semana', label: 'Próxima semana' },
+    { valor: 'este-mes', label: 'Este mês' }
+  ];
 
   return (
     <div className={styles.pageContainer}>
       <Header />
 
       <main className={styles.mainContent}>
+        {/* Hero Carousel */}
         <section className={styles.eventsSection}>
-          <CarouselEvents events={events} />
+          <HeroCarousel events={heroEvents} />
         </section>
 
         <div className={styles.contentWithBackground}>
-          <div className={styles.carouselWrapper}>
-            <CarouselColecao />
+          {/* Carousel O que fazer hoje/esta semana */}
+          <div className={styles.carouselSection}>
+            <div className={styles.carouselHeader}>
+              <h2>O que fazer</h2>
+              <Select.Root value={periodoSelecionado} onValueChange={setPeriodoSelecionado}>
+                <Select.Trigger className={styles.periodoDropdown} aria-label="Selecionar período">
+                  <Select.Value>
+                    {opcoesPeriodo.find(op => op.valor === periodoSelecionado)?.label}
+                  </Select.Value>
+                  <Select.Icon>
+                    <ChevronDownIcon />
+                  </Select.Icon>
+                </Select.Trigger>
+
+                <Select.Portal>
+                  <Select.Content className={styles.periodoOptions}>
+                    <Select.ScrollUpButton className={styles.periodoOption}>
+                      <ChevronUpIcon />
+                    </Select.ScrollUpButton>
+
+                    <Select.Viewport>
+                      {opcoesPeriodo.map(opcao => (
+                        <Select.Item key={opcao.valor} value={opcao.valor} className={styles.periodoOption}>
+                          <Select.ItemText>{opcao.label}</Select.ItemText>
+                          <Select.ItemIndicator>
+                            <CheckIcon />
+                          </Select.ItemIndicator>
+                        </Select.Item>
+                      ))}
+                    </Select.Viewport>
+
+                    <Select.ScrollDownButton className={styles.periodoOption}>
+                      <ChevronDownIcon />
+                    </Select.ScrollDownButton>
+                  </Select.Content>
+                </Select.Portal>
+              </Select.Root>
+            </div>
           </div>
 
-          <div className={styles.carouselWrapper}>
-            <CarouselElements />
-          </div>
+          <CategoryCarousel 
+            title="" 
+            filterType="periodo" 
+            filterValue={periodoSelecionado} 
+          />
 
+          {/* Carousels por categoria */}
+          {[
+            { nome: 'Esporte', valor: 'Esporte' },
+            { nome: 'Festas e Shows', valor: 'Festas e Shows' },
+            { nome: 'Gastronomia', valor: 'Gastronomia' },
+            { nome: 'Games e Geek', valor: 'Games e Geek' },
+            { nome: 'Infantil', valor: 'Infantil' },
+            { nome: 'Moda e Beleza', valor: 'Moda e Beleza' },
+            { nome: 'Passeios e Tours', valor: 'Passeios e Tours' },
+            { nome: 'Religião e Espiritualidade', valor: 'Religião e Espiritualidade' },
+            { nome: 'Teatros e Espetáculos', valor: 'Teatros e Espetáculos' }
+          ].map(categoria => (
+            <div key={categoria.valor} className={styles.carouselWrapper}>
+              <CategoryCarousel 
+                title={categoria.nome} 
+                filterType="categoria" 
+                filterValue={categoria.valor} 
+              />
+            </div>
+          ))}
+
+          {/* Seção de recursos */}
           <section className={styles.featureSection}>
             <div className={styles.featureContent}>
               <h1 className={styles.mainTitle}>Seu evento, do jeito que você imagina</h1>

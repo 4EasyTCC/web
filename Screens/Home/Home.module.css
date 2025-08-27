@@ -51,6 +51,23 @@
   z-index: 1;
 }
 
+.carouselSection {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* centraliza o bloco de 70% */
+  margin-bottom: 30px;
+}
+
+.carouselHeader {
+  width: 70%;               /* ocupa 70% do espaço */
+  display: flex;
+  align-items: center;       /* alinha verticalmente */
+  justify-content: flex-start; /* fica à esquerda dentro dos 70% */
+  gap: 12px;
+}
+
+
+
 /* Feature Section Styles */
 .featureSection {
   display: flex;
@@ -264,5 +281,89 @@
 
   .featureText {
     font-size: 1rem;
+  }
+}
+
+/* ===================== */
+/* Estilos para Dropdown */
+/* ===================== */
+.periodoDropdown {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 160px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 2px solid #2816b2;
+  background-color: #fff;
+  color: #2816b2;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(40, 22, 178, 0.1);
+}
+
+.periodoDropdown:hover {
+  background-color: #f8f8ff;
+  transform: translateY(-2px);
+}
+
+.periodoOptions {
+  background: #fff;
+  border-radius: 12px;
+  padding: 6px 0;
+  margin-top: 6px;
+  min-width: 180px;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  animation: fadeIn 0.2s ease-out;
+  z-index: 1000;
+}
+
+.periodoOption {
+  font-size: 0.95rem;
+  padding: 10px 16px;
+  cursor: pointer;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.periodoOption:hover {
+  background: #f0f0ff;
+  color: #2816b2;
+  transform: translateX(4px);
+}
+
+.periodoOption[data-state="checked"] {
+  font-weight: 600;
+  color: #2816b2;
+}
+
+/* Ícone de check ao lado da opção */
+.periodoOption svg {
+  margin-left: 8px;
+  color: #2816b2;
+}
+
+/* Animação suave */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsividade para o dropdown */
+@media (max-width: 480px) {
+  .periodoDropdown {
+    min-width: 100%;
+    justify-content: center;
+  }
+
+  .periodoOptions {
+    min-width: 95%;
   }
 }

@@ -1,7 +1,8 @@
+// components/HeroCarousel/HeroCarousel.jsx
 import React, { useState } from 'react';
-import styles from './CarouselEvents.module.css';
+import styles from './HeroCarousel.module.css';
 
-const CarouselEvents = ({ events }) => {
+const HeroCarousel = ({ events }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
 
@@ -16,70 +17,71 @@ const CarouselEvents = ({ events }) => {
     return 'hidden';
   };
 
- const getSlideStyle = (position) => {
-  const baseStyle = {
-    transition: transitioning ? 'all 0.5s ease' : 'none',
-    zIndex: 1,
-    left: '50%',
-    transformOrigin: 'center center'
+  const getSlideStyle = (position) => {
+    const baseStyle = {
+      transition: transitioning ? 'all 0.5s ease' : 'none',
+      zIndex: 1,
+      left: '50%',
+      transformOrigin: 'center center'
+    };
+
+    switch (position) {
+      case 'center':
+        return { 
+          ...baseStyle, 
+          transform: 'translateX(-50%) scale(1.1)',
+          zIndex: 5,
+          opacity: 1,
+          cursor: 'pointer',
+          width: 'clamp(400px, 40vw, 600px)',
+          height: 'clamp(300px, 30vw, 450px)'
+        };
+      case 'right':
+        return { 
+          ...baseStyle, 
+          transform: 'translateX(calc(-50% + 60%)) scale(0.9)',
+          zIndex: 4,
+          opacity: 0.9,
+          width: 'clamp(300px, 30vw, 450px)',
+          height: 'clamp(225px, 22.5vw, 337px)'
+        };
+      case 'far-right':
+        return { 
+          ...baseStyle, 
+          transform: 'translateX(calc(-50% + 120%)) scale(0.8)',
+          zIndex: 3,
+          opacity: 0.8,
+          width: 'clamp(250px, 25vw, 375px)',
+          height: 'clamp(187px, 18.7vw, 280px)'
+        };
+      case 'left':
+        return { 
+          ...baseStyle, 
+          transform: 'translateX(calc(-50% - 60%)) scale(0.9)',
+          zIndex: 4,
+          opacity: 0.9,
+          width: 'clamp(300px, 30vw, 450px)',
+          height: 'clamp(225px, 22.5vw, 337px)'
+        };
+      case 'far-left':
+        return { 
+          ...baseStyle, 
+          transform: 'translateX(calc(-50% - 120%)) scale(0.8)',
+          zIndex: 3,
+          opacity: 0.8,
+          width: 'clamp(250px, 25vw, 375px)',
+          height: 'clamp(187px, 18.7vw, 280px)'
+        };
+      default:
+        return { 
+          ...baseStyle, 
+          transform: 'translateX(-50%) scale(0.7)',
+          zIndex: 0,
+          opacity: 0
+        };
+    }
   };
 
-  switch (position) {
-    case 'center':
-      return { 
-        ...baseStyle, 
-        transform: 'translateX(-50%) scale(1.1)',
-        zIndex: 5,
-        opacity: 1,
-        cursor: 'pointer',
-        width: 'clamp(400px, 40vw, 600px)',
-        height: 'clamp(300px, 30vw, 450px)'
-      };
-    case 'right':
-      return { 
-        ...baseStyle, 
-        transform: 'translateX(calc(-50% + 60%)) scale(0.9)',
-        zIndex: 4,
-        opacity: 0.9,
-        width: 'clamp(300px, 30vw, 450px)',
-        height: 'clamp(225px, 22.5vw, 337px)'
-      };
-    case 'far-right':
-      return { 
-        ...baseStyle, 
-        transform: 'translateX(calc(-50% + 120%)) scale(0.8)',
-        zIndex: 3,
-        opacity: 0.8,
-        width: 'clamp(250px, 25vw, 375px)',
-        height: 'clamp(187px, 18.7vw, 280px)'
-      };
-    case 'left':
-      return { 
-        ...baseStyle, 
-        transform: 'translateX(calc(-50% - 60%)) scale(0.9)',
-        zIndex: 4,
-        opacity: 0.9,
-        width: 'clamp(300px, 30vw, 450px)',
-        height: 'clamp(225px, 22.5vw, 337px)'
-      };
-    case 'far-left':
-      return { 
-        ...baseStyle, 
-        transform: 'translateX(calc(-50% - 120%)) scale(0.8)',
-        zIndex: 3,
-        opacity: 0.8,
-        width: 'clamp(250px, 25vw, 375px)',
-        height: 'clamp(187px, 18.7vw, 280px)'
-      };
-    default:
-      return { 
-        ...baseStyle, 
-        transform: 'translateX(-50%) scale(0.7)',
-        zIndex: 0,
-        opacity: 0
-      };
-  }
-};
   const goToNext = () => {
     if (transitioning) return;
     setTransitioning(true);
@@ -150,7 +152,6 @@ const CarouselEvents = ({ events }) => {
       {/* Descrição do slide atual */}
       <div className={styles.currentEventInfo}>
         <h3>{events[currentIndex].nome}</h3>
-        <p className={styles.artist}>{events[currentIndex].artista}</p>
         <div className={styles.eventDetails}>
           <span>📍 {events[currentIndex].local}</span>
           <span>🗓️ {events[currentIndex].data}</span>
@@ -160,4 +161,4 @@ const CarouselEvents = ({ events }) => {
   );
 };
 
-export default CarouselEvents;
+export default HeroCarousel;
