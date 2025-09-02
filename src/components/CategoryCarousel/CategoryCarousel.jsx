@@ -1,9 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import styles from './CategoryCarousel.module.css';
-import { useNavigate } from 'react-router-dom';
+// components/CategoryCarousel/CategoryCarousel.jsx
+import React, { useRef, useState, useEffect } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import styles from "./CategoryCarousel.module.css";
+import { useNavigate } from "react-router-dom";
 
 const CategoryCarousel = ({ title, filterType, filterValue }) => {
   const [events, setEvents] = useState([]);
@@ -14,6 +15,8 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
   const [slidesToShow, setSlidesToShow] = useState(4);
   const navigate = useNavigate();
 
+  const API_BASE_URL = "http://localhost:3000";
+
   // Buscar eventos com base no filtro
   useEffect(() => {
     const fetchEvents = async () => {
@@ -21,24 +24,26 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
         setLoading(true);
         setError(null);
         const queryParams = new URLSearchParams();
-        
+
         if (filterType && filterValue) {
           queryParams.append(filterType, filterValue);
         }
-        
-        queryParams.append('limite', 16);
-        
-        const response = await fetch(`/api/eventos/home?${queryParams}`);
-        
+
+        queryParams.append("limite", 16);
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/eventos/home?${queryParams}`
+        );
+
         if (!response.ok) {
-          throw new Error('Erro na resposta da API');
+          throw new Error("Erro na resposta da API");
         }
-        
+
         const data = await response.json();
         setEvents(data.eventos || []);
       } catch (error) {
-        console.error('Erro ao buscar eventos:', error);
-        setError('Não foi possível carregar os eventos');
+        console.error("Erro ao buscar eventos:", error);
+        setError("Não foi possível carregar os eventos");
         setEvents([]);
       } finally {
         setLoading(false);
@@ -59,8 +64,8 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
     };
 
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const settings = {
@@ -74,21 +79,21 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
     responsive: [
       {
         breakpoint: 1280,
-        settings: { slidesToShow: 3, slidesToScroll: 3 }
+        settings: { slidesToShow: 3, slidesToScroll: 3 },
       },
       {
         breakpoint: 1024,
-        settings: { slidesToShow: 2, slidesToScroll: 2 }
+        settings: { slidesToShow: 2, slidesToScroll: 2 },
       },
       {
         breakpoint: 768,
-        settings: { slidesToShow: 2, slidesToScroll: 2 }
+        settings: { slidesToShow: 2, slidesToScroll: 2 },
       },
       {
         breakpoint: 640,
-        settings: { slidesToShow: 1, slidesToScroll: 1 }
-      }
-    ]
+        settings: { slidesToShow: 1, slidesToScroll: 1 },
+      },
+    ],
   };
 
   const goToNext = () => sliderRef.current?.slickNext();
@@ -98,10 +103,10 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
 
   const handleSeeAllClick = () => {
     const params = new URLSearchParams();
-    if (filterType === 'categoria') {
-      params.set('categoria', filterValue);
-    } else if (filterType === 'periodo') {
-      params.set('periodo', filterValue);
+    if (filterType === "categoria") {
+      params.set("categoria", filterValue);
+    } else if (filterType === "periodo") {
+      params.set("periodo", filterValue);
     }
     navigate(`/SearchEvents?${params.toString()}`);
   };
@@ -111,19 +116,19 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
   };
 
   const formatarData = (dataString) => {
-    if (!dataString) return 'Data não definida';
+    if (!dataString) return "Data não definida";
     try {
       const data = new Date(dataString);
-      if (isNaN(data.getTime())) return 'Data inválida';
-      
-      return data.toLocaleDateString('pt-BR', { 
-        weekday: 'short', 
-        day: '2-digit', 
-        month: 'short',
-        timeZone: 'America/Sao_Paulo'
+      if (isNaN(data.getTime())) return "Data inválida";
+
+      return data.toLocaleDateString("pt-BR", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        timeZone: "America/Sao_Paulo",
       });
     } catch (error) {
-      return 'Data inválida';
+      return "Data inválida";
     }
   };
 
@@ -131,13 +136,13 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
     if (!ingressos || !Array.isArray(ingressos) || ingressos.length === 0) {
       return null;
     }
-    
+
     const precos = ingressos
-      .map(ingresso => parseFloat(ingresso.preco))
-      .filter(preco => !isNaN(preco));
-    
+      .map((ingresso) => parseFloat(ingresso.preco))
+      .filter((preco) => !isNaN(preco));
+
     if (precos.length === 0) return null;
-    
+
     return Math.min(...precos);
   };
 
@@ -167,7 +172,7 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
       </div>
       <div className={styles.errorContainer}>
         <p>{error}</p>
-        <button 
+        <button
           onClick={() => window.location.reload()}
           className={styles.retryButton}
         >
@@ -195,65 +200,96 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
         <h2 className={styles.title}>{title}</h2>
         <div className={styles.controls}>
           <div className={styles.arrows}>
-            <button 
+            <button
               onClick={goToPrev}
-              className={`${styles.navButton} ${isFirstSlide ? styles.disabledButton : ''}`}
+              className={`${styles.navButton} ${
+                isFirstSlide ? styles.disabledButton : ""
+              }`}
               disabled={isFirstSlide}
               aria-label="Slide anterior"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M15 18l-6-6 6-6"/>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M15 18l-6-6 6-6" />
               </svg>
             </button>
-            <button 
+            <button
               onClick={goToNext}
-              className={`${styles.navButton} ${isLastSlide ? styles.disabledButton : ''}`}
+              className={`${styles.navButton} ${
+                isLastSlide ? styles.disabledButton : ""
+              }`}
               disabled={isLastSlide}
               aria-label="Próximo slide"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M9 18l6-6-6-6"/>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M9 18l6-6-6-6" />
               </svg>
             </button>
           </div>
-          <button 
-            className={styles.seeAllButton}
-            onClick={handleSeeAllClick}
-          >
+          <button className={styles.seeAllButton} onClick={handleSeeAllClick}>
             <span>Ver tudo</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </button>
         </div>
       </div>
-      
+
       <div className={styles.carouselWrapper}>
         <div className={styles.carouselContainer}>
           <Slider ref={sliderRef} {...settings}>
             {events.map((evento) => {
               const precoMinimo = getPrecoMinimo(evento.Ingressos);
-              const temIngressoGratis = evento.Ingressos && 
-                evento.Ingressos.some(ingresso => parseFloat(ingresso.preco) === 0);
-              
+              const temIngressoGratis =
+                evento.Ingressos &&
+                evento.Ingressos.some(
+                  (ingresso) => parseFloat(ingresso.preco) === 0
+                );
+
               return (
                 <div key={evento.eventoId} className={styles.eventItem}>
-                  <div 
+                  <div
                     className={styles.eventCard}
                     onClick={() => handleEventClick(evento.eventoId)}
                     role="button"
                     tabIndex={0}
-                    onKeyPress={(e) => e.key === 'Enter' && handleEventClick(evento.eventoId)}
+                    onKeyPress={(e) =>
+                      e.key === "Enter" && handleEventClick(evento.eventoId)
+                    }
                   >
                     <div className={styles.eventImage}>
-                      <img 
-                        src={evento.Midia && evento.Midia.length > 0 && evento.Midia[0].url
-                          ? evento.Midia[0].url 
-                          : '/placeholder-event.jpg'
-                        } 
-                        alt={evento.nomeEvento || 'Evento'}
+                      <img
+                        src={
+                          evento.Midia &&
+                          evento.Midia.length > 0 &&
+                          evento.Midia[0].url
+                            ? `${API_BASE_URL}${evento.Midia[0].url}` // URL COMPLETA para a imagem
+                            : "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                        }
+                        alt={evento.nomeEvento || "Evento"}
                         onError={(e) => {
-                          e.target.src = '/placeholder-event.jpg';
+                          e.target.src =
+                            "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80";
                         }}
                         loading="lazy"
                         width={280}
@@ -265,15 +301,20 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
                       <div className={styles.imageOverlay}></div>
                     </div>
                     <div className={styles.eventInfo}>
-                      <h3 className={styles.eventName}>{evento.nomeEvento || 'Evento sem nome'}</h3>
+                      <h3 className={styles.eventName}>
+                        {evento.nomeEvento || "Evento sem nome"}
+                      </h3>
                       <p className={styles.eventDate}>
                         {formatarData(evento.dataInicio)}
                       </p>
                       <p className={styles.eventLocation}>
-                        {evento.localizacao ? 
-                          `${evento.localizacao.cidade || ''}${evento.localizacao.estado ? ', ' + evento.localizacao.estado : ''}` 
-                          : 'Local a definir'
-                        }
+                        {evento.localizacao
+                          ? `${evento.localizacao.cidade || ""}${
+                              evento.localizacao.estado
+                                ? ", " + evento.localizacao.estado
+                                : ""
+                            }`
+                          : "Local a definir"}
                       </p>
                       {precoMinimo !== null && !temIngressoGratis && (
                         <p className={styles.eventPrice}>
@@ -289,13 +330,20 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
               );
             })}
             <div className={styles.eventItem}>
-              <button 
+              <button
                 className={styles.finalButton}
                 onClick={handleSeeAllClick}
               >
                 <span>Ver todos</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </button>
             </div>
