@@ -1,3 +1,4 @@
+// RootNavigator.jsx (atualizado)
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Home from "../Screens/Home/Home.jsx";
@@ -15,6 +16,8 @@ import PageSponsor from "../Screens/PageSponsor/PageSponsor.jsx";
 import PageColecoes from "../Screens/PageColecoes/PageColecoes.jsx";
 import Eventos from "../Screens/Eventos/Eventos.jsx";
 import SearchEvents from "../Screens/SearchEvents/SearchEvents.jsx";
+import PageWrapper from "@/components/PageWrapper/PageWrapper"; // Novo import
+
 function AnimatedRoutes() {
   const location = useLocation();
 
@@ -22,20 +25,92 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <PageTransition key={location.pathname}>
         <Routes location={location}>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/paginaLogin" element={<PaginaLogin />} />
-          <Route path="/aboutUs" element={<AboutUs />} />
-          <Route path="/pageCadastro" element={<PageCadastro />} />
-          <Route path="/InfoPage" element={<InfoPage />} />
-          <Route path="/Contact" element={<Contact />} />
-          <Route path="/Feedback" element={<Feedback />} />
-          <Route path="/MoreQuestions" element={<MoreQuestions />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/PageSponsor" element={<PageSponsor />} />
-          <Route path="/PageColecoes" element={<PageColecoes />} />
-          <Route path="/Eventos" element={<Eventos />} />
-          <Route path="/SearchEvents" element={<SearchEvents />} />
+          <Route path="/" element={
+            <PageWrapper>
+              <Home />
+            </PageWrapper>
+          } />
+          <Route path="/home" element={
+            <PageWrapper>
+              <Home />
+            </PageWrapper>
+          } />
+          <Route path="/paginaLogin" element={
+            <PageWrapper>
+              <PaginaLogin />
+            </PageWrapper>
+          } />
+          <Route path="/aboutUs" element={
+            <PageWrapper>
+              <AboutUs />
+            </PageWrapper>
+          } />
+          <Route path="/pageCadastro" element={
+            <PageWrapper>
+              <PageCadastro />
+            </PageWrapper>
+          } />
+          <Route path="/InfoPage" element={
+            <PageWrapper>
+              <InfoPage />
+            </PageWrapper>
+          } />
+          <Route path="/Contact" element={
+            <PageWrapper>
+              <Contact />
+            </PageWrapper>
+          } />
+          <Route path="/Feedback" element={
+            <PageWrapper>
+              <Feedback />
+            </PageWrapper>
+          } />
+          <Route path="/MoreQuestions" element={
+            <PageWrapper>
+              <MoreQuestions />
+            </PageWrapper>
+          } />
+          <Route path="/profile" element={
+            <PageWrapper>
+              <Profile />
+            </PageWrapper>
+          } />
+          <Route path="/PageSponsor" element={
+            <PageWrapper>
+              <PageSponsor />
+            </PageWrapper>
+          } />
+          <Route path="/PageColecoes" element={
+            <PageWrapper>
+              <PageColecoes />
+            </PageWrapper>
+          } />
+          <Route path="/colecao/:id" element={
+            <PageWrapper>
+              <PageColecoes />
+            </PageWrapper>
+          } />
+          <Route path="/colecao/:id/:subId" element={
+            <PageWrapper>
+              <PageColecoes />
+            </PageWrapper>
+          } />
+          <Route path="/Eventos" element={
+            <PageWrapper>
+              <Eventos />
+            </PageWrapper>
+          } />
+          <Route path="/evento/:id" element={
+            <PageWrapper>
+              <Eventos />
+            </PageWrapper>
+          } />
+          <Route path="/SearchEvents" element={
+            <PageWrapper>
+              <SearchEvents />
+            </PageWrapper>
+          } />
+          {/* Adicione rotas com parâmetros para outras páginas conforme necessário */}
         </Routes>
       </PageTransition>
     </AnimatePresence>

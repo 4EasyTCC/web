@@ -22,6 +22,14 @@
   backdrop-filter: blur(8px);
 }
 
+.header.withBreadcrumb {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+.headerMain {
+  background-color: inherit;
+}
+
 .headerContent {
   display: flex;
   justify-content: space-between;
@@ -35,6 +43,12 @@
 
 .header.scrolled .headerContent {
   padding: 0.8rem 2rem;
+}
+
+.breadcrumbWrapper {
+  border-top: 1px solid #e6e8f0;
+  background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+  padding: 0 2rem;
 }
 
 .logoContainer {
@@ -154,9 +168,18 @@
   height: var(--header-scrolled-height);
 }
 
+.headerSpacer.withBreadcrumb {
+  height: calc(var(--header-height) + var(--breadcrumb-height));
+}
+
+.headerSpacer.scrolled.withBreadcrumb {
+  height: calc(var(--header-scrolled-height) + var(--breadcrumb-height));
+}
+
 :root {
   --header-height: 260px;
   --header-scrolled-height: 70px;
+  --breadcrumb-height: 48px;
 }
 
 @media (max-width: 1024px) {
@@ -166,6 +189,10 @@
   
   .header.scrolled .headerContent {
     padding: 0.6rem 1.2rem;
+  }
+
+  .breadcrumbWrapper {
+    padding: 0 1.2rem;
   }
 
   .logo {
@@ -185,6 +212,10 @@
   .logoContainer p {
     display: none;
   }
+  
+  .breadcrumbWrapper {
+    padding: 0 1rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -194,6 +225,10 @@
   
   .header.scrolled .headerContent {
     padding: 0.5rem 1rem;
+  }
+  
+  .breadcrumbWrapper {
+    padding: 0 0.5rem;
   }
 
   .logo {
