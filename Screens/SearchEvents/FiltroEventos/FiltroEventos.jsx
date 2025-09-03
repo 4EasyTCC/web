@@ -1,28 +1,38 @@
-import React, { useState, useRef, useEffect } from 'react';
-import styles from './FiltroEventos.module.css';
+import React, { useRef } from "react";
+import styles from "./FiltroEventos.module.css";
 
-const FiltroEventos = ({ 
-  filtros, 
-  onFiltroChange, 
+const FiltroEventos = ({
+  filtros,
+  onFiltroChange,
   onLimparFiltros,
   sugestoesLocalizacao = [],
   mostrarSugestoes = false,
-  onSugestaoLocalizacaoClick
+  onSugestaoLocalizacaoClick,
 }) => {
   const categorias = [
-    'Arte, Cultura e Lazer', 'Congressos e Palestras', 'Cursos e Workshops',
-    'Esporte', 'Festas e Shows', 'Gastronomia', 'Games e Geek', 'Grátis',
-    'Infantil', 'Moda e Beleza', 'Passeios e Tours', 'Religião e Espiritualidade',
-    'Saúde e Bem-Estar', 'Teatros e Espetáculos'
+    "Arte, Cultura e Lazer",
+    "Congressos e Palestras",
+    "Cursos e Workshops",
+    "Esporte",
+    "Festas e Shows",
+    "Gastronomia",
+    "Games e Geek",
+    "Grátis",
+    "Infantil",
+    "Moda e Beleza",
+    "Passeios e Tours",
+    "Religião e Espiritualidade",
+    "Saúde e Bem-Estar",
+    "Teatros e Espetáculos",
   ];
 
   const localizacaoRef = useRef(null);
 
   const handleCategoriaChange = (categoria) => {
     const novasCategorias = filtros.categoria.includes(categoria)
-      ? filtros.categoria.filter(c => c !== categoria)
+      ? filtros.categoria.filter((c) => c !== categoria)
       : [...filtros.categoria, categoria];
-    
+
     onFiltroChange({ categoria: novasCategorias });
   };
 
@@ -39,34 +49,24 @@ const FiltroEventos = ({
   };
 
   const handleLocalizacaoKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
     }
   };
 
-  // Fechar sugestões ao clicar fora
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (localizacaoRef.current && !localizacaoRef.current.contains(event.target)) {
-        onSugestaoLocalizacaoClick && onSugestaoLocalizacaoClick(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [onSugestaoLocalizacaoClick]);
+  // A LÓGICA DE 'handleClickOutside' E 'useEffect' FOI REMOVIDA
+  // Pois o componente pai já gerencia o estado 'mostrarSugestoes'
+  // de forma eficiente.
 
   return (
     <div className={styles.filtroContainer}>
       <h3>Filtrar Eventos</h3>
-      
+
       {/* Filtro por Categoria */}
       <div className={styles.filtroGrupo}>
         <h4>Categoria</h4>
         <div className={styles.checkboxGroup}>
-          {categorias.map(categoria => (
+          {categorias.map((categoria) => (
             <label key={categoria} className={styles.checkboxLabel}>
               <input
                 type="checkbox"
@@ -90,8 +90,8 @@ const FiltroEventos = ({
               type="radio"
               name="preco"
               value="qualquer"
-              checked={filtros.preco === 'qualquer'}
-              onChange={() => handlePrecoChange('qualquer')}
+              checked={filtros.preco === "qualquer"}
+              onChange={() => handlePrecoChange("qualquer")}
             />
             <span className={styles.radioCustom}></span>
             Qualquer preço
@@ -101,8 +101,8 @@ const FiltroEventos = ({
               type="radio"
               name="preco"
               value="gratis"
-              checked={filtros.preco === 'gratis'}
-              onChange={() => handlePrecoChange('gratis')}
+              checked={filtros.preco === "gratis"}
+              onChange={() => handlePrecoChange("gratis")}
             />
             <span className={styles.radioCustom}></span>
             Grátis
@@ -112,8 +112,8 @@ const FiltroEventos = ({
               type="radio"
               name="preco"
               value="pago"
-              checked={filtros.preco === 'pago'}
-              onChange={() => handlePrecoChange('pago')}
+              checked={filtros.preco === "pago"}
+              onChange={() => handlePrecoChange("pago")}
             />
             <span className={styles.radioCustom}></span>
             Pago
@@ -130,8 +130,8 @@ const FiltroEventos = ({
               type="radio"
               name="tipo"
               value="qualquer"
-              checked={filtros.tipo === 'qualquer'}
-              onChange={() => handleTipoChange('qualquer')}
+              checked={filtros.tipo === "qualquer"}
+              onChange={() => handleTipoChange("qualquer")}
             />
             <span className={styles.radioCustom}></span>
             Qualquer tipo
@@ -141,8 +141,8 @@ const FiltroEventos = ({
               type="radio"
               name="tipo"
               value="presencial"
-              checked={filtros.tipo === 'presencial'}
-              onChange={() => handleTipoChange('presencial')}
+              checked={filtros.tipo === "presencial"}
+              onChange={() => handleTipoChange("presencial")}
             />
             <span className={styles.radioCustom}></span>
             Presencial
@@ -152,8 +152,8 @@ const FiltroEventos = ({
               type="radio"
               name="tipo"
               value="online"
-              checked={filtros.tipo === 'online'}
-              onChange={() => handleTipoChange('online')}
+              checked={filtros.tipo === "online"}
+              onChange={() => handleTipoChange("online")}
             />
             <span className={styles.radioCustom}></span>
             Online
@@ -168,30 +168,35 @@ const FiltroEventos = ({
           <input
             type="text"
             placeholder="Digite uma cidade"
-            value={filtros.localizacao || ''}
+            value={filtros.localizacao || ""}
             onChange={handleLocalizacaoChange}
             onKeyPress={handleLocalizacaoKeyPress}
             className={styles.locationInput}
             aria-label="Filtrar por localização"
           />
-          {mostrarSugestoes && Array.isArray(sugestoesLocalizacao) && sugestoesLocalizacao.length > 0 && (
-            <div className={styles.sugestoesLocalizacao}>
-              {sugestoesLocalizacao.map((sugestao, index) => (
-                <div
-                  key={index}
-                  className={styles.sugestaoItem}
-                  onClick={() => onSugestaoLocalizacaoClick && onSugestaoLocalizacaoClick(sugestao)}
-                >
-                  {sugestao}
-                </div>
-              ))}
-            </div>
-          )}
+          {mostrarSugestoes &&
+            Array.isArray(sugestoesLocalizacao) &&
+            sugestoesLocalizacao.length > 0 && (
+              <div className={styles.sugestoesLocalizacao}>
+                {sugestoesLocalizacao.map((sugestao, index) => (
+                  <div
+                    key={index}
+                    className={styles.sugestaoItem}
+                    onClick={() =>
+                      onSugestaoLocalizacaoClick &&
+                      onSugestaoLocalizacaoClick(sugestao)
+                    }
+                  >
+                    {sugestao}
+                  </div>
+                ))}
+              </div>
+            )}
         </div>
       </div>
 
-      <button 
-        className={styles.limparBtn} 
+      <button
+        className={styles.limparBtn}
         onClick={onLimparFiltros}
         aria-label="Limpar todos os filtros"
       >

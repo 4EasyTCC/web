@@ -1,5 +1,4 @@
-// Home.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Select from "@radix-ui/react-select";
 import {
@@ -10,11 +9,33 @@ import {
 import styles from "./Home.module.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-import CategoryCarousel from "@/components/CategoryCarousel/CategoryCarousel";
+import CategoryCarousel from "@/components/CategoryCarousel/CategoryCarousel"; // Certifique-se de que este componente está correto
 import HeroCarousel from "@/components/HeroCarousel/HeroCarousel";
 import cellphone from "@images/placeholders/cellphone.png";
 import cellphone4easy from "@images/placeholders/cellPhone4easy.png";
 import money from "@images/placeholders/money.png";
+
+// Função para buscar eventos da home
+const fetchHomeEvents = async (periodo, categoria) => {
+  const queryParams = new URLSearchParams();
+  queryParams.append("limite", 16);
+  if (periodo) queryParams.append("periodo", periodo);
+  if (categoria) queryParams.append("categoria", categoria);
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/eventos/home?${queryParams}`
+    );
+    if (!response.ok) {
+      throw new Error("Falha ao carregar eventos da home.");
+    }
+    const data = await response.json();
+    return data.eventos;
+  } catch (error) {
+    console.error("Erro ao buscar eventos para a home:", error);
+    return [];
+  }
+};
 
 export default function Home() {
   const navigate = useNavigate();
@@ -27,6 +48,17 @@ export default function Home() {
     { valor: "proxima-semana", label: "Próxima semana" },
     { valor: "este-mes", label: "Este mês" },
   ];
+
+  // Adicionar a lógica de busca de eventos para o carrossel principal
+  const [eventosDoPeriodo, setEventosDoPeriodo] = useState([]);
+
+  useEffect(() => {
+    const carregarEventos = async () => {
+      const eventos = await fetchHomeEvents(periodoSelecionado, null);
+      setEventosDoPeriodo(eventos);
+    };
+    carregarEventos();
+  }, [periodoSelecionado]);
 
   return (
     <div className={styles.pageContainer}>
@@ -91,13 +123,15 @@ export default function Home() {
                 </Select.Portal>
               </Select.Root>
             </div>
+            {/* O CategoryCarousel do Home precisa ser atualizado para buscar dados dinamicamente.
+            Aqui está um exemplo de como ele pode ser chamado. */}
+            <CategoryCarousel
+              title=""
+              filterType="periodo"
+              filterValue={periodoSelecionado}
+              events={eventosDoPeriodo} // Passando os eventos buscados
+            />
           </div>
-
-          <CategoryCarousel
-            title=""
-            filterType="periodo"
-            filterValue={periodoSelecionado}
-          />
 
           {/* Carousels por categoria */}
           {[
