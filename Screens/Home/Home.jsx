@@ -12,37 +12,9 @@ import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import CategoryCarousel from "@/components/CategoryCarousel/CategoryCarousel";
 import HeroCarousel from "@/components/HeroCarousel/HeroCarousel";
-import img1 from "@images/placeholders/img1.png";
-import img2 from "@images/placeholders/img2.png";
-import img3 from "@images/placeholders/img3.jpg";
 import cellphone from "@images/placeholders/cellphone.png";
 import cellphone4easy from "@images/placeholders/cellPhone4easy.png";
 import money from "@images/placeholders/money.png";
-
-// Dados estáticos para o carousel hero (como fallback)
-const heroEvents = [
-  {
-    image: img1,
-    alt: "Evento 1",
-    nome: "Nome do Evento 1",
-    local: "São Paulo",
-    data: "sexta-feira, 12 de Fev às 20:00",
-  },
-  {
-    image: img2,
-    alt: "Evento 2",
-    nome: "Nome do Evento 2",
-    local: "São Paulo",
-    data: "sexta-feira, 12 de Fev às 20:00",
-  },
-  {
-    image: img3,
-    alt: "Evento 3",
-    nome: "Nome do Evento 3",
-    local: "São Paulo",
-    data: "sexta-feira, 12 de Fev às 20:00",
-  },
-];
 
 export default function Home() {
   const navigate = useNavigate();
@@ -151,7 +123,6 @@ export default function Home() {
             </div>
           ))}
 
-          {/* Seção de recursos */}
           <section className={styles.featureSection}>
             <div className={styles.featureContent}>
               <h1 className={styles.mainTitle}>

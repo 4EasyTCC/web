@@ -1,92 +1,290 @@
-/* Adicione estas classes ao arquivo CSS existente */
+/* CategoryCarousel.module.css - CSS de Debug */
 
-.skeletonGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  padding: 1rem 0;
+.container {
+  width: 100%;
+  margin: 24px 0;
+  padding: 0 16px;
 }
 
-.skeletonCard {
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.arrows {
+  display: flex;
+  gap: 8px;
+}
+
+.navButton {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ddd;
   background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  height: 340px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
 }
 
-.skeletonImage {
-  height: 200px;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
+.navButton:hover {
+  background: #f5f5f5;
+  border-color: #999;
 }
 
-.skeletonText {
-  height: 16px;
-  background: #f0f0f0;
-  margin: 0.75rem 1.25rem;
+.disabledButton {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.seeAllButton {
+  padding: 8px 16px;
+  background: #007bff;
+  color: white;
+  border: none;
   border-radius: 4px;
-  animation: loading 1.5s infinite;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
 }
 
-.skeletonText:first-of-type {
-  width: 80%;
+.seeAllButton:hover {
+  background: #0056b3;
 }
 
-.skeletonText:last-of-type {
-  width: 60%;
+.carouselWrapper {
+  width: 100%;
 }
 
-@keyframes loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+.carouselContainer {
+  width: 100%;
 }
 
-.errorContainer {
+.eventItem {
+  padding: 0 8px;
+}
+
+.eventCard {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
+}
+
+.eventCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.eventImage {
+  width: 100%;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.eventImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.freeBadge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #28a745;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.imageOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
+}
+
+.eventInfo {
+  padding: 16px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 120px;
+}
+
+.eventName {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.eventDate {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.eventLocation {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.eventPrice {
+  font-size: 14px;
+  color: #007bff;
+  font-weight: 600;
+  margin: 0;
+  margin-top: auto;
+}
+
+.finalButton {
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 12px;
+  height: 360px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
-  gap: 1rem;
+  gap: 12px;
+  cursor: pointer;
+  color: #6c757d;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.finalButton:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+  color: #495057;
+}
+
+/* Estilos de loading e erro */
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.skeletonCard {
+  background: #f8f9fa;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.skeletonImage {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(90deg, #e9ecef 25%, #dee2e6 50%, #e9ecef 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeletonText {
+  height: 16px;
+  background: linear-gradient(90deg, #e9ecef 25%, #dee2e6 50%, #e9ecef 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  margin: 12px 16px;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.errorContainer {
   text-align: center;
+  padding: 40px 20px;
+  color: #666;
 }
 
 .retryButton {
-  padding: 0.75rem 1.5rem;
-  background: #1400b4;
+  background: #dc3545;
   color: white;
   border: none;
-  border-radius: 8px;
+  padding: 8px 16px;
+  border-radius: 4px;
   cursor: pointer;
-  font-weight: 600;
-  transition: background 0.3s ease;
+  margin-top: 16px;
 }
 
 .retryButton:hover {
-  background: #0d0080;
+  background: #c82333;
 }
 
-/* Responsividade para skeleton */
-@media (max-width: 1280px) {
-  .skeletonGrid {
-    grid-template-columns: repeat(3, 1fr);
+/* Responsivo */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
   }
-}
 
-@media (max-width: 1024px) {
-  .skeletonGrid {
-    grid-template-columns: repeat(2, 1fr);
+  .controls {
+    justify-content: space-between;
   }
-}
 
-@media (max-width: 640px) {
-  .skeletonGrid {
-    grid-template-columns: 1fr;
+  .eventInfo {
+    padding: 12px;
+    min-height: 100px;
+  }
+
+  .eventName {
+    font-size: 15px;
+  }
+
+  .eventDate,
+  .eventLocation,
+  .eventPrice {
+    font-size: 13px;
   }
 }
