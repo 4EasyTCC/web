@@ -4,7 +4,7 @@ import styles from './Footer.module.css';
 import whiteLogo from '@images/logos/Logo4eBranco.png';
 import apple from '@images/apps/appStore.png';
 import googlePlay from '@images/apps/googlePlay.png';
-import { FaFacebook, FaInstagram, FaTwitter, FaArrowUp } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
 
 export default function Footer() {
   const [visible, setVisible] = useState(false);
@@ -28,16 +28,18 @@ export default function Footer() {
 
   return (
     <footer className={styles.footer}>
-      {/* Botão de voltar ao topo */}
+      {/* Botão de voltar ao topo aprimorado */}
       <button
         onClick={scrollToTop}
         className={`${styles.backToTop} ${visible ? styles.show : ''}`}
         aria-label="Voltar ao topo"
       >
-        <FaArrowUp />
+        <div className={styles.arrowContainer}>
+          <div className={styles.arrowIcon}></div>
+        </div>
       </button>
 
-      {/* Seção principal */}
+      {/* Restante do código do footer */}
       <div className={styles.footerContent}>
         {/* Seção de download */}
         <div className={styles.downloadSection}>
