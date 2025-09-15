@@ -1,15 +1,23 @@
-// Código atualizado para o Eventos.js
 import React, { useState, useEffect } from "react";
 import styles from "./Eventos.module.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import { useParams, useNavigate } from "react-router-dom";
 
+// Função auxiliar para resolver o caminho da imagem
+const resolveImageUrl = (url) => {
+  // Verifica se a URL já é absoluta (começa com http, https, etc.)
+  if (url && (url.startsWith("http") || url.startsWith("https"))) {
+    return url;
+  }
+  // Se for uma URL relativa, a transforma em absoluta usando a URL base do backend.
+  // IMPORTANTE: Ajuste a URL base se o seu backend estiver em outro local.
+  return `http://localhost:3000${url}`;
+};
+
 const Eventos = () => {
-  // Corrigido: Extraia o 'id' da URL e atribua-o a 'eventoId'
   const { id } = useParams();
   const eventoId = id;
-
   const navigate = useNavigate();
   const [evento, setEvento] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -17,16 +25,13 @@ const Eventos = () => {
 
   useEffect(() => {
     const fetchEventoData = async () => {
-      // Se não há um ID na URL, exiba o erro imediatamente e pare o carregamento
       if (!eventoId) {
         setLoading(false);
         return;
       }
-
       try {
         setLoading(true);
         setError(null);
-
         const response = await fetch(
           `http://localhost:3000/api/eventos/${eventoId}`
         );
@@ -37,13 +42,10 @@ const Eventos = () => {
           }
           throw new Error("Erro ao carregar evento");
         }
-
         const data = await response.json();
-
         if (!data.success) {
           throw new Error(data.message || "Erro ao carregar evento");
         }
-
         setEvento(data.evento);
         setLoading(false);
       } catch (err) {
@@ -51,7 +53,7 @@ const Eventos = () => {
         setError(err.message);
         setLoading(false);
 
-        // Se houver um erro, exiba os dados mockados no ambiente de desenvolvimento
+        // Dados mockados
         if (import.meta.env.DEV) {
           const eventoMockado = {
             eventoId: parseInt(eventoId),
@@ -99,6 +101,7 @@ const Eventos = () => {
             Midia: [
               {
                 midiaId: 1,
+                // Usando caminho relativo para o mock
                 url: "/placeholder-event.jpg",
                 tipo: "imagem",
               },
@@ -114,7 +117,6 @@ const Eventos = () => {
         }
       }
     };
-
     fetchEventoData();
   }, [eventoId]);
 
@@ -205,24 +207,20 @@ const Eventos = () => {
   return (
     <>
       <Header />
-
       <section className={styles.hero}>
         <div
           className={styles.heroImage}
           style={{
             backgroundImage: `url(${
               evento.Midia && evento.Midia.length > 0
-                ? evento.Midia[0].url
+                ? resolveImageUrl(evento.Midia[0].url)
                 : "/default-banner.jpg"
             })`,
           }}
         >
           <div className={styles.heroOverlay}>
             <div className={styles.heroContent}>
-              <button
-                onClick={() => navigate(-1)}
-                className={styles.backButton}
-              >
+              <button onClick={() => navigate(-1)} className={styles.backButton}>
                 ← Voltar
               </button>
               <h1 className={styles.eventTitle}>{evento.nomeEvento}</h1>
@@ -263,7 +261,6 @@ const Eventos = () => {
               {evento.descEvento ||
                 "Este evento ainda não possui uma descrição detalhada."}
             </p>
-
             {evento.Midia && evento.Midia.length > 0 && (
               <div className={styles.mediaGallery}>
                 <h3 className={styles.galleryTitle}>Galeria</h3>
@@ -274,7 +271,7 @@ const Eventos = () => {
                       className={styles.galleryItem}
                     >
                       <img
-                        src={midia.url}
+                        src={resolveImageUrl(midia.url)}
                         alt={`${evento.nomeEvento} - Imagem ${index + 1}`}
                         onError={(e) => {
                           e.target.src = "/placeholder-event.jpg";
@@ -367,7 +364,7 @@ const Eventos = () => {
               <div className={styles.organizerLogo}>
                 {evento.organizador?.avatarUrl ? (
                   <img
-                    src={evento.organizador.avatarUrl}
+                    src={resolveImageUrl(evento.organizador.avatarUrl)}
                     alt={evento.organizador.nome}
                     onError={(e) => {
                       e.target.src = "/placeholder-avatar.jpg";
@@ -390,7 +387,6 @@ const Eventos = () => {
               </div>
             </div>
           </div>
-
           {evento.Ingressos?.length > 0 && (
             <div className={styles.ticketCard}>
               <h3 className={styles.sidebarTitle}>🎫 Ingressos</h3>
@@ -427,7 +423,6 @@ const Eventos = () => {
               </div>
             </div>
           )}
-
           {evento.localizacao && (
             <div className={styles.locationCard}>
               <h3 className={styles.sidebarTitle}>📍 Localização</h3>
@@ -451,7 +446,6 @@ const Eventos = () => {
               </div>
             </div>
           )}
-
           <div className={styles.appCard}>
             <h3 className={styles.sidebarTitle}>📱 Baixe nosso app</h3>
             <p className={styles.appDescription}>
