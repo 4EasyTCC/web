@@ -25,91 +25,142 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <PageTransition key={location.pathname}>
         <Routes location={location}>
-          <Route path="/" element={
-            <PageWrapper>
-              <Home />
-            </PageWrapper>
-          } />
-          <Route path="/home" element={
-            <PageWrapper>
-              <Home />
-            </PageWrapper>
-          } />
-          <Route path="/paginaLogin" element={
-            <PageWrapper>
-              <PaginaLogin />
-            </PageWrapper>
-          } />
-          <Route path="/aboutUs" element={
-            <PageWrapper>
-              <AboutUs />
-            </PageWrapper>
-          } />
-          <Route path="/pageCadastro" element={
-            <PageWrapper>
-              <PageCadastro />
-            </PageWrapper>
-          } />
-          <Route path="/InfoPage" element={
-            <PageWrapper>
-              <InfoPage />
-            </PageWrapper>
-          } />
-          <Route path="/Contact" element={
-            <PageWrapper>
-              <Contact />
-            </PageWrapper>
-          } />
-          <Route path="/Feedback" element={
-            <PageWrapper>
-              <Feedback />
-            </PageWrapper>
-          } />
-          <Route path="/MoreQuestions" element={
-            <PageWrapper>
-              <MoreQuestions />
-            </PageWrapper>
-          } />
-          <Route path="/profile" element={
-            <PageWrapper>
-              <Profile />
-            </PageWrapper>
-          } />
-          <Route path="/PageSponsor" element={
-            <PageWrapper>
-              <PageSponsor />
-            </PageWrapper>
-          } />
-          <Route path="/PageColecoes" element={
-            <PageWrapper>
-              <PageColecoes />
-            </PageWrapper>
-          } />
-          <Route path="/colecao/:id" element={
-            <PageWrapper>
-              <PageColecoes />
-            </PageWrapper>
-          } />
-          <Route path="/colecao/:id/:subId" element={
-            <PageWrapper>
-              <PageColecoes />
-            </PageWrapper>
-          } />
-          <Route path="/Eventos" element={
-            <PageWrapper>
-              <Eventos />
-            </PageWrapper>
-          } />
-          <Route path="/evento/:id" element={
-            <PageWrapper>
-              <Eventos />
-            </PageWrapper>
-          } />
-          <Route path="/SearchEvents" element={
-            <PageWrapper>
-              <SearchEvents />
-            </PageWrapper>
-          } />
+          <Route
+            path="/"
+            element={
+              <PageWrapper>
+                <Home />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <PageWrapper>
+                <Home />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/paginaLogin"
+            element={
+              <PageWrapper>
+                <PaginaLogin />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/aboutUs"
+            element={
+              <PageWrapper>
+                <AboutUs />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/pageCadastro"
+            element={
+              <PageWrapper>
+                <PageCadastro />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/InfoPage"
+            element={
+              <PageWrapper>
+                <InfoPage />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/Contact"
+            element={
+              <PageWrapper>
+                <Contact />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/Feedback"
+            element={
+              <PageWrapper>
+                <Feedback />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/MoreQuestions"
+            element={
+              <PageWrapper>
+                <MoreQuestions />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PageWrapper>
+                <Profile />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/PageSponsor"
+            element={
+              <PageWrapper>
+                <PageSponsor />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/PageColecoes"
+            element={
+              <PageWrapper>
+                <PageColecoes />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/colecao/:id"
+            element={
+              <PageWrapper>
+                <PageColecoes />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/colecao/:id/:subId"
+            element={
+              <PageWrapper>
+                <PageColecoes />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/Eventos"
+            element={
+              <PageWrapper>
+                <Eventos />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/eventos/:id"
+            element={
+              <PageWrapper>
+                <Eventos />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/SearchEvents"
+            element={
+              <PageWrapper>
+                <SearchEvents />
+              </PageWrapper>
+            }
+          />
           {/* Adicione rotas com parâmetros para outras páginas conforme necessário */}
         </Routes>
       </PageTransition>

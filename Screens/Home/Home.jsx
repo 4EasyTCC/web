@@ -9,7 +9,7 @@ import {
 import styles from "./Home.module.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-import CategoryCarousel from "@/components/CategoryCarousel/CategoryCarousel"; // Certifique-se de que este componente está correto
+import CategoryCarousel from "@/components/CategoryCarousel/CategoryCarousel";
 import HeroCarousel from "@/components/HeroCarousel/HeroCarousel";
 import cellphone from "@images/placeholders/cellphone.png";
 import cellphone4easy from "@images/placeholders/cellPhone4easy.png";
@@ -49,7 +49,6 @@ export default function Home() {
     { valor: "este-mes", label: "Este mês" },
   ];
 
-  // Adicionar a lógica de busca de eventos para o carrossel principal
   const [eventosDoPeriodo, setEventosDoPeriodo] = useState([]);
 
   useEffect(() => {
@@ -129,7 +128,6 @@ export default function Home() {
               title=""
               filterType="periodo"
               filterValue={periodoSelecionado}
-              events={eventosDoPeriodo} // Passando os eventos buscados
             />
           </div>
 
