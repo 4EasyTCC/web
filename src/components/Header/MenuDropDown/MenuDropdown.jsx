@@ -1,13 +1,26 @@
+// MenuDropdown.jsx (atualizado)
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './MenuDropdown.module.css';
 
 const MenuDropdown = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
+  
+  // Verificar se o usuário está logado
+  const isLoggedIn = !!localStorage.getItem('token');
+  const userData = JSON.parse(localStorage.getItem('userData') || 'null');
 
   const navigateTo = (path) => {
     navigate(path);
     onClose();
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userData');
+    window.dispatchEvent(new Event('userLoggedOut'));
+    onClose();
+    navigate('/');
   };
 
   const menuItems = [
@@ -33,6 +46,20 @@ const MenuDropdown = ({ isOpen, onClose }) => {
         aria-hidden={!isOpen}
       >
         <div className={styles.menuContent}>
+          {isLoggedIn && userData && (
+            <div className={styles.userSection}>
+              <img 
+                src={userData.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.nome)}&background=4a00e0&color=fff&bold=true`} 
+                alt="Avatar" 
+                className={styles.userAvatar}
+              />
+              <div className={styles.userInfo}>
+                <h4>{userData.nome}</h4>
+                <p>{userData.email}</p>
+              </div>
+            </div>
+          )}
+          
           <h3 className={styles.menuTitle}>Menu</h3>
           <ul className={styles.menuItems}>
             {menuItems.map((item) => (
@@ -48,25 +75,39 @@ const MenuDropdown = ({ isOpen, onClose }) => {
               </li>
             ))}
           </ul>
+          
           <div className={styles.menuAuthButtons}>
-            <button
-              onClick={() => navigateTo('/paginaLogin')}
-              className={styles.menuLoginButton}
-            >
-              Login
-            </button>
-            <button
-              onClick={() => navigateTo('/pageCadastro')}
-              className={styles.menuRegisterButton}
-            >
-              Cadastre-se
-            </button>
-            <button
-              onClick={() => navigateTo('/Profile')}
-              className={styles.menuRegisterButton}
-            >
-              Meu Perfil
-            </button>
+            {isLoggedIn ? (
+              <>
+                <button
+                  onClick={() => navigateTo('/profile')}
+                  className={styles.menuProfileButton}
+                >
+                  Meu Perfil
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className={styles.menuLogoutButton}
+                >
+                  Sair
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => navigateTo('/paginaLogin')}
+                  className={styles.menuLoginButton}
+                >
+                  Login
+                </button>
+                <button
+                  onClick={() => navigateTo('/pageCadastro')}
+                  className={styles.menuRegisterButton}
+                >
+                  Cadastre-se
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

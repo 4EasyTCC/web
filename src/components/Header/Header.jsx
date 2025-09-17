@@ -1,8 +1,10 @@
+// Header.jsx (atualizado)
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './Header.module.css';
 import SearchBar from './SearchBar/SearchBar';
 import AuthButtons from './AuthButtons/AuthButtons';
+import UserProfile from './UserProfile/UserProfile'; // Novo componente
 import LocationSelector from './LocationSelector/LocationSelector';
 import MenuDropdown from './MenuDropdown/MenuDropdown';
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb';
@@ -16,9 +18,39 @@ export default function Header({ customBreadcrumbs = [] }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado de autenticação
+  const [userData, setUserData] = useState(null); // Dados do usuário
   const headerRef = useRef(null);
   const animationFrameId = useRef(null);
 
+  // Verificar autenticação ao carregar
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      const token = localStorage.getItem('token');
+      const user = localStorage.getItem('userData');
+      
+      if (token && user) {
+        setIsLoggedIn(true);
+        setUserData(JSON.parse(user));
+      } else {
+        setIsLoggedIn(false);
+        setUserData(null);
+      }
+    };
+
+    checkAuthStatus();
+    
+    // Ouvir eventos de login/logout
+    window.addEventListener('userLoggedIn', checkAuthStatus);
+    window.addEventListener('userLoggedOut', checkAuthStatus);
+    
+    return () => {
+      window.removeEventListener('userLoggedIn', checkAuthStatus);
+      window.removeEventListener('userLoggedOut', checkAuthStatus);
+    };
+  }, []);
+
+  // Restante do código permanece igual...
   // Inicialização do estado de scroll
   useEffect(() => {
     setIsScrolled(isHomePage ? window.scrollY > 50 : true);
@@ -100,7 +132,17 @@ export default function Header({ customBreadcrumbs = [] }) {
             <div className={styles.rightSection}>
               <div className={styles.rightAboveSection}>
                 {isScrolled && <LocationSelector />}
-                <AuthButtons />
+                
+                {/* Substituição dos AuthButtons pelo UserProfile quando logado */}
+                {isLoggedIn ? (
+                  <UserProfile 
+                    userData={userData} 
+                    isScrolled={isScrolled}
+                  />
+                ) : (
+                  <AuthButtons />
+                )}
+                
                 <button
                   onClick={toggleMenu}
                   className={`${styles.menuButton} ${isMenuOpen ? styles.open : ''}`}
