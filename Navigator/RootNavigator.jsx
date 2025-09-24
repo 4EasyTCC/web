@@ -146,7 +146,7 @@ function AnimatedRoutes() {
             }
           />
           <Route
-            path="/eventos/:id"
+            path="/evento/:id"
             element={
               <PageWrapper>
                 <Eventos />
