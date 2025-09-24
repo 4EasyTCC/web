@@ -9,6 +9,7 @@ import {
 import styles from "./Home.module.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
+import CarouselColecao from "./CarouselColecao.jsx"
 import CategoryCarousel from "@/components/CategoryCarousel/CategoryCarousel";
 import HeroCarousel from "@/components/HeroCarousel/HeroCarousel";
 import cellphone from "@images/placeholders/cellphone.png";
@@ -70,67 +71,8 @@ export default function Home() {
         </section>
 
         <div className={styles.contentWithBackground}>
-          {/* Carousel O que fazer hoje/esta semana */}
-          <div className={styles.carouselSection}>
-            <div className={styles.carouselHeader}>
-              <h2>O que fazer</h2>
-              <Select.Root
-                value={periodoSelecionado}
-                onValueChange={setPeriodoSelecionado}
-              >
-                <Select.Trigger
-                  className={styles.periodoDropdown}
-                  aria-label="Selecionar período"
-                >
-                  <Select.Value>
-                    {
-                      opcoesPeriodo.find(
-                        (op) => op.valor === periodoSelecionado
-                      )?.label
-                    }
-                  </Select.Value>
-                  <Select.Icon>
-                    <ChevronDownIcon />
-                  </Select.Icon>
-                </Select.Trigger>
-
-                <Select.Portal>
-                  <Select.Content className={styles.periodoOptions}>
-                    <Select.ScrollUpButton className={styles.periodoOption}>
-                      <ChevronUpIcon />
-                    </Select.ScrollUpButton>
-
-                    <Select.Viewport>
-                      {opcoesPeriodo.map((opcao) => (
-                        <Select.Item
-                          key={opcao.valor}
-                          value={opcao.valor}
-                          className={styles.periodoOption}
-                        >
-                          <Select.ItemText>{opcao.label}</Select.ItemText>
-                          <Select.ItemIndicator>
-                            <CheckIcon />
-                          </Select.ItemIndicator>
-                        </Select.Item>
-                      ))}
-                    </Select.Viewport>
-
-                    <Select.ScrollDownButton className={styles.periodoOption}>
-                      <ChevronDownIcon />
-                    </Select.ScrollDownButton>
-                  </Select.Content>
-                </Select.Portal>
-              </Select.Root>
-            </div>
-            {/* O CategoryCarousel do Home precisa ser atualizado para buscar dados dinamicamente.
-            Aqui está um exemplo de como ele pode ser chamado. */}
-            <CategoryCarousel
-              title=""
-              filterType="periodo"
-              filterValue={periodoSelecionado}
-            />
-          </div>
-
+        
+            <CarouselColecao/>
           {/* Carousels por categoria */}
           {[
             { nome: "Esporte", valor: "Esporte" },

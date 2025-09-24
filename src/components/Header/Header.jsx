@@ -5,8 +5,7 @@ import styles from './Header.module.css';
 import SearchBar from './SearchBar/SearchBar';
 import AuthButtons from './AuthButtons/AuthButtons';
 import UserProfile from './UserProfile/UserProfile'; // Novo componente
-import LocationSelector from './LocationSelector/LocationSelector';
-import MenuDropdown from './MenuDropdown/MenuDropdown';
+import MenuDropdown from './MenuDropDown/MenuDropdown';
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb';
 import LogoOficial from '@images/logos/LogoOficial.png';
 import LogoCompleta from '@images/logos/LogoExtended.png';
@@ -131,7 +130,7 @@ export default function Header({ customBreadcrumbs = [] }) {
 
             <div className={styles.rightSection}>
               <div className={styles.rightAboveSection}>
-                {isScrolled && <LocationSelector />}
+                {isScrolled}
                 
                 {/* Substituição dos AuthButtons pelo UserProfile quando logado */}
                 {isLoggedIn ? (
@@ -174,9 +173,7 @@ export default function Header({ customBreadcrumbs = [] }) {
                 isScrolled={isScrolled}
                 fullWidth
               />
-              <div className={styles.filtersRow}>
-                <LocationSelector variant="filter" />
-              </div>
+             
             </div>
           </div>
         )}

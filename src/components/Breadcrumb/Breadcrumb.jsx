@@ -23,7 +23,7 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
     'PageColecoes': 'Coleções',
     'colecao': 'Coleção',
     'Eventos': 'Eventos',
-    'evento': 'Evento',
+    'eventos': 'Eventos',
     'SearchEvents': 'Buscar Eventos'
   };
 
@@ -45,45 +45,50 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
       '13': 'Saúde e Bem-Estar',
       '14': 'Teatros e Espetáculos'
     },
-    'evento': {
+    'eventos': {
       // Exemplo de eventos (em um caso real, viria da API)
       '123': 'Show Nacional',
       '456': 'Feira de Tecnologia'
     }
   };
 
-  // Combinar paths adicionais com os paths da URL
-  const allPaths = [...additionalPaths];
+  // Construir breadcrumb paths
+  const breadcrumbPaths = [];
   
+  // Sempre começar com Home
+  breadcrumbPaths.push({
+    to: '/',
+    displayName: 'Home',
+    isLast: pathnames.length === 0
+  });
+
+  // Processar cada parte do path
   pathnames.forEach((value, index) => {
     const to = `/${pathnames.slice(0, index + 1).join('/')}`;
-    const isParam = !isNaN(value) || value.length > 10; // IDs ou valores longos são parâmetros
+    const isLast = index === pathnames.length - 1;
     
     let displayName = routeNames[value] || value;
     
-    // Se for um parâmetro e tivermos dados dinâmicos, use-os
-    if (isParam && index > 0) {
+    // Se for um parâmetro numérico, tentar encontrar nome dinâmico
+    if (!isNaN(value) && index > 0) {
       const parentRoute = pathnames[index - 1];
       if (dynamicData[parentRoute] && dynamicData[parentRoute][value]) {
         displayName = dynamicData[parentRoute][value];
-      } else {
-        // Se não encontrar dados dinâmicos, formate o texto
-        displayName = displayName
-          .split('-')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(' ');
       }
     }
     
     // Capitalizar a primeira letra
     displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
     
-    allPaths.push({
+    breadcrumbPaths.push({
       to,
       displayName,
-      isLast: index === pathnames.length - 1
+      isLast
     });
   });
+
+  // Combinar com paths adicionais se fornecidos
+  const allPaths = [...breadcrumbPaths, ...additionalPaths];
 
   // Se estamos na página inicial, não mostrar breadcrumb
   if (location.pathname === '/' || location.pathname === '/home') {
@@ -93,19 +98,16 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
   return (
     <nav className={styles.breadcrumbContainer}>
       <div className={styles.breadcrumbContent}>
-        <Link to="/" className={styles.breadcrumbHome}>
-          <Home size={16} />
-          <span>Home</span>
-        </Link>
-        
         {allPaths.map((path, index) => {
           const isLast = index === allPaths.length - 1;
           
           return (
             <React.Fragment key={path.to || index}>
-              <div className={styles.breadcrumbSeparator}>
-                <ChevronRight size={14} />
-              </div>
+              {index > 0 && (
+                <div className={styles.breadcrumbSeparator}>
+                  <ChevronRight size={14} />
+                </div>
+              )}
               
               {isLast ? (
                 <span className={styles.breadcrumbItemActive}>
@@ -113,7 +115,8 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
                 </span>
               ) : (
                 <Link to={path.to} className={styles.breadcrumbItem}>
-                  {path.displayName}
+                  {index === 0 ? <Home size={16} /> : null}
+                  <span>{path.displayName}</span>
                 </Link>
               )}
             </React.Fragment>

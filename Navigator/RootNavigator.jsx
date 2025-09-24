@@ -16,7 +16,7 @@ import PageSponsor from "../Screens/PageSponsor/PageSponsor.jsx";
 import PageColecoes from "../Screens/PageColecoes/PageColecoes.jsx";
 import Eventos from "../Screens/Eventos/Eventos.jsx";
 import SearchEvents from "../Screens/SearchEvents/SearchEvents.jsx";
-import PageWrapper from "@/components/PageWrapper/PageWrapper"; // Novo import
+import PageWrapper from "@/components/PageWrapper/PageWrapper";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -113,6 +113,8 @@ function AnimatedRoutes() {
               </PageWrapper>
             }
           />
+          
+          {/* Rota principal das coleções */}
           <Route
             path="/PageColecoes"
             element={
@@ -121,22 +123,28 @@ function AnimatedRoutes() {
               </PageWrapper>
             }
           />
+          
+          {/* Rota dinâmica para detalhes da coleção */}
           <Route
-            path="/colecao/:id"
+            path="/PageColecoes/:id"
             element={
               <PageWrapper>
                 <PageColecoes />
               </PageWrapper>
             }
           />
+          
+          {/* Rota dinâmica para subcategoria da coleção */}
           <Route
-            path="/colecao/:id/:subId"
+            path="/PageColecoes/:id/:subId"
             element={
               <PageWrapper>
                 <PageColecoes />
               </PageWrapper>
             }
           />
+          
+          {/* Rota principal de eventos */}
           <Route
             path="/Eventos"
             element={
@@ -145,14 +153,17 @@ function AnimatedRoutes() {
               </PageWrapper>
             }
           />
+          
+          {/* Rota dinâmica para detalhes do evento */}
           <Route
-            path="/eventos/:id"
+            path="/Eventos/:id"
             element={
               <PageWrapper>
                 <Eventos />
               </PageWrapper>
             }
           />
+          
           <Route
             path="/SearchEvents"
             element={
@@ -161,7 +172,6 @@ function AnimatedRoutes() {
               </PageWrapper>
             }
           />
-          {/* Adicione rotas com parâmetros para outras páginas conforme necessário */}
         </Routes>
       </PageTransition>
     </AnimatePresence>

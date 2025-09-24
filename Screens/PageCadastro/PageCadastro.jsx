@@ -13,6 +13,7 @@ export default function PageCadastro() {
     cpf: "",
     email: "",
     senha: "",
+    confirmarSenha: "",
     telefone: "",
     genero: "",
     dataNascimento: "",
@@ -65,8 +66,23 @@ export default function PageCadastro() {
     setLoading(true);
     setError("");
 
-    if (!formData.cpf || !formData.email || !formData.senha) {
+    // Verificação dos campos obrigatórios
+    if (!formData.cpf || !formData.email || !formData.senha || !formData.confirmarSenha) {
       setError("Preencha todos os campos obrigatórios");
+      setLoading(false);
+      return;
+    }
+
+    // Verificação se as senhas coincidem
+    if (formData.senha !== formData.confirmarSenha) {
+      setError("As senhas não coincidem");
+      setLoading(false);
+      return;
+    }
+
+    // Verificação do comprimento mínimo da senha
+    if (formData.senha.length < 6) {
+      setError("A senha deve ter pelo menos 6 caracteres");
       setLoading(false);
       return;
     }
@@ -78,6 +94,9 @@ export default function PageCadastro() {
         telefone: formData.telefone.replace(/\D/g, ""),
         cep: formData.cep.replace(/\D/g, ""),
       };
+
+      // Remover o campo confirmarSenha dos dados enviados para o servidor
+      delete dadosParaEnviar.confirmarSenha;
 
       console.log("Dados sendo enviados:", dadosParaEnviar);
 
@@ -117,6 +136,7 @@ export default function PageCadastro() {
       setLoading(false);
     }
   };
+
   return (
     <div className={styles.pageContainer}>
       <Header />
@@ -186,6 +206,20 @@ export default function PageCadastro() {
                 </div>
 
                 <div className={styles.formGroup}>
+                  <label htmlFor="confirmarSenha">Confirmar Senha*</label>
+                  <input
+                    type="password"
+                    id="confirmarSenha"
+                    value={formData.confirmarSenha}
+                    onChange={handleChange}
+                    minLength="6"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
                   <label htmlFor="telefone">Telefone*</label>
                   <input
                     type="tel"
@@ -197,9 +231,7 @@ export default function PageCadastro() {
                     required
                   />
                 </div>
-              </div>
 
-              <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label htmlFor="genero">Gênero*</label>
                   <select
@@ -217,37 +249,15 @@ export default function PageCadastro() {
                     </option>
                   </select>
                 </div>
+              </div>
 
+              <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label htmlFor="dataNascimento">Data de Nascimento*</label>
                   <input
                     type="date"
                     id="dataNascimento"
                     value={formData.dataNascimento}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label htmlFor="endereco">Endereço*</label>
-                <input
-                  type="text"
-                  id="endereco"
-                  value={formData.endereco}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="cidade">Cidade*</label>
-                  <input
-                    type="text"
-                    id="cidade"
-                    value={formData.cidade}
                     onChange={handleChange}
                     required
                   />
@@ -265,6 +275,28 @@ export default function PageCadastro() {
                     required
                   />
                 </div>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="endereco">Endereço*</label>
+                <input
+                  type="text"
+                  id="endereco"
+                  value={formData.endereco}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="cidade">Cidade*</label>
+                <input
+                  type="text"
+                  id="cidade"
+                  value={formData.cidade}
+                  onChange={handleChange}
+                  required
+                />
               </div>
 
               {error && <div className={styles.errorMessage}>{error}</div>}

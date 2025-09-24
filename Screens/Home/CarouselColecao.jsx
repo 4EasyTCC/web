@@ -12,10 +12,21 @@ const CollectionsCarousel = () => {
     navigate(path);
   };
 
+  // Função para navegar para uma coleção específica
+ const navigateToCollection = (collectionId) => {
+  navigate(`/PageColecoes/${collectionId}`);
+};
+
+    const collectionId = collectionIds[collectionName];
+    if (collectionId) {
+      navigate(`/colecao/${collectionId}`);
+    }
+  };
+
   // Funções para renderizar os ícones SVG
   const renderIcon = (iconName) => {
     const iconSize = 24;
-    const iconColor = "#000000"; // Alterado para preto
+    const iconColor = "#000000";
 
     const icons = {
       "Arte, Cultura e Lazer": (
@@ -139,22 +150,22 @@ const CollectionsCarousel = () => {
     );
   };
 
-  // Coleções atualizadas
+  // Coleções atualizadas com IDs correspondentes
   const allCollections = [
-    "Arte, Cultura e Lazer",
-    "Congressos e Palestras",
-    "Cursos e Workshops",
-    "Esporte",
-    "Festas e Shows",
-    "Gastronomia",
-    "Games e Geek",
-    "Grátis",
-    "Infantil",
-    "Moda e Beleza",
-    "Passeios e Tours",
-    "Religião e Espiritualidade",
-    "Saúde e Bem-Estar",
-    "Teatros e Espetáculos"
+    { id: 1, name: "Arte, Cultura e Lazer" },
+    { id: 2, name: "Congressos e Palestras" },
+    { id: 3, name: "Cursos e Workshops" },
+    { id: 4, name: "Esporte" },
+    { id: 5, name: "Festas e Shows" },
+    { id: 6, name: "Gastronomia" },
+    { id: 7, name: "Games e Geek" },
+    { id: 8, name: "Grátis" },
+    { id: 9, name: "Infantil" },
+    { id: 10, name: "Moda e Beleza" },
+    { id: 11, name: "Passeios e Tours" },
+    { id: 12, name: "Religião e Espiritualidade" },
+    { id: 13, name: "Saúde e Bem-Estar" },
+    { id: 14, name: "Teatros e Espetáculos" }
   ];
 
   const sliderRef = useRef();
@@ -260,14 +271,17 @@ const CollectionsCarousel = () => {
       <div className={styles.carouselWrapper}>
         <div className={styles.carouselContainer}>
           <Slider ref={sliderRef} {...settings}>
-            {allCollections.map((item, index) => (
-              <div key={index} className={styles.collectionItem}>
-                <div className={styles.square}>
+            {allCollections.map((collection, index) => (
+              <div key={collection.id} className={styles.collectionItem}>
+                <button
+                  className={styles.square}
+                  onClick={() => navigateTo(`/PageColecoes/${collection.id}`)}
+                >
                   <div className={styles.iconContainer}>
-                    {renderIcon(item)}
+                    {renderIcon(collection.name)}
                   </div>
-                  <span className={styles.collectionName}>{item}</span>
-                </div>
+                  <span className={styles.collectionName}>{collection.name}</span>
+                </button>
               </div>
             ))}
             <div className={styles.collectionItem}>

@@ -1,19 +1,24 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from "./PageColecoes.module.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
+import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 
-export default function Collections() {
+export default function PageColecoes() {
   const navigate = useNavigate();
+  const { id, subId } = useParams();
   
-  const navigateTo = (path) => {
-    navigate(path);
+  // Se há um ID na URL, mostrar detalhes da coleção específica
+  const isDetailView = !!id;
+
+  const navigateToCollection = (collectionId) => {
+    navigate(`/PageColecoes/${collectionId}`);
   };
 
   // Funções para renderizar os ícones SVG
   const renderIcon = (iconName) => {
-    const iconSize = 32;
+    const iconSize = isDetailView ? 32 : 48;
     const iconColor = "#000000";
     
     const icons = {
@@ -138,7 +143,7 @@ export default function Collections() {
     );
   };
 
-  // Novas coleções
+  // Coleções
   const collections = [
     { id: 1, name: "Arte, Cultura e Lazer" },
     { id: 2, name: "Congressos e Palestras" },
@@ -156,9 +161,49 @@ export default function Collections() {
     { id: 14, name: "Teatros e Espetáculos" }
   ];
 
+  // Encontrar a coleção atual se estiver na view de detalhes
+  const currentCollection = isDetailView 
+    ? collections.find(collection => collection.id === parseInt(id)) 
+    : null;
+
+  // Renderizar view de detalhes se há um ID
+  if (isDetailView) {
+    return (
+      <div className={styles.pageContainer}>
+        <Header />
+        <Breadcrumb additionalPaths={[
+          { displayName: currentCollection?.name || `Coleção ${id}`, to: `/PageColecoes/${id}` }
+        ]} />
+        <div className={styles.backgroundPattern}></div>
+
+        <main className={styles.mainContent}>
+          <div className={styles.pageHeader}>
+            <h1>{currentCollection?.name || `Coleção ${id}`}</h1>
+            <p className={styles.pageSubtitle}>Eventos incríveis nesta categoria</p>
+          </div>
+          
+          {/* Aqui você pode adicionar os eventos específicos desta coleção */}
+          <div className={styles.collectionDetail}>
+            <p>Conteúdo específico da coleção será exibido aqui.</p>
+            <button 
+              onClick={() => navigate('/PageColecoes')}
+              className={styles.backButton}
+            >
+              Voltar para todas as coleções
+            </button>
+          </div>
+        </main>
+
+        <Footer />
+      </div>
+    );
+  }
+
+  // Renderizar view principal (lista de coleções)
   return (
     <div className={styles.pageContainer}>
       <Header />
+      <Breadcrumb />
       <div className={styles.backgroundPattern}></div>
 
       <main className={styles.mainContent}>
@@ -172,7 +217,7 @@ export default function Collections() {
             <div 
               key={collection.id} 
               className={styles.collectionCard}
-              onClick={() => navigateTo(`/colecao/${collection.id}`)}
+              onClick={() => navigateToCollection(collection.id)}
             >
               <div className={styles.collectionIcon}>
                 {renderIcon(collection.name)}
