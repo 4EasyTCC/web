@@ -14,6 +14,7 @@ import HeroCarousel from "@/components/HeroCarousel/HeroCarousel";
 import cellphone from "@images/placeholders/cellphone.png";
 import cellphone4easy from "@images/placeholders/cellPhone4easy.png";
 import money from "@images/placeholders/money.png";
+import CarouselColecao from "./CarouselColecao.jsx"
 
 // Função para buscar eventos da home
 const fetchHomeEvents = async (periodo, categoria) => {
@@ -70,6 +71,7 @@ export default function Home() {
         </section>
 
         <div className={styles.contentWithBackground}>
+          <CarouselColecao/>
           {/* Carousel O que fazer hoje/esta semana */}
           <div className={styles.carouselSection}>
             <div className={styles.carouselHeader}>
