@@ -1,0 +1,251 @@
+/* TermosUso.module.css */
+.pageContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f9f9ff 0%, #f0f4ff 100%);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.pageContainer::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234a3aff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.05;
+  z-index: 0;
+}
+
+.header {
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 20px 5%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a40;
+  text-decoration: none;
+}
+
+.logoHighlight {
+  color: #4a3aff;
+}
+
+.navLinks {
+  display: flex;
+  gap: 30px;
+}
+
+.navLink {
+  text-decoration: none;
+  color: #4a5568;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navLink:hover {
+  color: #4a3aff;
+}
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 80px 5%;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.pageHeader {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.pageTitle {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #1a1a40;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.highlight {
+  color: #4a3aff;
+  position: relative;
+  display: inline-block;
+}
+
+.highlight::after {
+  content: "";
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background-color: rgba(74, 58, 255, 0.2);
+  z-index: -1;
+}
+
+.pageSubtitle {
+  font-size: 1.2rem;
+  color: #4a5568;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.contentContainer {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  padding: 50px;
+  margin-bottom: 40px;
+}
+
+.lastUpdated {
+  text-align: right;
+  font-size: 0.9rem;
+  color: #718096;
+  margin-bottom: 30px;
+  font-style: italic;
+}
+
+.termsSection {
+  margin-bottom: 40px;
+}
+
+.sectionTitle {
+  font-size: 1.8rem;
+  color: #1a1a40;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f4ff;
+}
+
+.subsectionTitle {
+  font-size: 1.3rem;
+  color: #2d3748;
+  margin: 25px 0 15px;
+}
+
+.paragraph {
+  color: #4a5568;
+  line-height: 1.7;
+  margin-bottom: 15px;
+}
+
+.list {
+  margin-left: 20px;
+  margin-bottom: 20px;
+  color: #4a5568;
+}
+
+.listItem {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.noteBox {
+  background-color: #f7f7ff;
+  border-left: 4px solid #4a3aff;
+  padding: 20px;
+  margin: 25px 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.noteText {
+  margin: 0;
+  color: #4a5568;
+}
+
+.footer {
+  background-color: white;
+  padding: 40px 5%;
+  margin-top: 60px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.footerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 20px;
+}
+
+.footerLink {
+  text-decoration: none;
+  color: #4a5568;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.footerLink:hover {
+  color: #4a3aff;
+}
+
+.copyright {
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+  .mainContainer {
+    padding: 60px 5%;
+  }
+  
+  .pageTitle {
+    font-size: 2.2rem;
+  }
+  
+  .contentContainer {
+    padding: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navLinks {
+    display: none;
+  }
+  
+  .pageTitle {
+    font-size: 1.8rem;
+  }
+  
+  .footerContent {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .footerLinks {
+    justify-content: center;
+  }
+}
