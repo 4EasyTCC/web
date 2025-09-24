@@ -13,14 +13,8 @@ const CollectionsCarousel = () => {
   };
 
   // Função para navegar para uma coleção específica
- const navigateToCollection = (collectionId) => {
-  navigate(`/PageColecoes/${collectionId}`);
-};
-
-    const collectionId = collectionIds[collectionName];
-    if (collectionId) {
-      navigate(`/colecao/${collectionId}`);
-    }
+  const navigateToCollection = (collectionId) => {
+    navigate(`/PageColecoes/${collectionId}`);
   };
 
   // Funções para renderizar os ícones SVG

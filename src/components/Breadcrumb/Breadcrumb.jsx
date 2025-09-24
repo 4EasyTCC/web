@@ -21,15 +21,13 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
     'profile': 'Perfil',
     'PageSponsor': 'Seja um Patrocinador',
     'PageColecoes': 'Coleções',
-    'colecao': 'Coleção',
     'Eventos': 'Eventos',
-    'eventos': 'Eventos',
     'SearchEvents': 'Buscar Eventos'
   };
 
-  // Dados dinâmicos (poderia vir de uma API)
+  // Dados dinâmicos para coleções
   const dynamicData = {
-    'colecao': {
+    'PageColecoes': {
       '1': 'Arte, Cultura e Lazer',
       '2': 'Congressos e Palestras',
       '3': 'Cursos e Workshops',
@@ -44,11 +42,6 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
       '12': 'Religião e Espiritualidade',
       '13': 'Saúde e Bem-Estar',
       '14': 'Teatros e Espetáculos'
-    },
-    'eventos': {
-      // Exemplo de eventos (em um caso real, viria da API)
-      '123': 'Show Nacional',
-      '456': 'Feira de Tecnologia'
     }
   };
 
