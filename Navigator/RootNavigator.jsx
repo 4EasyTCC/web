@@ -17,6 +17,7 @@ import PageColecoes from "../Screens/PageColecoes/PageColecoes.jsx";
 import Eventos from "../Screens/Eventos/Eventos.jsx";
 import SearchEvents from "../Screens/SearchEvents/SearchEvents.jsx";
 import PageWrapper from "@/components/PageWrapper/PageWrapper";
+import Terms from "../Screens/Terms/Terms";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -160,6 +161,15 @@ function AnimatedRoutes() {
             element={
               <PageWrapper>
                 <Eventos />
+              </PageWrapper>
+            }
+          />
+
+          <Route
+            path="/Terms"
+            element={
+              <PageWrapper>
+                <Terms />
               </PageWrapper>
             }
           />

@@ -1,10 +1,10 @@
-// Header.jsx (atualizado)
+// Header.jsx (CORRIGIDO PARA USAR "user")
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './Header.module.css';
 import SearchBar from './SearchBar/SearchBar';
 import AuthButtons from './AuthButtons/AuthButtons';
-import UserProfile from './UserProfile/UserProfile'; // Novo componente
+import UserProfile from './UserProfile/UserProfile';
 import MenuDropdown from './MenuDropDown/MenuDropdown';
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb';
 import LogoOficial from '@images/logos/LogoOficial.png';
@@ -17,45 +17,68 @@ export default function Header({ customBreadcrumbs = [] }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado de autenticação
-  const [userData, setUserData] = useState(null); // Dados do usuário
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState(null);
   const headerRef = useRef(null);
   const animationFrameId = useRef(null);
 
-  // Verificar autenticação ao carregar
-  useEffect(() => {
-    const checkAuthStatus = () => {
+  // ✅ VERIFICAÇÃO CORRIGIDA - usando "user" em vez de "userData"
+  const checkAuthStatus = useCallback(() => {
+    try {
       const token = localStorage.getItem('token');
-      const user = localStorage.getItem('userData');
+      const userStr = localStorage.getItem('user'); // ⚠️ MUDOU PARA "user"
       
-      if (token && user) {
+      console.log('🔐 Header - Verificando localStorage:', { 
+        token: token ? `EXISTE (${token.substring(0, 20)}...)` : 'NÃO EXISTE', 
+        user: userStr ? `EXISTE: ${JSON.parse(userStr).nome}` : 'NÃO EXISTE' 
+      });
+
+      if (token && userStr) {
+        const user = JSON.parse(userStr);
+        console.log('✅ Header - Usuário autenticado:', user.nome);
         setIsLoggedIn(true);
-        setUserData(JSON.parse(user));
+        setUserData(user);
       } else {
+        console.log('❌ Header - Dados incompletos no localStorage');
         setIsLoggedIn(false);
         setUserData(null);
       }
-    };
-
-    checkAuthStatus();
-    
-    // Ouvir eventos de login/logout
-    window.addEventListener('userLoggedIn', checkAuthStatus);
-    window.addEventListener('userLoggedOut', checkAuthStatus);
-    
-    return () => {
-      window.removeEventListener('userLoggedIn', checkAuthStatus);
-      window.removeEventListener('userLoggedOut', checkAuthStatus);
-    };
+    } catch (error) {
+      console.error('❌ Header - Erro ao verificar autenticação:', error);
+      setIsLoggedIn(false);
+      setUserData(null);
+    }
   }, []);
 
+  // ✅ EFFECT CORRIGIDO
+  useEffect(() => {
+    console.log('🚀 Header - Iniciando verificação de autenticação');
+    
+    // Verificação imediata
+    checkAuthStatus();
+    
+    // Escutar eventos
+    const handleAuthEvent = () => {
+      console.log('📢 Header - Evento de autenticação detectado');
+      setTimeout(checkAuthStatus, 100);
+    };
+
+    window.addEventListener('userLoggedIn', handleAuthEvent);
+    window.addEventListener('userLoggedOut', handleAuthEvent);
+    window.addEventListener('storage', handleAuthEvent);
+    
+    return () => {
+      window.removeEventListener('userLoggedIn', handleAuthEvent);
+      window.removeEventListener('userLoggedOut', handleAuthEvent);
+      window.removeEventListener('storage', handleAuthEvent);
+    };
+  }, [checkAuthStatus]);
+
   // Restante do código permanece igual...
-  // Inicialização do estado de scroll
   useEffect(() => {
     setIsScrolled(isHomePage ? window.scrollY > 50 : true);
   }, [isHomePage]);
 
-  // Handler de scroll otimizado
   const handleScroll = useCallback(() => {
     if (animationFrameId.current) {
       cancelAnimationFrame(animationFrameId.current);
@@ -94,8 +117,15 @@ export default function Header({ customBreadcrumbs = [] }) {
     setIsMenuOpen(prev => !prev);
   }, []);
 
-  // Não mostrar breadcrumb na homepage
   const showBreadcrumb = !isHomePage && location.pathname !== '/home';
+
+  // ✅ DEBUG COMPLETO
+  console.log('🎯 Header - Estado final:', { 
+    isLoggedIn, 
+    user: userData?.nome || 'Nenhum usuário',
+    hasToken: !!localStorage.getItem('token'),
+    hasUser: !!localStorage.getItem('user') // ⚠️ MUDOU PARA "user"
+  });
 
   return (
     <>
@@ -132,8 +162,8 @@ export default function Header({ customBreadcrumbs = [] }) {
               <div className={styles.rightAboveSection}>
                 {isScrolled}
                 
-                {/* Substituição dos AuthButtons pelo UserProfile quando logado */}
-                {isLoggedIn ? (
+                {/* ✅ RENDERIZAÇÃO CONDICIONAL */}
+                {isLoggedIn && userData ? (
                   <UserProfile 
                     userData={userData} 
                     isScrolled={isScrolled}
@@ -173,7 +203,6 @@ export default function Header({ customBreadcrumbs = [] }) {
                 isScrolled={isScrolled}
                 fullWidth
               />
-             
             </div>
           </div>
         )}
