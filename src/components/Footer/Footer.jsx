@@ -118,7 +118,7 @@ export default function Footer() {
             <ul>
                 <li>
                 <Link to="/Terms" className={styles.link}>Termos de Uso</Link>
-              </li>
+                </li>
               <li>
                 <Link to="/Contact" className={styles.link}>Contato</Link>
               </li>

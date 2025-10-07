@@ -1,22 +1,12 @@
 import React from 'react';
 import styles from './Terms.module.css';
+import Header from "@/components/Header/Header";
+import Footer from "@/components/Footer/Footer";
 
 const TermosUso = () => {
   return (
     <div className={styles.pageContainer}>
-      <header className={styles.header}>
-        <div className={styles.navContainer}>
-          <a href="/" className={styles.logo}>
-            Nossa<span className={styles.logoHighlight}>Empresa</span>
-          </a>
-          <nav className={styles.navLinks}>
-            <a href="/" className={styles.navLink}>Início</a>
-            <a href="/sobre" className={styles.navLink}>Sobre</a>
-            <a href="/servicos" className={styles.navLink}>Serviços</a>
-            <a href="/contato" className={styles.navLink}>Contato</a>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       <main className={styles.mainContainer}>
         <div className={styles.pageHeader}>
@@ -24,121 +14,166 @@ const TermosUso = () => {
             Termos de <span className={styles.highlight}>Uso</span>
           </h1>
           <p className={styles.pageSubtitle}>
-            Leia atentamente nossos termos e condições antes de utilizar nossos serviços.
+            Este documento contém as regras e condições que regem a utilização da plataforma e dos serviços da 4Easy. Leia atentamente.
           </p>
         </div>
 
         <div className={styles.contentContainer}>
-          <div className={styles.lastUpdated}>
-            Última atualização: 15 de Novembro de 2023
-          </div>
 
+
+          {/* 1. GLOSSÁRIO - SIMILAR À ESTRUTURA SYMPLA */}
           <section className={styles.termsSection}>
-            <h2 className={styles.sectionTitle}>1. Aceitação dos Termos</h2>
+            <h2 className={styles.sectionTitle}>1. Glossário</h2>
             <p className={styles.paragraph}>
-              Ao acessar e utilizar nossos serviços, você concorda em cumprir e estar vinculado a estes Termos de Uso. 
-              Se você não concordar com qualquer parte destes termos, não poderá utilizar nossos serviços.
+              Para fins destes Termos de Uso, os termos listados abaixo, quando escritos em letra maiúscula, terão os seguintes significados:
             </p>
+            <ul className={styles.list}>
+              <li className={styles.listItem}>
+                <strong>Plataforma:</strong> Refere-se à plataforma digital (website, aplicativo e quaisquer outras interfaces) de propriedade da NossaEmpresa.
+              </li>
+              <li className={styles.listItem}>
+                <strong>Usuário:</strong> Qualquer pessoa física ou jurídica que acesse ou utilize os serviços da Plataforma, seja como Comprador ou Prestador de Serviço.
+              </li>
+              <li className={styles.listItem}>
+                <strong>Serviços:</strong> As funcionalidades e recursos oferecidos pela NossaEmpresa através da Plataforma.
+              </li>
+              <li className={styles.listItem}>
+                <strong>Conteúdo:</strong> Inclui textos, dados, gráficos, imagens, músicas, software e quaisquer outros materiais disponibilizados na Plataforma.
+              </li>
+            </ul>
           </section>
 
-          <section className={styles.termsSection}>
-            <h2 className={styles.sectionTitle}>2. Modificações dos Termos</h2>
-            <p className={styles.paragraph}>
-              Reservamo-nos o direito de modificar estes Termos a qualquer momento. 
-              As alterações entrarão em vigor imediatamente após a publicação. 
-              O uso continuado de nossos serviços após tais modificações constitui sua aceitação dos novos termos.
-            </p>
-          </section>
+          <hr/> {/* Separador visual para seções principais */}
 
+          {/* 2. ACEITAÇÃO E INFORMAÇÕES GERAIS */}
           <section className={styles.termsSection}>
-            <h2 className={styles.sectionTitle}>3. Uso dos Serviços</h2>
+            <h2 className={styles.sectionTitle}>2. Aceitação e Informações Gerais</h2>
             
-            <h3 className={styles.subsectionTitle}>3.1. Elegibilidade</h3>
+            <h3 className={styles.subsectionTitle}>2.1. Aceitação Integral</h3>
             <p className={styles.paragraph}>
-              Você deve ter pelo menos 18 anos de idade para utilizar nossos serviços. 
-              Ao utilizar nossos serviços, você declara e garante que atende a este requisito.
+              Ao acessar e utilizar a Plataforma, o Usuário manifesta sua ciência e concordância integral e irrestrita com todas as cláusulas e condições destes Termos de Uso. 
+              Se houver discordância com qualquer ponto, o Usuário não deverá utilizar os Serviços.
+            </p>
+            
+            <h3 className={styles.subsectionTitle}>2.2. Modificações dos Termos</h3>
+            <p className={styles.paragraph}>
+              A NossaEmpresa reserva-se o direito de modificar estes Termos a qualquer momento. 
+              As alterações entrarão em vigor imediatamente após a publicação na Plataforma. 
+              O uso continuado dos Serviços após a publicação das modificações constitui aceitação tácita dos novos termos.
             </p>
 
-            <h3 className={styles.subsectionTitle}>3.2. Conta do Usuário</h3>
+             <h3 className={styles.subsectionTitle}>2.3. Capacidade Legal</h3>
             <p className={styles.paragraph}>
-              Ao criar uma conta, você concorda em:
+              Os Serviços são destinados a pessoas físicas maiores de 18 (dezoito) anos ou pessoas jurídicas devidamente representadas.
+              Usuários menores de idade devem obter consentimento expresso de seus pais ou representantes legais para a utilização, sendo estes os responsáveis por todas as ações do menor na Plataforma.
             </p>
-            <ul className={styles.list}>
-              <li className={styles.listItem}>Fornecer informações precisas e completas</li>
-              <li className={styles.listItem}>Manter a segurança de sua senha</li>
-              <li className={styles.listItem}>Notificar-nos imediatamente sobre qualquer uso não autorizado</li>
-              <li className={styles.listItem}>Ser responsável por todas as atividades em sua conta</li>
-            </ul>
-
-            <h3 className={styles.subsectionTitle}>3.3. Conduta Proibida</h3>
-            <p className={styles.paragraph}>
-              Você concorda em não:
-            </p>
-            <ul className={styles.list}>
-              <li className={styles.listItem}>Violar qualquer lei ou regulamento aplicável</li>
-              <li className={styles.listItem}>Infringir direitos de propriedade intelectual</li>
-              <li className={styles.listItem}>Distribuir malware ou código malicioso</li>
-              <li className={styles.listItem}>Realizar atividades fraudulentas</li>
-              <li className={styles.listItem}>Interferir na segurança ou funcionamento dos serviços</li>
-            </ul>
           </section>
 
+          <hr/>
+
+          {/* 3. CADASTRO E CONTA DO USUÁRIO - SIMILAR À ESTRUTURA SYMPLA */}
           <section className={styles.termsSection}>
-            <h2 className={styles.sectionTitle}>4. Propriedade Intelectual</h2>
+            <h2 className={styles.sectionTitle}>3. Cadastro e Conta do Usuário</h2>
+            
+            <h3 className={styles.subsectionTitle}>3.1. Requisitos de Cadastro</h3>
             <p className={styles.paragraph}>
-              Todo o conteúdo, recursos e funcionalidades disponíveis em nossos serviços são de nossa propriedade 
-              ou de nossos licenciadores e estão protegidos por leis de direitos autorais, marcas registradas e outras leis de propriedade intelectual.
+              O Usuário compromete-se a fornecer informações precisas, completas e verdadeiras no momento do cadastro e a mantê-las sempre atualizadas.
+            </p>
+            
+            <h3 className={styles.subsectionTitle}>3.2. Segurança e Responsabilidade</h3>
+            <p className={styles.paragraph}>
+              O Usuário é o único e exclusivo responsável pela segurança de sua senha e por todas as atividades que ocorram em sua conta. 
+              Qualquer uso não autorizado deve ser imediatamente notificado à NossaEmpresa.
             </p>
             
             <div className={styles.noteBox}>
               <p className={styles.noteText}>
-                Você pode utilizar nosso conteúdo apenas para uso pessoal e não comercial, sujeito a estas restrições.
+                <strong>Atenção:</strong> A NossaEmpresa não se responsabiliza por quaisquer danos resultantes do uso indevido da conta por terceiros, com ou sem o conhecimento do Usuário.
               </p>
             </div>
           </section>
+          
+          <hr/>
 
+          {/* 4. CONDUTA E OBRIGAÇÕES DO USUÁRIO - SIMILAR À ESTRUTURA SYMPLA */}
           <section className={styles.termsSection}>
-            <h2 className={styles.sectionTitle}>5. Limitação de Responsabilidade</h2>
+            <h2 className={styles.sectionTitle}>4. Conduta e Obrigações do Usuário</h2>
             <p className={styles.paragraph}>
-              Nossos serviços são fornecidos "no estado em que se encontram" e "conforme a disponibilidade". 
-              Não garantimos que os serviços atenderão a todos os seus requisitos ou que serão ininterruptos, 
-              seguros ou livres de erros.
+              O Usuário se compromete a utilizar a Plataforma de forma ética e legal, abstendo-se de praticar as seguintes condutas:
             </p>
+            <ul className={styles.list}>
+              <li className={styles.listItem}>Violar leis, regulamentos ou direitos de terceiros (incluindo propriedade intelectual).</li>
+              <li className={styles.listItem}>Realizar atividades fraudulentas, enganosas ou que se enquadrem como crime cibernético.</li>
+              <li className={styles.listItem}>Distribuir, transmitir ou carregar vírus, malware ou qualquer código malicioso.</li>
+              <li className={styles.listItem}>Interferir ou interromper a segurança ou a funcionalidade dos Serviços.</li>
+              <li className={styles.listItem}>Promover discurso de ódio, discriminação ou violência.</li>
+            </ul>
+          </section>
+          
+          <hr/>
+
+          {/* 5. PROPRIEDADE INTELECTUAL - SIMILAR À ESTRUTURA SYMPLA */}
+          <section className={styles.termsSection}>
+            <h2 className={styles.sectionTitle}>5. Direitos Autorais e Propriedade Intelectual</h2>
             <p className={styles.paragraph}>
-              Em nenhuma circunstância seremos responsáveis por quaisquer danos indiretos, incidentais, 
-              especiais, consequenciais ou punitivos resultantes do uso ou incapacidade de usar nossos serviços.
+              Todo o Conteúdo, incluindo, mas não se limitando a, software, marcas, design, textos e identidade visual da Plataforma, são de propriedade exclusiva da NossaEmpresa ou de seus licenciadores e são protegidos por leis de propriedade intelectual.
+            </p>
+            
+            <h3 className={styles.subsectionTitle}>5.1. Uso do Conteúdo</h3>
+            <p className={styles.paragraph}>
+              É expressamente proibido reproduzir, copiar, adaptar, utilizar marcas ou logotipos da NossaEmpresa sem autorização prévia e expressa. 
+              O Usuário pode utilizar o Conteúdo apenas para uso pessoal e não comercial, respeitando as restrições deste Termo.
             </p>
           </section>
 
+          <hr/>
+
+          {/* 6. LIMITAÇÃO DE RESPONSABILIDADE - SIMILAR À ESTRUTURA SYMPLA */}
           <section className={styles.termsSection}>
-            <h2 className={styles.sectionTitle}>6. Privacidade</h2>
+            <h2 className={styles.sectionTitle}>6. Limitação de Responsabilidade</h2>
             <p className={styles.paragraph}>
-              Sua privacidade é importante para nós. Nossa Política de Privacidade explica como coletamos, 
-              usamos e protegemos suas informações pessoais. Ao utilizar nossos serviços, você concorda com 
-              nossas práticas de coleta e uso de informações conforme descrito em nossa Política de Privacidade.
+              Os Serviços da Plataforma são fornecidos "no estado em que se encontram" e "conforme a disponibilidade", sem garantias de que atenderão a todos os requisitos do Usuário ou que serão ininterruptos, seguros ou livres de erros.
+            </p>
+            <p className={styles.paragraph}>
+              A NossaEmpresa não será responsável por quaisquer danos indiretos, incidentais, consequenciais ou punitivos resultantes do uso ou da incapacidade de usar os Serviços.
+              A NossaEmpresa não se responsabiliza por falhas na prestação de serviços de terceiros (como Produtores de Conteúdo ou Parceiros) cujos serviços sejam apenas intermediados pela Plataforma.
+            </p>
+          </section>
+          
+          <hr/>
+
+          {/* 7. PRIVACIDADE E DADOS PESSOAIS - SIMILAR À ESTRUTURA SYMPLA */}
+          <section className={styles.termsSection}>
+            <h2 className={styles.sectionTitle}>7. Privacidade e Proteção de Dados</h2>
+            <p className={styles.paragraph}>
+              A coleta, uso, armazenamento e proteção dos dados pessoais dos Usuários são regidos pela nossa **Política de Privacidade**. Ao utilizar a Plataforma, o Usuário concorda com as práticas descritas em tal política.
             </p>
           </section>
 
-          <section className={styles.termsSection}>
-            <h2 className={styles.sectionTitle}>7. Rescisão</h2>
-            <p className={styles.paragraph}>
-              Podemos rescindir ou suspender seu acesso aos nossos serviços imediatamente, sem aviso prévio, 
-              por qualquer motivo, incluindo, mas não se limitando a, violação destes Termos de Uso.
-            </p>
-          </section>
+          <hr/>
 
+          {/* 8. DISPOSIÇÕES GERAIS - SIMILAR À ESTRUTURA SYMPLA */}
           <section className={styles.termsSection}>
-            <h2 className={styles.sectionTitle}>8. Lei Aplicável</h2>
+            <h2 className={styles.sectionTitle}>8. Disposições Gerais</h2>
+            
+            <h3 className={styles.subsectionTitle}>8.1. Rescisão</h3>
             <p className={styles.paragraph}>
-              Estes Termos serão regidos e interpretados de acordo com as leis do Brasil, 
-              sem consideração a seus conflitos de disposições legais.
+              Podemos rescindir ou suspender o acesso do Usuário aos Serviços imediatamente, sem aviso prévio, em caso de violação destes Termos de Uso.
+            </p>
+            
+            <h3 className={styles.subsectionTitle}>8.2. Lei Aplicável e Foro</h3>
+            <p className={styles.paragraph}>
+              Estes Termos de Uso são regidos e interpretados pelas leis da República Federativa do Brasil. 
+              Fica eleito o foro da Comarca de São Paulo, no Estado de São Paulo, para dirimir quaisquer controvérsias oriundas destes Termos.
             </p>
           </section>
+          
+          <hr/>
 
           <section className={styles.termsSection}>
             <h2 className={styles.sectionTitle}>9. Contato</h2>
             <p className={styles.paragraph}>
-              Se você tiver alguma dúvida sobre estes Termos de Uso, entre em contato conosco através de:
+              Para qualquer dúvida, reclamação ou solicitação relacionada a estes Termos de Uso ou aos nossos Serviços, o Usuário pode entrar em contato através dos canais abaixo:
             </p>
             <ul className={styles.list}>
               <li className={styles.listItem}>E-mail: legal@nossaempresa.com</li>
@@ -149,18 +184,7 @@ const TermosUso = () => {
         </div>
       </main>
 
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <div className={styles.footerLinks}>
-            <a href="/privacidade" className={styles.footerLink}>Política de Privacidade</a>
-            <a href="/termos" className={styles.footerLink}>Termos de Uso</a>
-            <a href="/cookies" className={styles.footerLink}>Cookies</a>
-          </div>
-          <div className={styles.copyright}>
-            © 2025 NossaEmpresa. Todos os direitos reservados.
-          </div>
-        </div>
-      </footer>
+    <Footer />
     </div>
   );
 };

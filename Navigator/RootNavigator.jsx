@@ -17,7 +17,7 @@ import PageColecoes from "../Screens/PageColecoes/PageColecoes.jsx";
 import Eventos from "../Screens/Eventos/Eventos.jsx";
 import SearchEvents from "../Screens/SearchEvents/SearchEvents.jsx";
 import PageWrapper from "@/components/PageWrapper/PageWrapper";
-import Terms from "../Screens/Terms/Terms";
+import Terms from "../Screens/Terms/Terms.jsx";
 
 function AnimatedRoutes() {
   const location = useLocation();
