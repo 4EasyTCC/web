@@ -1,0 +1,63 @@
+/* components/Profile/ProfileTabs.module.css */
+.tabsContainer {
+    margin-bottom: 2rem;
+  }
+  
+  .tabs {
+    display: flex;
+    background: #f8fafc;
+    padding: 0.5rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    gap: 0.5rem;
+  }
+  
+  .tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    color: #64748b;
+  }
+  
+  .tab:hover {
+    background: #e2e8f0;
+    color: #475569;
+  }
+  
+  .tab.active {
+    background: white;
+    color: #667eea;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tabIcon {
+    font-size: 1.1rem;
+  }
+  
+  .tabLabel {
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 768px) {
+    .tabs {
+      flex-wrap: wrap;
+    }
+    
+    .tab {
+      flex: 1 1 calc(50% - 0.5rem);
+      min-width: 120px;
+    }
+    
+    .tabLabel {
+      font-size: 0.8rem;
+    }
+  }

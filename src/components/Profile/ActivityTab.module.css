@@ -1,0 +1,140 @@
+/* components/Profile/ActivityTab.module.css */
+.activityContainer {
+    animation: fadeIn 0.5s ease-in;
+  }
+  
+  .activityContainer h2 {
+    margin: 0 0 2rem 0;
+    color: #1e293b;
+    font-size: 1.75rem;
+    font-weight: 700;
+    text-align: center;
+  }
+  
+  .activityList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .activityItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+  }
+  
+  .activityItem:hover {
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateX(5px);
+  }
+  
+  .activityIcon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    color: white;
+  }
+  
+  .activityContent {
+    flex: 1;
+  }
+  
+  .activityText {
+    color: #334155;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+  }
+  
+  .activityText strong {
+    color: #1e293b;
+    font-weight: 600;
+  }
+  
+  .activityDate {
+    color: #64748b;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  
+  .emptyState {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 20px;
+    border: 2px dashed #cbd5e1;
+    color: #64748b;
+  }
+  
+  .emptyState p {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .emptyState small {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+  
+  /* Timeline effect */
+  .activityItem {
+    position: relative;
+  }
+  
+  .activityItem::before {
+    content: '';
+    position: absolute;
+    left: 35px;
+    top: 70px;
+    bottom: -1rem;
+    width: 2px;
+    background: #e2e8f0;
+    z-index: 1;
+  }
+  
+  .activityItem:last-child::before {
+    display: none;
+  }
+  
+  .activityIcon {
+    position: relative;
+    z-index: 2;
+  }
+  
+  @media (max-width: 768px) {
+    .activityItem {
+      padding: 1rem;
+    }
+    
+    .activityIcon {
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+    }
+    
+    .activityText {
+      font-size: 0.9rem;
+    }
+    
+    .activityItem::before {
+      left: 30px;
+    }
+    
+    .emptyState {
+      padding: 3rem 1.5rem;
+    }
+  }

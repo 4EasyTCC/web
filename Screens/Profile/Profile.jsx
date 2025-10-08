@@ -1,21 +1,40 @@
-// ATUALIZAR Profile.jsx - Adicionar sincronização com localStorage
+// Profile.jsx - PÁGINA PRINCIPAL ATUALIZADA
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./Profile.module.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
+import ProfileHeader from "@/components/Profile/ProfileHeader/ProfileHeader";
+import EditProfileModal from "@/components/Profile/EditProfileModal/EditProfileModal";
+import ProfileTabs from "@/components/Profile/ProfileTabs/ProfileTabs";
+import AboutTab from "@/components/Profile/AboutTab";
+import StatisticsTab from "@/components/Profile/StatisticsTab";
+import PreferencesTab from "@/components/Profile/PreferencesTab";
+import ActivityTab from "@/components/Profile/ActivityTab";
 
 export default function Profile() {
   const [perfil, setPerfil] = useState(null);
-  const [aba, setAba] = useState("ultimoMes");
-  const [editando, setEditando] = useState(false);
-  const [formData, setFormData] = useState({ nome: "", sobreMim: "" });
+  const [activeTab, setActiveTab] = useState('sobre');
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState("");
+  const [sucesso, setSucesso] = useState("");
 
   useEffect(() => {
     carregarPerfil();
   }, []);
+
+  const garantirUrlCompleta = (avatarUrl) => {
+    if (!avatarUrl) return null;
+    if (avatarUrl.startsWith('http')) return avatarUrl;
+    return `http://localhost:3000${avatarUrl}`;
+  };
+
+  const adicionarTimestamp = (url) => {
+    if (!url) return url;
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}t=${new Date().getTime()}`;
+  };
 
   const carregarPerfil = async () => {
     const token = localStorage.getItem("token");
@@ -23,30 +42,45 @@ export default function Profile() {
       const res = await axios.get("http://localhost:3000/perfil/convidado", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setPerfil(res.data);
-      setFormData({
-        nome: res.data.convidado.nome,
-        sobreMim: res.data.convidado.sobreMim || ""
-      });
+      
+      const perfilComAvatarCorrigido = {
+        ...res.data,
+        convidado: {
+          ...res.data.convidado,
+          avatarUrl: res.data.convidado.avatarUrl 
+            ? garantirUrlCompleta(res.data.convidado.avatarUrl)
+            : null
+        }
+      };
+      
+      setPerfil(perfilComAvatarCorrigido);
     } catch (err) {
       console.error("Erro ao carregar perfil:", err);
       setErro("Erro ao carregar perfil");
     }
   };
 
-  // Função para atualizar o localStorage e notificar outros componentes
   const atualizarUsuarioLocalStorage = (novosDados) => {
     const usuarioAtual = JSON.parse(localStorage.getItem("user") || "{}");
-    const usuarioAtualizado = { ...usuarioAtual, ...novosDados };
+    const usuarioAtualizado = { 
+      ...usuarioAtual, 
+      ...novosDados
+    };
+    
     localStorage.setItem("user", JSON.stringify(usuarioAtualizado));
     
-    // Disparar evento personalizado para notificar outros componentes
     window.dispatchEvent(new CustomEvent("usuarioAtualizado", {
       detail: usuarioAtualizado
     }));
+
+    if (novosDados.avatarUrl) {
+      window.dispatchEvent(new CustomEvent("avatarAtualizado", {
+        detail: { avatarUrl: novosDados.avatarUrl }
+      }));
+    }
   };
 
-  const handleSalvarPerfil = async () => {
+  const handleSalvarPerfil = async (formData) => {
     const token = localStorage.getItem("token");
     setCarregando(true);
     setErro("");
@@ -63,36 +97,33 @@ export default function Profile() {
         }
       );
 
-      console.log("Resposta da API:", res.data);
-
       if (res.data.success) {
-        // Atualizar estado local
+        const avatarUrlCompleta = res.data.convidado.avatarUrl 
+          ? garantirUrlCompleta(res.data.convidado.avatarUrl)
+          : null;
+
         setPerfil(prev => ({
           ...prev,
-          convidado: res.data.convidado
+          convidado: {
+            ...res.data.convidado,
+            avatarUrl: avatarUrlCompleta
+          }
         }));
         
-        // Atualizar localStorage
         atualizarUsuarioLocalStorage({
-          nome: res.data.convidado.nome,
-          sobreMim: res.data.convidado.sobreMim,
+          ...res.data.convidado,
           avatarUrl: res.data.convidado.avatarUrl
         });
         
-        setEditando(false);
-        setErro("");
+        setEditModalOpen(false);
+        setSucesso("Perfil atualizado com sucesso!");
+        setTimeout(() => setSucesso(""), 3000);
       } else {
         setErro(res.data.message || "Erro ao atualizar perfil");
       }
     } catch (err) {
-      console.error("Erro completo ao atualizar perfil:", err);
-      if (err.response?.data?.message) {
-        setErro(err.response.data.message);
-      } else if (err.message) {
-        setErro(err.message);
-      } else {
-        setErro("Erro ao atualizar perfil");
-      }
+      console.error("Erro ao atualizar perfil:", err);
+      setErro(err.response?.data?.message || err.message || "Erro ao atualizar perfil");
     } finally {
       setCarregando(false);
     }
@@ -102,13 +133,11 @@ export default function Profile() {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Validar tipo de arquivo
     if (!file.type.startsWith('image/')) {
       setErro("Por favor, selecione uma imagem válida");
       return;
     }
 
-    // Validar tamanho do arquivo (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       setErro("A imagem deve ter menos de 5MB");
       return;
@@ -132,38 +161,54 @@ export default function Profile() {
         }
       );
 
-      console.log("Resposta do upload:", res.data);
-
       if (res.data.success) {
-        // Atualizar estado local
+        const avatarUrlCompleta = garantirUrlCompleta(res.data.avatarUrl);
+        const avatarUrlComTimestamp = adicionarTimestamp(avatarUrlCompleta);
+
         setPerfil(prev => ({
           ...prev,
           convidado: {
             ...prev.convidado,
-            avatarUrl: res.data.avatarUrl
+            avatarUrl: avatarUrlComTimestamp
           }
         }));
         
-        // Atualizar localStorage
         atualizarUsuarioLocalStorage({
+          ...res.data.convidado,
           avatarUrl: res.data.avatarUrl
         });
         
-        setErro("");
+        setSucesso("Foto atualizada com sucesso!");
+        setTimeout(() => setSucesso(""), 3000);
       } else {
         setErro(res.data.message || "Erro ao atualizar foto");
       }
     } catch (err) {
-      console.error("Erro completo no upload:", err);
-      if (err.response?.data?.message) {
-        setErro(err.response.data.message);
-      } else if (err.message) {
-        setErro(err.message);
-      } else {
-        setErro("Erro ao fazer upload da foto");
-      }
+      console.error("Erro no upload:", err);
+      setErro(err.response?.data?.message || err.message || "Erro ao fazer upload da foto");
     } finally {
       setCarregando(false);
+      event.target.value = '';
+    }
+  };
+
+  const renderTabContent = () => {
+    if (!perfil) return null;
+
+    switch (activeTab) {
+      case 'sobre':
+        return <AboutTab perfil={perfil} onEdit={() => setEditModalOpen(true)} />;
+      case 'estatisticas':
+        return <StatisticsTab estatisticas={perfil.estatisticas} />;
+      case 'preferencias':
+        return <PreferencesTab 
+          eventosFavoritos={perfil.eventosFavoritos} 
+          profissoesFavoritas={perfil.profissoesFavoritas} 
+        />;
+      case 'atividade':
+        return <ActivityTab />;
+      default:
+        return <AboutTab perfil={perfil} onEdit={() => setEditModalOpen(true)} />;
     }
   };
 
@@ -174,159 +219,48 @@ export default function Profile() {
       <Header />
 
       <div className={styles.profileContainer}>
-        {/* Mensagem de erro */}
+        {/* Mensagens de feedback */}
         {erro && (
           <div className={styles.erroMensagem}>
             {erro}
-            <button 
-              onClick={() => setErro("")} 
-              className={styles.fecharErro}
-            >
-              ×
-            </button>
+            <button onClick={() => setErro("")} className={styles.fecharErro}>×</button>
           </div>
         )}
 
-        {/* Mensagem de sucesso */}
-        {!erro && carregando && (
+        {sucesso && (
           <div className={styles.sucessoMensagem}>
-            {editando ? "Salvando alterações..." : "Atualizando foto..."}
+            {sucesso}
+            <button onClick={() => setSucesso("")} className={styles.fecharSucesso}>×</button>
           </div>
         )}
 
         {/* Cabeçalho do Perfil */}
-        <div className={styles.header}>
-          <div className={styles.avatarContainer}>
-            <img
-              src={perfil.convidado.avatarUrl || "/default-avatar.png"}
-              alt="Foto de perfil"
-              className={styles.avatar}
-              key={perfil.convidado.avatarUrl} // Forçar re-render quando a URL mudar
-            />
-            <input
-              type="file"
-              id="fotoPerfil"
-              accept="image/*"
-              onChange={handleUploadFoto}
-              style={{ display: 'none' }}
-              disabled={carregando}
-            />
-            <label 
-              htmlFor="fotoPerfil" 
-              className={`${styles.uploadLabel} ${carregando ? styles.disabled : ''}`}
-            >
-              {carregando ? "📸 Enviando..." : "📷 Alterar Foto"}
-            </label>
-          </div>
-          
-          <div className={styles.userInfo}>
-            {editando ? (
-              <>
-                <input
-                  type="text"
-                  value={formData.nome}
-                  onChange={(e) => setFormData(prev => ({ ...prev, nome: e.target.value }))}
-                  className={styles.editInput}
-                  placeholder="Seu nome"
-                  disabled={carregando}
-                />
-                <textarea
-                  value={formData.sobreMim}
-                  onChange={(e) => setFormData(prev => ({ ...prev, sobreMim: e.target.value }))}
-                  className={styles.editTextarea}
-                  placeholder="Fale um pouco sobre você..."
-                  rows="3"
-                  disabled={carregando}
-                />
-                <div className={styles.editButtons}>
-                  <button 
-                    onClick={handleSalvarPerfil} 
-                    disabled={carregando || !formData.nome.trim()}
-                    className={styles.saveButton}
-                  >
-                    {carregando ? "Salvando..." : "Salvar"}
-                  </button>
-                  <button 
-                    onClick={() => {
-                      setEditando(false);
-                      setErro("");
-                      // Restaurar valores originais
-                      setFormData({
-                        nome: perfil.convidado.nome,
-                        sobreMim: perfil.convidado.sobreMim || ""
-                      });
-                    }}
-                    disabled={carregando}
-                    className={styles.cancelButton}
-                  >
-                    Cancelar
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <h2>{perfil.convidado.nome}</h2>
-                <p>{perfil.convidado.sobreMim || "Sem descrição disponível"}</p>
-                <button 
-                  onClick={() => setEditando(true)}
-                  className={styles.editButton}
-                >
-                  ✏️ Editar Perfil
-                </button>
-              </>
-            )}
-          </div>
+        <ProfileHeader 
+          perfil={perfil} 
+          onUploadFoto={handleUploadFoto} 
+          carregando={carregando} 
+        />
+
+        {/* Abas de Navegação */}
+        <ProfileTabs 
+          activeTab={activeTab} 
+          onTabChange={setActiveTab} 
+          stats={perfil.estatisticas} 
+        />
+
+        {/* Conteúdo das Abas */}
+        <div className={styles.tabContent}>
+          {renderTabContent()}
         </div>
 
-        {/* Restante do código permanece igual */}
-        <div className={styles.card}>
-          <h3>Área Pessoal</h3>
-
-          <div className={styles.favSection}>
-            <p className={styles.sectionTitle}>Eventos Favoritos</p>
-            <div className={styles.grid}>
-              {perfil.eventosFavoritos.map((e, i) => (
-                <div key={i} className={styles.circle}></div>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.favSection}>
-            <p className={styles.sectionTitle}>Profissionais Favoritos</p>
-            <div className={styles.grid}>
-              {perfil.profissoesFavoritas.map((p, i) => (
-                <div key={i} className={styles.circle}></div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.tabs}>
-          <button
-            onClick={() => setAba("ultimoMes")}
-            className={aba === "ultimoMes" ? styles.active : ""}
-          >
-            Último Mês
-          </button>
-          <button
-            onClick={() => setAba("geral")}
-            className={aba === "geral" ? styles.active : ""}
-          >
-            Geral
-          </button>
-        </div>
-
-        <div className={styles.card}>
-          <h3>Estatísticas</h3>
-          <div className={styles.stats}>
-            <div>👥 Amigos: <span>{perfil.estatisticas.amigos}</span></div>
-            <div>🎟️ Eventos: <span>{perfil.estatisticas.eventos}</span></div>
-            <div>📩 Notificações: <span>{perfil.estatisticas.notificacoes}</span></div>
-            <div>⭐ Avaliações: <span>{perfil.estatisticas.avaliacoes}</span></div>
-            <div>🏆 Categoria mais frequente: <span>{perfil.estatisticas.categoriaMaisFrequente}</span></div>
-            <div>📍 Local mais visitado: <span>{perfil.estatisticas.localMaisVisitado}</span></div>
-          </div>
-        </div>
+        {/* Modal de Edição */}
+        <EditProfileModal
+          isOpen={editModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          userData={perfil.convidado}
+          onSave={handleSalvarPerfil}
+          carregando={carregando}
+        />
       </div>
 
       <Footer />

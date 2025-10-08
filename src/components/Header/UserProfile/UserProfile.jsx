@@ -1,4 +1,4 @@
-// UserProfile/UserProfile.jsx (COMPLETO E ATUALIZADO)
+// UserProfile.jsx - CÓDIGO COMPLETO CORRIGIDO
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './UserProfile.module.css';
@@ -9,20 +9,27 @@ const UserProfile = ({ userData, isScrolled }) => {
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  // Atualizar quando userData mudar via props
+  // ✅ CORREÇÃO: Atualizar quando userData mudar via props
   useEffect(() => {
     setCurrentUserData(userData);
   }, [userData]);
 
-  // Escutar eventos de atualização do usuário
+  // ✅ CORREÇÃO: Sistema de escuta de eventos melhorado
   useEffect(() => {
     const handleUsuarioAtualizado = (event) => {
       console.log('📢 Evento de usuário atualizado recebido:', event.detail);
       setCurrentUserData(event.detail);
     };
 
+    const handleAvatarAtualizado = (event) => {
+      console.log('🔄 Evento de avatar atualizado:', event.detail);
+      setCurrentUserData(prev => ({
+        ...prev,
+        avatarUrl: event.detail.avatarUrl
+      }));
+    };
+
     const handleStorageChange = () => {
-      // Verificar se o localStorage foi atualizado
       const storedUser = localStorage.getItem('user');
       if (storedUser) {
         try {
@@ -36,10 +43,12 @@ const UserProfile = ({ userData, isScrolled }) => {
 
     // Adicionar listeners
     window.addEventListener('usuarioAtualizado', handleUsuarioAtualizado);
+    window.addEventListener('avatarAtualizado', handleAvatarAtualizado);
     window.addEventListener('storage', handleStorageChange);
 
     return () => {
       window.removeEventListener('usuarioAtualizado', handleUsuarioAtualizado);
+      window.removeEventListener('avatarAtualizado', handleAvatarAtualizado);
       window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
@@ -91,15 +100,29 @@ const UserProfile = ({ userData, isScrolled }) => {
     }, 100);
   };
 
-  // Gerar avatar com fallback elegante - USAR currentUserData
+  // ✅ CORREÇÃO: Função melhorada para obter URL do avatar
   const getAvatarUrl = () => {
-    if (currentUserData?.avatarUrl) {
+    if (!currentUserData) {
+      return 'https://ui-avatars.com/api/?name=US&background=7c3aed&color=ffffff&bold=true&size=128';
+    }
+
+    // Se tem avatarUrl, garantir URL completa e adicionar timestamp
+    if (currentUserData.avatarUrl) {
+      let urlCompleta = currentUserData.avatarUrl;
+      
+      // Se não tem domínio, adicionar
+      if (!urlCompleta.startsWith('http')) {
+        urlCompleta = `http://localhost:3000${urlCompleta}`;
+      }
+      
+      // Adicionar timestamp para evitar cache
       const timestamp = new Date().getTime();
-      return `http://localhost:3000${currentUserData.avatarUrl}?t=${timestamp}`;
+      const separator = urlCompleta.includes('?') ? '&' : '?';
+      return `${urlCompleta}${separator}t=${timestamp}`;
     }
     
-    // Avatar com iniciais como fallback
-    if (currentUserData?.nome) {
+    // Fallback para avatar com iniciais
+    if (currentUserData.nome) {
       const names = currentUserData.nome.split(' ');
       const initials = names.length > 1 
         ? `${names[0][0]}${names[names.length - 1][0]}` 
@@ -111,7 +134,22 @@ const UserProfile = ({ userData, isScrolled }) => {
     return 'https://ui-avatars.com/api/?name=US&background=7c3aed&color=ffffff&bold=true&size=128';
   };
 
-  // Obter nome abreviado para display - USAR currentUserData
+  // ✅ CORREÇÃO: Função de fallback para erro de carregamento
+  const handleImageError = (e) => {
+    console.error("❌ Erro ao carregar avatar:", getAvatarUrl());
+    
+    if (currentUserData?.nome) {
+      const names = currentUserData.nome.split(' ');
+      const initials = names.length > 1 
+        ? `${names[0][0]}${names[names.length - 1][0]}` 
+        : names[0].substring(0, 2).toUpperCase();
+      e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=7c3aed&color=ffffff&bold=true&size=128`;
+    } else {
+      e.target.src = 'https://ui-avatars.com/api/?name=US&background=7c3aed&color=ffffff&bold=true&size=128';
+    }
+  };
+
+  // Obter nome abreviado para display
   const getDisplayName = () => {
     if (!currentUserData?.nome) return 'Usuário';
     return currentUserData.nome.split(' ')[0];
@@ -130,19 +168,7 @@ const UserProfile = ({ userData, isScrolled }) => {
             src={getAvatarUrl()} 
             alt={`Avatar de ${getDisplayName()}`}
             className={styles.avatar}
-            key={currentUserData?.avatarUrl} // Forçar re-render quando a URL mudar
-            onError={(e) => {
-              // Fallback para avatar com iniciais se a imagem falhar
-              if (currentUserData?.nome) {
-                const names = currentUserData.nome.split(' ');
-                const initials = names.length > 1 
-                  ? `${names[0][0]}${names[names.length - 1][0]}` 
-                  : names[0].substring(0, 2).toUpperCase();
-                e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=7c3aed&color=ffffff&bold=true&size=128`;
-              } else {
-                e.target.src = 'https://ui-avatars.com/api/?name=US&background=7c3aed&color=ffffff&bold=true&size=128';
-              }
-            }}
+            onError={handleImageError}
           />
           <div className={styles.statusIndicator}></div>
         </div>
@@ -159,14 +185,14 @@ const UserProfile = ({ userData, isScrolled }) => {
 
       {isDropdownOpen && (
         <div className={styles.dropdownMenu}>
-          {/* Header do dropdown - USAR currentUserData */}
+          {/* Header do dropdown */}
           <div className={styles.dropdownHeader}>
             <div className={styles.avatarContainer}>
               <img 
                 src={getAvatarUrl()} 
                 alt="Avatar" 
                 className={styles.headerAvatar}
-                key={currentUserData?.avatarUrl}
+                onError={handleImageError}
               />
             </div>
             <div className={styles.userDetails}>
