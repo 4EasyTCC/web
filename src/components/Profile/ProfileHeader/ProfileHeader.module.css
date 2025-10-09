@@ -1,5 +1,6 @@
 /* components/Profile/ProfileHeader.module.css */
 .header {
+  margin-top: 2rem;
     display: flex;
     align-items: center;
     gap: 2rem;
@@ -54,6 +55,7 @@
   }
   
   .userName {
+    text-align: left;
     font-size: 2rem;
     font-weight: 700;
     margin: 0 0 0.5rem 0;

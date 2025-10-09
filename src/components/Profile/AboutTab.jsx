@@ -3,36 +3,98 @@ import React from 'react';
 import styles from './AboutTab.module.css';
 
 const AboutTab = ({ perfil, onEdit }) => {
+  console.log('Dados completos do perfil recebidos:', perfil);
+  
+  // DEBUG: Log detalhado para verificar a estrutura
+  console.log('Estrutura do perfil:', {
+    hasPerfil: !!perfil,
+    hasConvidado: !!(perfil?.convidado),
+    perfilKeys: perfil ? Object.keys(perfil) : [],
+    convidadoKeys: perfil?.convidado ? Object.keys(perfil.convidado) : []
+  });
 
-  console.log('Dados do perfil recebidos:', perfil);
-  const convidado = perfil?.convidado || perfil;
+  // CORREÇÃO: Múltiplas formas de acessar os dados do convidado
+  let convidado = perfil?.convidado || perfil;
+  
+  // Se perfil for null/undefined ou convidado for null/undefined
   if (!convidado) {
+    console.warn('Dados do convidado não encontrados:', { perfil, convidado });
     return <div>Carregando dados do perfil...</div>;
   }
 
+  // DEBUG: Log dos valores específicos que estão com problemas
+  console.log('Valores específicos do convidado:', {
+    genero: convidado.genero,
+    dataNascimento: convidado.dataNascimento,
+    telefone: convidado.telefone,
+    endereco: convidado.endereco,
+    cidade: convidado.cidade,
+    cep: convidado.cep,
+    sobreMim: convidado.sobreMim
+  });
+
+  // CORREÇÃO: Funções de formatação mais robustas
   const formatarData = (data) => {
     if (!data) return 'Não informada';
-    return new Date(data).toLocaleDateString('pt-BR');
+    try {
+      // Tenta converter para Date e verifica se é válida
+      const dataObj = new Date(data);
+      return !isNaN(dataObj.getTime()) 
+        ? dataObj.toLocaleDateString('pt-BR') 
+        : 'Não informada';
+    } catch (error) {
+      console.error('Erro ao formatar data:', error);
+      return 'Não informada';
+    }
   };
 
   const formatarTelefone = (telefone) => {
-    if (!telefone) return 'Não informado';
-    const numeros = telefone.replace(/\D/g, '');
+    if (!telefone || telefone === 'null' || telefone === 'undefined') {
+      return 'Não informado';
+    }
+    
+    const numeros = telefone.toString().replace(/\D/g, '');
+    
     if (numeros.length === 11) {
       return numeros.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
     } else if (numeros.length === 10) {
       return numeros.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+    } else if (numeros.length > 0) {
+      return telefone; // Retorna o original se não conseguir formatar
     }
-    return telefone;
+    
+    return 'Não informado';
   };
 
   const formatarCEP = (cep) => {
-    if (!cep) return 'Não informado';
-    const numeros = cep.replace(/\D/g, '');
+    if (!cep || cep === 'null' || cep === 'undefined') {
+      return 'Não informado';
+    }
+    
+    const numeros = cep.toString().replace(/\D/g, '');
     if (numeros.length === 8) {
       return numeros.replace(/(\d{5})(\d{3})/, '$1-$2');
+    } else if (numeros.length > 0) {
+      return cep; // Retorna o original se não conseguir formatar
     }
-    return cep;
+    
+    return 'Não informado';
+  };
+
+  // CORREÇÃO: Função auxiliar para verificar se um valor é válido
+  const valorValido = (valor) => {
+    return valor && 
+           valor !== 'null' && 
+           valor !== 'undefined' && 
+           valor.toString().trim() !== '';
+  };
+
+  // CORREÇÃO: Renderização condicional melhorada
+  const renderizarValor = (valor, formatarFn = null) => {
+    if (valorValido(valor)) {
+      return formatarFn ? formatarFn(valor) : valor;
+    }
+    return 'Não informado';
   };
 
   return (
@@ -50,28 +112,32 @@ const AboutTab = ({ perfil, onEdit }) => {
           <div className={styles.infoList}>
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Nome:</span>
-              <span className={styles.infoValue}>{convidado.nome}</span>
+              <span className={styles.infoValue}>
+                {renderizarValor(convidado.nome)}
+              </span>
             </div>
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Email:</span>
-              <span className={styles.infoValue}>{convidado.email}</span>
+              <span className={styles.infoValue}>
+                {renderizarValor(convidado.email)}
+              </span>
             </div>
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Gênero:</span>
               <span className={styles.infoValue}>
-                {convidado.genero || 'Não informado'}
+                {renderizarValor(convidado.genero)}
               </span>
             </div>
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Data de Nascimento:</span>
               <span className={styles.infoValue}>
-                {formatarData(convidado.dataNascimento)}
+                {renderizarValor(convidado.dataNascimento, formatarData)}
               </span>
             </div>
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Telefone:</span>
               <span className={styles.infoValue}>
-                {formatarTelefone(convidado.telefone)}
+                {renderizarValor(convidado.telefone, formatarTelefone)}
               </span>
             </div>
           </div>
@@ -83,19 +149,19 @@ const AboutTab = ({ perfil, onEdit }) => {
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Endereço:</span>
               <span className={styles.infoValue}>
-                {convidado.endereco || 'Não informado'}
+                {renderizarValor(convidado.endereco)}
               </span>
             </div>
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Cidade:</span>
               <span className={styles.infoValue}>
-                {convidado.cidade || 'Não informada'}
+                {renderizarValor(convidado.cidade)}
               </span>
             </div>
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>CEP:</span>
               <span className={styles.infoValue}>
-                {formatarCEP(convidado.cep)}
+                {renderizarValor(convidado.cep, formatarCEP)}
               </span>
             </div>
           </div>
@@ -104,7 +170,7 @@ const AboutTab = ({ perfil, onEdit }) => {
         <div className={styles.infoCard}>
           <h3>💭 Bio</h3>
           <div className={styles.bioContent}>
-            {convidado.sobreMim ? (
+            {valorValido(convidado.sobreMim) ? (
               <p>{convidado.sobreMim}</p>
             ) : (
               <p className={styles.noBio}>Nenhuma bio adicionada ainda.</p>
@@ -112,6 +178,12 @@ const AboutTab = ({ perfil, onEdit }) => {
           </div>
         </div>
       </div>
+
+      {/* DEBUG: Seção de diagnóstico (remover em produção) */}
+      <details className={styles.debugSection}>
+        <summary>🔧 Debug Info (Desenvolvedor)</summary>
+        <pre>{JSON.stringify(convidado, null, 2)}</pre>
+      </details>
     </div>
   );
 };
