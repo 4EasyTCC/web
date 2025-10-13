@@ -1,4 +1,4 @@
-// Header.jsx (CORRIGIDO PARA USAR "user")
+// Header.jsx (SEM CONSOLE EXCESSIVO)
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './Header.module.css';
@@ -22,24 +22,17 @@ export default function Header({ customBreadcrumbs = [] }) {
   const headerRef = useRef(null);
   const animationFrameId = useRef(null);
 
-  // ✅ VERIFICAÇÃO CORRIGIDA - usando "user" em vez de "userData"
+  // ✅ VERIFICAÇÃO SILENCIOSA - sem console.log excessivos
   const checkAuthStatus = useCallback(() => {
     try {
       const token = localStorage.getItem('token');
-      const userStr = localStorage.getItem('user'); // ⚠️ MUDOU PARA "user"
+      const userStr = localStorage.getItem('user');
       
-      console.log('🔐 Header - Verificando localStorage:', { 
-        token: token ? `EXISTE (${token.substring(0, 20)}...)` : 'NÃO EXISTE', 
-        user: userStr ? `EXISTE: ${JSON.parse(userStr).nome}` : 'NÃO EXISTE' 
-      });
-
       if (token && userStr) {
         const user = JSON.parse(userStr);
-        console.log('✅ Header - Usuário autenticado:', user.nome);
         setIsLoggedIn(true);
         setUserData(user);
       } else {
-        console.log('❌ Header - Dados incompletos no localStorage');
         setIsLoggedIn(false);
         setUserData(null);
       }
@@ -50,16 +43,13 @@ export default function Header({ customBreadcrumbs = [] }) {
     }
   }, []);
 
-  // ✅ EFFECT CORRIGIDO
+  // ✅ EFFECT SILENCIOSO
   useEffect(() => {
-    console.log('🚀 Header - Iniciando verificação de autenticação');
-    
-    // Verificação imediata
+    // Verificação inicial
     checkAuthStatus();
     
-    // Escutar eventos
+    // Escutar eventos de autenticação
     const handleAuthEvent = () => {
-      console.log('📢 Header - Evento de autenticação detectado');
       setTimeout(checkAuthStatus, 100);
     };
 
@@ -74,7 +64,7 @@ export default function Header({ customBreadcrumbs = [] }) {
     };
   }, [checkAuthStatus]);
 
-  // Restante do código permanece igual...
+  // Efeito para scroll inicial
   useEffect(() => {
     setIsScrolled(isHomePage ? window.scrollY > 50 : true);
   }, [isHomePage]);
@@ -119,14 +109,6 @@ export default function Header({ customBreadcrumbs = [] }) {
 
   const showBreadcrumb = !isHomePage && location.pathname !== '/home';
 
-  // ✅ DEBUG COMPLETO
-  console.log('🎯 Header - Estado final:', { 
-    isLoggedIn, 
-    user: userData?.nome || 'Nenhum usuário',
-    hasToken: !!localStorage.getItem('token'),
-    hasUser: !!localStorage.getItem('user') // ⚠️ MUDOU PARA "user"
-  });
-
   return (
     <>
       <header
@@ -162,7 +144,7 @@ export default function Header({ customBreadcrumbs = [] }) {
               <div className={styles.rightAboveSection}>
                 {isScrolled}
                 
-                {/* ✅ RENDERIZAÇÃO CONDICIONAL */}
+                {/* Renderização condicional */}
                 {isLoggedIn && userData ? (
                   <UserProfile 
                     userData={userData} 

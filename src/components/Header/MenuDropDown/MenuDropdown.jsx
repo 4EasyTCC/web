@@ -1,13 +1,63 @@
-// MenuDropdown.jsx - CÓDIGO COMPLETO CORRIGIDO
-import React from 'react';
+// MenuDropdown.jsx - CORRIGIDO PARA ATUALIZAÇÃO IMEDIATA
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './MenuDropdown.module.css';
 
 const MenuDropdown = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
   
+  // ✅ CORREÇÃO: Buscar dados do localStorage dinamicamente
+  useEffect(() => {
+    const loadUserData = () => {
+      try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const user = JSON.parse(storedUser);
+          console.log('📦 MenuDropdown - Dados carregados:', user);
+          setUserData(user);
+        } else {
+          setUserData(null);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar userData:', error);
+        setUserData(null);
+      }
+    };
+
+    // Carregar dados quando o menu abrir
+    if (isOpen) {
+      loadUserData();
+    }
+
+    // Escutar mudanças no localStorage
+    const handleStorageChange = () => {
+      console.log('🗂️ MenuDropdown - Storage mudou, recarregando...');
+      setTimeout(loadUserData, 100);
+    };
+
+    const handleUserUpdated = (event) => {
+      console.log('📢 MenuDropdown - Evento usuarioAtualizado:', event.detail);
+      setUserData(event.detail);
+    };
+
+    const handleAvatarUpdated = (event) => {
+      console.log('🖼️ MenuDropdown - Evento avatarAtualizado:', event.detail);
+      setUserData(prev => prev ? { ...prev, avatarUrl: event.detail.avatarUrl } : null);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('usuarioAtualizado', handleUserUpdated);
+    window.addEventListener('avatarAtualizado', handleAvatarUpdated);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('usuarioAtualizado', handleUserUpdated);
+      window.removeEventListener('avatarAtualizado', handleAvatarUpdated);
+    };
+  }, [isOpen]);
+
   const isLoggedIn = !!localStorage.getItem('token');
-  const userData = JSON.parse(localStorage.getItem('user') || 'null');
 
   const navigateTo = (path) => {
     navigate(path);
@@ -26,17 +76,17 @@ const MenuDropdown = ({ isOpen, onClose }) => {
     }, 100);
   };
 
-  // ✅ CORREÇÃO: Função melhorada para obter URL do avatar
+  // ✅ CORREÇÃO: Função MELHORADA para obter URL do avatar
   const getAvatarUrl = (user) => {
     if (!user) return null;
     
-    // Se tem avatarUrl, garantir URL completa e adicionar timestamp
-    if (user.avatarUrl) {
-      let urlCompleta = user.avatarUrl;
+    // ✅ VERIFICAÇÃO RIGOROSA: avatarUrl existe E não está vazio
+    if (user.avatarUrl && user.avatarUrl.trim() !== '') {
+      let urlCompleta = user.avatarUrl.trim();
       
-      // Se não tem domínio, adicionar
+      // Se é um caminho relativo, adicionar domínio
       if (!urlCompleta.startsWith('http')) {
-        urlCompleta = `http://localhost:3000${urlCompleta}`;
+        urlCompleta = `http://localhost:3000${urlCompleta.startsWith('/') ? '' : '/'}${urlCompleta}`;
       }
       
       // Adicionar timestamp para evitar cache
@@ -45,8 +95,18 @@ const MenuDropdown = ({ isOpen, onClose }) => {
       return `${urlCompleta}${separator}t=${timestamp}`;
     }
     
-    // Fallback para avatar baseado nas iniciais
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(user.nome || user.name || 'U')}&background=7c3aed&color=fff&bold=true&size=64`;
+    // ✅ FALLBACK: Apenas se realmente não tiver avatar
+    if (user.nome || user.name) {
+      const nomeCompleto = user.nome || user.name || 'U';
+      const names = nomeCompleto.split(' ');
+      const initials = names.length > 1 
+        ? `${names[0][0]}${names[names.length - 1][0]}` 
+        : nomeCompleto.substring(0, 2).toUpperCase();
+      
+      return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=7c3aed&color=fff&bold=true&size=64`;
+    }
+    
+    return `https://ui-avatars.com/api/?name=U&background=7c3aed&color=fff&bold=true&size=64`;
   };
 
   const menuItems = [
@@ -58,6 +118,15 @@ const MenuDropdown = ({ isOpen, onClose }) => {
   ];
 
   const avatarUrl = getAvatarUrl(userData);
+
+  // ✅ DEBUG: Log do estado atual
+  console.log('🎯 MenuDropdown - Estado final:', {
+    userData,
+    isLoggedIn,
+    hasAvatarUrl: !!userData?.avatarUrl,
+    avatarUrl: userData?.avatarUrl,
+    finalAvatarUrl: avatarUrl
+  });
 
   return (
     <>
@@ -82,7 +151,16 @@ const MenuDropdown = ({ isOpen, onClose }) => {
                 className={styles.userAvatar}
                 onError={(e) => {
                   // ✅ CORREÇÃO: Fallback melhorado
-                  e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.nome || userData.name || 'U')}&background=7c3aed&color=fff&bold=true&size=64`;
+                  if (userData?.nome || userData?.name) {
+                    const nomeCompleto = userData.nome || userData.name || 'U';
+                    const names = nomeCompleto.split(' ');
+                    const initials = names.length > 1 
+                      ? `${names[0][0]}${names[names.length - 1][0]}` 
+                      : nomeCompleto.substring(0, 2).toUpperCase();
+                    e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=7c3aed&color=fff&bold=true&size=64`;
+                  } else {
+                    e.target.src = 'https://ui-avatars.com/api/?name=U&background=7c3aed&color=fff&bold=true&size=64';
+                  }
                 }}
               />
               <div className={styles.userInfo}>
@@ -147,4 +225,4 @@ const MenuDropdown = ({ isOpen, onClose }) => {
   );
 };
 
-export default MenuDropdown;  
+export default MenuDropdown;

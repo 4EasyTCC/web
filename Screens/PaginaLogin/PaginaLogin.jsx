@@ -41,6 +41,22 @@ export default function PaginaLogin() {
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.convidado));
+        
+        // ✅ CORREÇÃO: ADICIONAR ESTES EVENTOS
+        console.log('🚀 Login - Disparando eventos de atualização');
+        
+        // Evento para o Header se atualizar
+        window.dispatchEvent(new Event('userLoggedIn'));
+        
+        // Evento para componentes específicos com dados do usuário
+        window.dispatchEvent(new CustomEvent('usuarioAtualizado', {
+          detail: response.data.convidado
+        }));
+        
+        // Evento de storage para sincronização entre abas
+        window.dispatchEvent(new Event('storage'));
+        
+        console.log('✅ Login - Eventos disparados, navegando para /profile');
         navigate("/profile");
       } else {
         setError(response.data.message || "Erro ao fazer login");

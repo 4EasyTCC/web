@@ -1,4 +1,4 @@
-// UserProfile.jsx - CÓDIGO COMPLETO CORRIGIDO
+// UserProfile.jsx - CORRIGIDO PARA ATUALIZAÇÃO IMEDIATA
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './UserProfile.module.css';
@@ -9,47 +9,57 @@ const UserProfile = ({ userData, isScrolled }) => {
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  // ✅ CORREÇÃO: Atualizar quando userData mudar via props
+  // ✅ CORREÇÃO: Atualizar imediatamente quando userData mudar
   useEffect(() => {
+    console.log('🔄 UserProfile - userData atualizado via props:', userData);
     setCurrentUserData(userData);
   }, [userData]);
 
-  // ✅ CORREÇÃO: Sistema de escuta de eventos melhorado
+  // ✅ CORREÇÃO: Verificar localStorage diretamente no mount
   useEffect(() => {
-    const handleUsuarioAtualizado = (event) => {
-      console.log('📢 Evento de usuário atualizado recebido:', event.detail);
+    const checkLocalStorage = () => {
+      try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const user = JSON.parse(storedUser);
+          console.log('📦 UserProfile - Dados do localStorage:', user);
+          setCurrentUserData(user);
+        }
+      } catch (error) {
+        console.error('Erro ao ler localStorage:', error);
+      }
+    };
+
+    // Verificar imediatamente
+    checkLocalStorage();
+
+    // Escutar eventos de atualização
+    const handleStorageChange = () => {
+      console.log('🗂️ UserProfile - Storage mudou, verificando...');
+      setTimeout(checkLocalStorage, 100);
+    };
+
+    const handleUserUpdated = (event) => {
+      console.log('📢 UserProfile - Evento usuarioAtualizado:', event.detail);
       setCurrentUserData(event.detail);
     };
 
-    const handleAvatarAtualizado = (event) => {
-      console.log('🔄 Evento de avatar atualizado:', event.detail);
+    const handleAvatarUpdated = (event) => {
+      console.log('🖼️ UserProfile - Evento avatarAtualizado:', event.detail);
       setCurrentUserData(prev => ({
         ...prev,
         avatarUrl: event.detail.avatarUrl
       }));
     };
 
-    const handleStorageChange = () => {
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        try {
-          const user = JSON.parse(storedUser);
-          setCurrentUserData(user);
-        } catch (error) {
-          console.error('Erro ao parsear user do localStorage:', error);
-        }
-      }
-    };
-
-    // Adicionar listeners
-    window.addEventListener('usuarioAtualizado', handleUsuarioAtualizado);
-    window.addEventListener('avatarAtualizado', handleAvatarAtualizado);
     window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('usuarioAtualizado', handleUserUpdated);
+    window.addEventListener('avatarAtualizado', handleAvatarUpdated);
 
     return () => {
-      window.removeEventListener('usuarioAtualizado', handleUsuarioAtualizado);
-      window.removeEventListener('avatarAtualizado', handleAvatarAtualizado);
       window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('usuarioAtualizado', handleUserUpdated);
+      window.removeEventListener('avatarAtualizado', handleAvatarUpdated);
     };
   }, []);
 
@@ -82,17 +92,11 @@ const UserProfile = ({ userData, isScrolled }) => {
   };
 
   const handleLogout = () => {
-    console.log('🚪 Executando logout...');
-    
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    
     window.dispatchEvent(new Event('userLoggedOut'));
     window.dispatchEvent(new Event('storage'));
-    
     setIsDropdownOpen(false);
-    
-    console.log('✅ Logout concluído, redirecionando...');
     
     setTimeout(() => {
       navigate('/');
@@ -100,19 +104,19 @@ const UserProfile = ({ userData, isScrolled }) => {
     }, 100);
   };
 
-  // ✅ CORREÇÃO: Função melhorada para obter URL do avatar
+  // ✅ CORREÇÃO: Função MELHORADA para obter URL do avatar
   const getAvatarUrl = () => {
     if (!currentUserData) {
       return 'https://ui-avatars.com/api/?name=US&background=7c3aed&color=ffffff&bold=true&size=128';
     }
 
-    // Se tem avatarUrl, garantir URL completa e adicionar timestamp
-    if (currentUserData.avatarUrl) {
-      let urlCompleta = currentUserData.avatarUrl;
+    // ✅ VERIFICAÇÃO RIGOROSA: avatarUrl existe E não está vazio
+    if (currentUserData.avatarUrl && currentUserData.avatarUrl.trim() !== '') {
+      let urlCompleta = currentUserData.avatarUrl.trim();
       
-      // Se não tem domínio, adicionar
+      // Se é um caminho relativo, adicionar domínio
       if (!urlCompleta.startsWith('http')) {
-        urlCompleta = `http://localhost:3000${urlCompleta}`;
+        urlCompleta = `http://localhost:3000${urlCompleta.startsWith('/') ? '' : '/'}${urlCompleta}`;
       }
       
       // Adicionar timestamp para evitar cache
@@ -121,14 +125,14 @@ const UserProfile = ({ userData, isScrolled }) => {
       return `${urlCompleta}${separator}t=${timestamp}`;
     }
     
-    // Fallback para avatar com iniciais
+    // ✅ FALLBACK: Apenas se realmente não tiver avatar
     if (currentUserData.nome) {
       const names = currentUserData.nome.split(' ');
       const initials = names.length > 1 
         ? `${names[0][0]}${names[names.length - 1][0]}` 
         : names[0].substring(0, 2).toUpperCase();
       
-      return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=7c3aed&color=ffffff&bold=true&size=128&font-size=0.5`;
+      return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=7c3aed&color=ffffff&bold=true&size=128`;
     }
     
     return 'https://ui-avatars.com/api/?name=US&background=7c3aed&color=ffffff&bold=true&size=128';
@@ -136,7 +140,7 @@ const UserProfile = ({ userData, isScrolled }) => {
 
   // ✅ CORREÇÃO: Função de fallback para erro de carregamento
   const handleImageError = (e) => {
-    console.error("❌ Erro ao carregar avatar:", getAvatarUrl());
+    console.error("❌ Erro ao carregar avatar");
     
     if (currentUserData?.nome) {
       const names = currentUserData.nome.split(' ');
@@ -154,6 +158,14 @@ const UserProfile = ({ userData, isScrolled }) => {
     if (!currentUserData?.nome) return 'Usuário';
     return currentUserData.nome.split(' ')[0];
   };
+
+  // ✅ DEBUG: Log do estado atual
+  console.log('🎯 UserProfile - Estado final:', {
+    currentUserData,
+    hasAvatarUrl: !!currentUserData?.avatarUrl,
+    avatarUrl: currentUserData?.avatarUrl,
+    finalAvatarUrl: getAvatarUrl()
+  });
 
   return (
     <div className={styles.userProfile} ref={dropdownRef}>
