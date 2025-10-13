@@ -1,16 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from "./PageColecoes.module.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
+import CategoryCarousel from "@/components/CategoryCarousel/CategoryCarousel";
 
 export default function PageColecoes() {
   const navigate = useNavigate();
-  const { id, subId } = useParams();
+  const { id } = useParams();
+  const [currentCollection, setCurrentCollection] = useState(null);
   
-  // Se há um ID na URL, mostrar detalhes da coleção específica
   const isDetailView = !!id;
+
+  // Coleções com mapeamento para categorias da API
+  const collections = [
+    { id: 1, name: "Arte, Cultura e Lazer", category: "Arte, Cultura e Lazer" },
+    { id: 2, name: "Congressos e Palestras", category: "Congressos e Palestras" },
+    { id: 3, name: "Cursos e Workshops", category: "Cursos e Workshops" },
+    { id: 4, name: "Esporte", category: "Esporte" },
+    { id: 5, name: "Festas e Shows", category: "Festas e Shows" },
+    { id: 6, name: "Gastronomia", category: "Gastronomia" },
+    { id: 7, name: "Games e Geek", category: "Games e Geek" },
+    { id: 8, name: "Grátis", category: "Grátis" },
+    { id: 9, name: "Infantil", category: "Infantil" },
+    { id: 10, name: "Moda e Beleza", category: "Moda e Beleza" },
+    { id: 11, name: "Passeios e Tours", category: "Passeios e Tours" },
+    { id: 12, name: "Religião e Espiritualidade", category: "Religião e Espiritualidade" },
+    { id: 13, name: "Saúde e Bem-Estar", category: "Saúde e Bem-Estar" },
+    { id: 14, name: "Teatros e Espetáculos", category: "Teatros e Espetáculos" }
+  ];
+
+  useEffect(() => {
+    if (isDetailView) {
+      const collection = collections.find(c => c.id === parseInt(id));
+      setCurrentCollection(collection);
+    }
+  }, [id, isDetailView]);
 
   const navigateToCollection = (collectionId) => {
     navigate(`/PageColecoes/${collectionId}`);
@@ -44,7 +70,7 @@ export default function PageColecoes() {
         </svg>
       ),
       "Esporte": (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M11.1 7.1a16.55 16.55 0 0 1 10.9 4" />
           <path d="M12 12a12.6 12.6 0 0 1-8.7 5" />
           <path d="M16.8 13.6a16.55 16.55 0 0 1-9 7.5" />
@@ -54,7 +80,7 @@ export default function PageColecoes() {
         </svg>
       ),
       "Festas e Shows": (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M5.8 11.3 2 22l10.7-3.79" />
           <path d="M4 3h.01" />
           <path d="M22 8h.01" />
@@ -90,27 +116,27 @@ export default function PageColecoes() {
         </svg>
       ),
       "Infantil": (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M8.3 10a.7.7 0 0 1-.626-1.079L11.4 3a.7.7 0 0 1 1.198-.043L16.3 8.9a.7.7 0 0 1-.572 1.1Z" />
           <rect x="3" y="14" width="7" height="7" rx="1" />
           <circle cx="17.5" cy="17.5" r="3.5" />
         </svg>
       ),
       "Moda e Beleza": (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M2.048 18.566A2 2 0 0 0 4 21h16a2 2 0 0 0 1.952-2.434l-2-9A2 2 0 0 0 18 8H6a2 2 0 0 0-1.952 1.566z" />
           <path d="M8 11V6a4 4 0 0 1 8 0v5" />
         </svg>
       ),
       "Passeios e Tours": (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 13v8" />
           <path d="M12 3v3" />
           <path d="M4 6a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h13a2 2 0 0 0 1.152-.365l3.424-2.317a1 1 0 0 0 0-1.635l-3.424-2.318A2 2 0 0 0 17 6z" />
         </svg>
       ),
       "Religião e Espiritualidade": (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M10 9h4" />
           <path d="M12 7v5" />
           <path d="M14 22v-4a2 2 0 0 0-4 0v4" />
@@ -143,31 +169,8 @@ export default function PageColecoes() {
     );
   };
 
-  // Coleções
-  const collections = [
-    { id: 1, name: "Arte, Cultura e Lazer" },
-    { id: 2, name: "Congressos e Palestras" },
-    { id: 3, name: "Cursos e Workshops" },
-    { id: 4, name: "Esporte" },
-    { id: 5, name: "Festas e Shows" },
-    { id: 6, name: "Gastronomia" },
-    { id: 7, name: "Games e Geek" },
-    { id: 8, name: "Grátis" },
-    { id: 9, name: "Infantil" },
-    { id: 10, name: "Moda e Beleza" },
-    { id: 11, name: "Passeios e Tours" },
-    { id: 12, name: "Religião e Espiritualidade" },
-    { id: 13, name: "Saúde e Bem-Estar" },
-    { id: 14, name: "Teatros e Espetáculos" }
-  ];
-
-  // Encontrar a coleção atual se estiver na view de detalhes
-  const currentCollection = isDetailView 
-    ? collections.find(collection => collection.id === parseInt(id)) 
-    : null;
-
   // Renderizar view de detalhes se há um ID
-  if (isDetailView) {
+  if (isDetailView && currentCollection) {
     return (
       <div className={styles.pageContainer}>
         <Header />
@@ -178,13 +181,27 @@ export default function PageColecoes() {
 
         <main className={styles.mainContent}>
           <div className={styles.pageHeader}>
-            <h1>{currentCollection?.name || `Coleção ${id}`}</h1>
-            <p className={styles.pageSubtitle}>Eventos incríveis nesta categoria</p>
+            <div className={styles.collectionHeader}>
+              <div className={styles.collectionIconLarge}>
+                {renderIcon(currentCollection.name)}
+              </div>
+              <div>
+                <h1>{currentCollection.name}</h1>
+                <p className={styles.pageSubtitle}>Eventos incríveis nesta categoria</p>
+              </div>
+            </div>
           </div>
           
-          {/* Aqui você pode adicionar os eventos específicos desta coleção */}
-          <div className={styles.collectionDetail}>
-            <p>Conteúdo específico da coleção será exibido aqui.</p>
+          {/* Componente CategoryCarousel para mostrar eventos filtrados por categoria */}
+          <div className={styles.eventsSection}>
+            <CategoryCarousel 
+              title={`Eventos em ${currentCollection.name}`}
+              filterType="categoria"
+              filterValue={currentCollection.category}
+            />
+          </div>
+
+          <div className={styles.collectionActions}>
             <button 
               onClick={() => navigate('/PageColecoes')}
               className={styles.backButton}

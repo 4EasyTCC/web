@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import styles from "./SearchEvents.module.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
@@ -7,6 +7,7 @@ import FiltroEventos from "./FiltroEventos/FiltroEventos.jsx";
 
 const SearchEvents = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [eventos, setEventos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,6 +27,11 @@ const SearchEvents = () => {
   const [totalEventos, setTotalEventos] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  // CORREÇÃO: Usar a rota correta com E maiúsculo
+  const handleEventClick = (eventoId) => {
+    navigate(`/Eventos/${eventoId}`);
+  };
 
   // Lógica de busca de eventos
   useEffect(() => {
@@ -146,7 +152,6 @@ const SearchEvents = () => {
   };
 
   const handlePaginaChange = (novaPagina) => {
-    // CORREÇÃO: Variável novaPagala mudou para novaPagina
     if (novaPagina >= 1 && novaPagina <= totalPaginas) {
       setFiltros((prev) => ({ ...prev, pagina: novaPagina }));
       window.scrollTo(0, 0);
@@ -155,7 +160,7 @@ const SearchEvents = () => {
 
   const handleSugestaoLocalizacaoClick = (sugestao) => {
     setFiltros((prev) => ({ ...prev, localizacao: sugestao, pagina: 1 }));
-    setMostrarSugestoes(false); // Esconde as sugestões após a seleção
+    setMostrarSugestoes(false);
   };
 
   const formatarData = (dataString) => {
@@ -385,7 +390,18 @@ const SearchEvents = () => {
                         );
 
                       return (
-                        <div key={evento.eventoId} className={styles.eventCard}>
+                        <div 
+                          key={evento.eventoId} 
+                          className={styles.eventCard}
+                          onClick={() => handleEventClick(evento.eventoId)}
+                          role="button"
+                          tabIndex={0}
+                          onKeyPress={(e) => {
+                            if (e.key === "Enter") {
+                              handleEventClick(evento.eventoId);
+                            }
+                          }}
+                        >
                           <div className={styles.eventImage}>
                             <img
                               src={

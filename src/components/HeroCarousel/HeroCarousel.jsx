@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Importar useNavigate
 import styles from "./HeroCarousel.module.css";
 
 const HeroCarousel = () => {
@@ -7,6 +8,7 @@ const HeroCarousel = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Hook para navegação
 
   const API_BASE_URL = "http://localhost:3000";
 
@@ -85,6 +87,11 @@ const HeroCarousel = () => {
       console.error("Erro ao formatar data:", error);
       return "Data inválida";
     }
+  };
+
+  // Função para navegar para a página do evento
+  const handleEventClick = (eventoId) => {
+    navigate(`/Eventos/${eventoId}`);
   };
 
   useEffect(() => {
@@ -239,7 +246,24 @@ const HeroCarousel = () => {
               key={event.id || index}
               className={styles.slide}
               style={style}
-              onClick={() => position === "center" && goToSlide(index)}
+              onClick={() => {
+                if (position === "center") {
+                  handleEventClick(event.id); // Navegar para a página do evento
+                } else {
+                  goToSlide(index); // Mudar para o slide clicado
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  if (position === "center") {
+                    handleEventClick(event.id);
+                  } else {
+                    goToSlide(index);
+                  }
+                }
+              }}
             >
               <div className={styles.eventImage}>
                 <img

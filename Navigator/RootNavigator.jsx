@@ -1,6 +1,7 @@
 // RootNavigator.jsx (atualizado)
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+import { NavigationHistoryProvider } from "@/components/NavigationHistoryProvider/NavigationHistoryProvider.jsx";
 import Home from "../Screens/Home/Home.jsx";
 import PaginaLogin from "../Screens/PaginaLogin/PaginaLogin.jsx";
 import AboutUs from "../Screens/AboutUs/AboutUs.jsx";
@@ -9,7 +10,6 @@ import InfoPage from "../Screens/InfoPage/InfoPage.jsx";
 import ScrollToTop from "@/components/ScrollToTop/ScrollToTop";
 import Contact from "../Screens/Contact/Contact.jsx";
 import Feedback from "../Screens/Feedback/Feedback.jsx";
-import PageTransition from "@/components/PageTransition/PageTransition";
 import MoreQuestions from "../Screens/MoreQuestions/MoreQuestions.jsx";
 import Profile from "../Screens/Profile/Profile.jsx";
 import PageSponsor from "../Screens/PageSponsor/PageSponsor.jsx";
@@ -18,6 +18,7 @@ import Eventos from "../Screens/Eventos/Eventos.jsx";
 import SearchEvents from "../Screens/SearchEvents/SearchEvents.jsx";
 import PageWrapper from "@/components/PageWrapper/PageWrapper";
 import Terms from "../Screens/Terms/Terms.jsx";
+import PageTransition from "@/components/PageTransition/PageTransition";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -191,8 +192,10 @@ function AnimatedRoutes() {
 function RootNavigator() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
-      <AnimatedRoutes />
+      <NavigationHistoryProvider>
+        <ScrollToTop />
+        <AnimatedRoutes />
+      </NavigationHistoryProvider>
     </BrowserRouter>
   );
 }

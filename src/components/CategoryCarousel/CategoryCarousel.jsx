@@ -204,7 +204,7 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
   };
 
   const handleEventClick = (eventoId) => {
-    navigate(`/evento/${eventoId}`);
+    navigate(`/Eventos/${eventoId}`);
   };
 
   const formatarData = (dataString) => {

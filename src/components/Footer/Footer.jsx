@@ -26,6 +26,24 @@ export default function Footer() {
     return () => window.removeEventListener('scroll', toggleVisible);
   }, []);
 
+  // Mapeamento de categorias para IDs (baseado no PageColecoes)
+  const categoryToIdMap = {
+    'Arte, Cultura e Lazer': 1,
+    'Congressos e Palestras': 2,
+    'Cursos e Workshops': 3,
+    'Esporte': 4,
+    'Festas e Shows': 5,
+    'Gastronomia': 6,
+    'Games e Geek': 7,
+    'Grátis': 8,
+    'Infantil': 9,
+    'Moda e Beleza': 10,
+    'Passeios e Tours': 11,
+    'Religião e Espiritualidade': 12,
+    'Saúde e Bem-Estar': 13,
+    'Teatros e Espetáculos': 14
+  };
+
   return (
     <footer className={styles.footer}>
       {/* Botão de voltar ao topo aprimorado */}
@@ -92,7 +110,8 @@ export default function Footer() {
           <div className={styles.linksColumn}>
             <h4>Categorias</h4>
             <ul>
-              {['Arte, Cultura e Lazer',
+              {[
+                'Arte, Cultura e Lazer',
                 'Congressos e Palestras',
                 'Cursos e Workshops',
                 'Esporte',
@@ -105,20 +124,33 @@ export default function Footer() {
                 'Passeios e Tours',
                 'Religião e Espiritualidade',
                 'Saúde e Bem-Estar',
-                'Teatros e Espetáculos'].map((category, index) => (
+                'Teatros e Espetáculos'
+              ].map((category, index) => {
+                const categoryId = categoryToIdMap[category];
+                return (
                   <li key={index}>
-                    <a href="#" className={styles.link}>{category}</a>
+                    {categoryId ? (
+                      <Link 
+                        to={`/PageColecoes/${categoryId}`} 
+                        className={styles.link}
+                      >
+                        {category}
+                      </Link>
+                    ) : (
+                      <span className={styles.link}>{category}</span>
+                    )}
                   </li>
-                ))}
+                );
+              })}
             </ul>
           </div>
 
           <div className={styles.linksColumn}>
             <h4>Ajuda</h4>
             <ul>
-                <li>
+              <li>
                 <Link to="/Terms" className={styles.link}>Termos de Uso</Link>
-                </li>
+              </li>
               <li>
                 <Link to="/Contact" className={styles.link}>Contato</Link>
               </li>

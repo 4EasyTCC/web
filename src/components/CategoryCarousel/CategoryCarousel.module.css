@@ -31,45 +31,65 @@
   gap: 8px;
 }
 
+
 .navButton {
-  width: 40px;
-  height: 40px;
-  border: 1px solid #ddd;
-  background: white;
+  background: #1400b4;
+  color: white;
+  border: none;
   border-radius: 50%;
-  cursor: pointer;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
 }
 
-.navButton:hover {
-  background: #f5f5f5;
-  border-color: #999;
+.navButton:hover:not(.disabledButton) {
+  transform: scale(1.05);
+  background: #0d008c;
+}
+
+.navButton svg {
+  transition: transform 0.2s ease;
 }
 
 .disabledButton {
-  opacity: 0.5;
-  cursor: not-allowed;
+  background-color: #e0e0e0 !important;
+  color: #a0a0a0 !important;
+  cursor: not-allowed !important;
 }
 
 .seeAllButton {
-  padding: 8px 16px;
-  background: #007bff;
-  color: white;
+  background: none;
   border: none;
-  border-radius: 4px;
+  color: #000;
   cursor: pointer;
+  font-size: 1rem;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
+  gap: 5px;
+  transition: all 0.3s ease;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-weight: 700;
 }
 
 .seeAllButton:hover {
-  background: #0056b3;
+  background-color: #f0f0f0;
 }
+
+.seeAllButton svg {
+  transition: transform 0.3s ease;
+  stroke: #000000;
+}
+
+.seeAllButton:hover svg {
+  transform: translateX(3px);
+}
+
 
 .carouselWrapper {
   width: 100%;

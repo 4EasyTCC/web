@@ -5,9 +5,7 @@ const FiltroEventos = ({
   filtros,
   onFiltroChange,
   onLimparFiltros,
-  sugestoesLocalizacao = [],
-  mostrarSugestoes = false,
-  onSugestaoLocalizacaoClick,
+  
 }) => {
   const categorias = [
     "Arte, Cultura e Lazer",
@@ -26,7 +24,7 @@ const FiltroEventos = ({
     "Teatros e Espetáculos",
   ];
 
-  const localizacaoRef = useRef(null);
+
 
   const handleCategoriaChange = (categoria) => {
     const novasCategorias = filtros.categoria.includes(categoria)
@@ -44,15 +42,9 @@ const FiltroEventos = ({
     onFiltroChange({ tipo });
   };
 
-  const handleLocalizacaoChange = (e) => {
-    onFiltroChange({ localizacao: e.target.value });
-  };
+  
 
-  const handleLocalizacaoKeyPress = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-    }
-  };
+
 
   // A LÓGICA DE 'handleClickOutside' E 'useEffect' FOI REMOVIDA
   // Pois o componente pai já gerencia o estado 'mostrarSugestoes'
@@ -158,40 +150,6 @@ const FiltroEventos = ({
             <span className={styles.radioCustom}></span>
             Online
           </label>
-        </div>
-      </div>
-
-      {/* Filtro por Localização */}
-      <div className={styles.filtroGrupo} ref={localizacaoRef}>
-        <h4>Localização</h4>
-        <div className={styles.locationInputContainer}>
-          <input
-            type="text"
-            placeholder="Digite uma cidade"
-            value={filtros.localizacao || ""}
-            onChange={handleLocalizacaoChange}
-            onKeyPress={handleLocalizacaoKeyPress}
-            className={styles.locationInput}
-            aria-label="Filtrar por localização"
-          />
-          {mostrarSugestoes &&
-            Array.isArray(sugestoesLocalizacao) &&
-            sugestoesLocalizacao.length > 0 && (
-              <div className={styles.sugestoesLocalizacao}>
-                {sugestoesLocalizacao.map((sugestao, index) => (
-                  <div
-                    key={index}
-                    className={styles.sugestaoItem}
-                    onClick={() =>
-                      onSugestaoLocalizacaoClick &&
-                      onSugestaoLocalizacaoClick(sugestao)
-                    }
-                  >
-                    {sugestao}
-                  </div>
-                ))}
-              </div>
-            )}
         </div>
       </div>
 
