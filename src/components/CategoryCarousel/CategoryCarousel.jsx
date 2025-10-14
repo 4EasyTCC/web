@@ -7,6 +7,7 @@ import styles from "./CategoryCarousel.module.css";
 import { useNavigate } from "react-router-dom";
 
 const CategoryCarousel = ({ title, filterType, filterValue }) => {
+  const [isEmpty, setIsEmpty] = useState(false);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,72 +18,26 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
 
   const API_BASE_URL = "http://localhost:3000";
 
-  const filtrarPorPeriodo = (eventos, periodo) => {
-    const hoje = new Date();
-    hoje.setHours(0, 0, 0, 0);
-
-    const amanha = new Date(hoje);
-    amanha.setDate(amanha.getDate() + 1);
-
-    const finalSemana = new Date(hoje);
-    finalSemana.setDate(finalSemana.getDate() + (6 - hoje.getDay()));
-
-    const proximaSemanaInicio = new Date(hoje);
-    proximaSemanaInicio.setDate(proximaSemanaInicio.getDate() + 7);
-    const proximaSemanaFim = new Date(proximaSemanaInicio);
-    proximaSemanaFim.setDate(proximaSemanaFim.getDate() + 6);
-
-    const esteMesFim = new Date(hoje);
-    esteMesFim.setMonth(esteMesFim.getMonth() + 1);
-    esteMesFim.setDate(0);
-
-    return eventos.filter((evento) => {
-      if (!evento.dataInicio) return false;
-
-      const dataEvento = new Date(evento.dataInicio);
-      dataEvento.setHours(0, 0, 0, 0);
-
-      switch (periodo) {
-        case "hoje":
-          return dataEvento.getTime() === hoje.getTime();
-        case "amanha":
-          return dataEvento.getTime() === amanha.getTime();
-        case "esta-semana":
-          return dataEvento >= hoje && dataEvento <= finalSemana;
-        case "proxima-semana":
-          return (
-            dataEvento >= proximaSemanaInicio && dataEvento <= proximaSemanaFim
-          );
-        case "este-mes":
-          return dataEvento >= hoje && dataEvento <= esteMesFim;
-        default:
-          return true;
-      }
-    });
-  };
-
+  
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         setLoading(true);
         setError(null);
+        setIsEmpty(false);
 
         let url = `${API_BASE_URL}/api/eventos/home`;
         const queryParams = new URLSearchParams();
 
-        // Configurar parâmetros baseados no tipo de filtro
         if (filterType === "categoria" && filterValue) {
           queryParams.append("categoria", filterValue);
         }
 
-        queryParams.append("limite", "20"); // Buscar mais eventos para ter opções após filtrar
+        queryParams.append("limite", "20");
 
-        // Construir URL final
         if (queryParams.toString()) {
           url += `?${queryParams.toString()}`;
         }
-
-        console.log("Fazendo requisição para:", url);
 
         const response = await fetch(url);
 
@@ -91,11 +46,9 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
         }
 
         const data = await response.json();
-        console.log("Dados recebidos:", data);
 
         let eventosProcessados = data.eventos || [];
 
-        // Aplicar filtro de período se necessário
         if (filterType === "periodo" && filterValue) {
           eventosProcessados = filtrarPorPeriodo(
             eventosProcessados,
@@ -103,14 +56,17 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
           );
         }
 
-        // Limitar a 16 eventos finais
         eventosProcessados = eventosProcessados.slice(0, 16);
+        
+         if (eventosProcessados.length === 0) {
+          setIsEmpty(true);
+        }
 
         setEvents(eventosProcessados);
       } catch (error) {
-        console.error("Erro ao buscar eventos:", error);
         setError("Não foi possível carregar os eventos");
         setEvents([]);
+        setIsEmpty(false);
       } finally {
         setLoading(false);
       }
@@ -119,7 +75,6 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
     fetchEvents();
   }, [filterType, filterValue]);
 
-  // Configurações responsivas do slider
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1280) setSlidesToShow(4);
@@ -139,7 +94,7 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
     infinite: false,
     speed: 500,
     slidesToShow: slidesToShow,
-    slidesToScroll: Math.min(slidesToShow, 2), // Não rolar mais que 2 por vez
+    slidesToScroll: Math.min(slidesToShow, 2),
     arrows: false,
     beforeChange: (_, next) => setCurrentSlide(next),
     variableWidth: false,
@@ -245,7 +200,6 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
     );
   };
 
-  // Componente de loading skeleton
   const renderSkeleton = () => (
     <div className={styles.container}>
       {title && (
@@ -265,7 +219,30 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
     </div>
   );
 
-  // Componente de erro
+  const renderEmptyState = () => (
+    <div className={styles.emptyContainer}>
+      <div className={styles.emptyIcon}>
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      </div>
+      <h3 className={styles.emptyTitle}>Nenhum evento encontrado</h3>
+      <p className={styles.emptyMessage}>
+        Não há eventos disponíveis nesta categoria no momento.
+        <br />
+        Que tal explorar outras coleções?
+      </p>
+      <button 
+        className={styles.emptyButton}
+        onClick={() => navigate('/PageColecoes')}
+      >
+        Ver todas as coleções
+      </button>
+    </div>
+  );
+
   const renderError = () => (
     <div className={styles.container}>
       {title && (
@@ -283,6 +260,8 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
         </button>
       </div>
     </div>
+
+    
   );
 
   if (loading) {
@@ -293,8 +272,21 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
     return renderError();
   }
 
+  if (isEmpty || events.length === 0) {
+    return (
+      <div className={styles.container}>
+        {title && (
+          <div className={styles.header}>
+            <h2 className={styles.title}>{title}</h2>
+          </div>
+        )}
+        {renderEmptyState()}
+      </div>
+    );
+  }
+
   if (events.length === 0) {
-    return null; // Ou você pode retornar uma mensagem de "Nenhum evento encontrado"
+    return null;
   }
 
   return (
@@ -429,7 +421,6 @@ const CategoryCarousel = ({ title, filterType, filterValue }) => {
                 </div>
               );
             })}
-            {/* Botão final "Ver todos" */}
             <div className={styles.eventItem}>
               <button
                 className={styles.finalButton}

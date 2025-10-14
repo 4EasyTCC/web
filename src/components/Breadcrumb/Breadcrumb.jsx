@@ -1,3 +1,4 @@
+// Breadcrumb.jsx (atualizado)
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { useNavigationHistory } from '@/components/NavigationHistoryProvider/NavigationHistoryProvider';
@@ -71,16 +72,10 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
     const eventId = pathnames[1];
     const previousPage = getPreviousValidPage ? getPreviousValidPage() : null;
     
-    // DEBUG: Log para verificar o histórico
-    console.log("🔍 DEBUG Breadcrumb - Página atual:", location.pathname);
-    console.log("🔍 DEBUG Breadcrumb - Página anterior do histórico:", previousPage);
-    
     // Se temos histórico anterior válido, usá-lo para reconstruir o caminho
     if (previousPage && previousPage.pathname) {
       const previousPath = previousPage.pathname;
       const previousPathnames = previousPath.split('/').filter((x) => x);
-      
-      console.log("🔍 DEBUG Breadcrumb - Path anterior:", previousPath);
       
       // Se veio da página de busca
       if (previousPath === '/SearchEvents' || previousPath.startsWith('/SearchEvents?')) {
@@ -113,7 +108,6 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
         
         // Subcategoria (se existir)
         if (subId) {
-          // Aqui você pode adicionar lógica para nomes de subcategorias se tiver
           breadcrumbPaths.push({
             to: `/PageColecoes/${colecaoId}/${subId}`,
             displayName: 'Eventos',
@@ -130,10 +124,8 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
         });
       }
       // Se veio do home ou outra página, não adicionamos nada extra
-      // pois já temos Home > Detalhes do Evento
       else if (previousPath === '/' || previousPath === '/home') {
-        // Mantém apenas Home > Detalhes do Evento (não adiciona nada extra)
-        console.log("🔍 DEBUG Breadcrumb - Veio do Home, mantendo caminho simples");
+        // Mantém apenas Home > Detalhes do Evento
       }
       // Se veio de outra página não mapeada
       else if (previousPathnames[0] && routeNames[previousPathnames[0]]) {
@@ -143,8 +135,6 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
           isLast: false
         });
       }
-    } else {
-      console.log("🔍 DEBUG Breadcrumb - Nenhuma página anterior válida encontrada");
     }
     
     // Último item: Detalhes do Evento
@@ -177,7 +167,6 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
     // Segundo nível (subcategoria)
     if (pathnames.length >= 3) {
       const subId = pathnames[2];
-      // Aqui você pode adicionar nomes específicos para subcategorias se tiver
       breadcrumbPaths.push({
         to: location.pathname,
         displayName: 'Eventos',
@@ -185,31 +174,41 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
       });
     }
   }
-  // Para páginas normais
+  // PARA PÁGINAS NORMAIS - LÓGICA SIMPLIFICADA
   else {
-    pathnames.forEach((value, index) => {
-      const to = `/${pathnames.slice(0, index + 1).join('/')}`;
-      const isLast = index === pathnames.length - 1 && additionalPaths.length === 0;
-      
-      let displayName = routeNames[value] || value;
-      
-      // Se for um parâmetro numérico, tentar encontrar nome dinâmico
-      if (!isNaN(value) && index > 0) {
-        const parentRoute = pathnames[index - 1];
-        if (dynamicData[parentRoute] && dynamicData[parentRoute][value]) {
-          displayName = dynamicData[parentRoute][value];
-        }
-      }
-      
-      // Capitalizar a primeira letra
-      displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-      
+    // Para páginas como PageSponsor e Contact, usar caminho direto
+    if (location.pathname === '/PageSponsor' || location.pathname === '/Contact') {
       breadcrumbPaths.push({
-        to,
-        displayName,
-        isLast
+        to: location.pathname,
+        displayName: routeNames[pathnames[0]] || pathnames[0],
+        isLast: true
       });
-    });
+    } else {
+      // Para outras páginas, manter a lógica original
+      pathnames.forEach((value, index) => {
+        const to = `/${pathnames.slice(0, index + 1).join('/')}`;
+        const isLast = index === pathnames.length - 1 && additionalPaths.length === 0;
+        
+        let displayName = routeNames[value] || value;
+        
+        // Se for um parâmetro numérico, tentar encontrar nome dinâmico
+        if (!isNaN(value) && index > 0) {
+          const parentRoute = pathnames[index - 1];
+          if (dynamicData[parentRoute] && dynamicData[parentRoute][value]) {
+            displayName = dynamicData[parentRoute][value];
+          }
+        }
+        
+        // Capitalizar a primeira letra
+        displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+        
+        breadcrumbPaths.push({
+          to,
+          displayName,
+          isLast
+        });
+      });
+    }
   }
 
   // Combinar com paths adicionais se fornecidos

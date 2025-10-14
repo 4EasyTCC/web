@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './SearchBar.module.css';
 
-const SearchBar = ({ 
-  searchQuery, 
-  setSearchQuery, 
-  onSubmit, 
+const SearchBar = ({
+  searchQuery,
+  setSearchQuery,
+  onSubmit,
   isScrolled,
   fullWidth = false,
   onSearchResults = null
@@ -20,7 +20,7 @@ const SearchBar = ({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target) &&
-          inputRef.current && !inputRef.current.contains(event.target)) {
+        inputRef.current && !inputRef.current.contains(event.target)) {
         setShowDropdown(false);
       }
     };
@@ -41,25 +41,35 @@ const SearchBar = ({
       setIsSearching(true);
       try {
         console.log('Buscando eventos por:', searchQuery);
+
         const response = await fetch(
           `http://localhost:3000/api/eventos/busca-nome?query=${encodeURIComponent(searchQuery)}&limite=5`
         );
-        
+
+        console.log('Status da resposta:', response.status);
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const data = await response.json();
-        console.log('Resultados da busca:', data);
-        
+        console.log('Dados recebidos:', data);
+
         if (data.success) {
           setSearchResults(data.eventos || []);
           setShowDropdown(true);
+        } else {
+          console.error('Busca não foi bem-sucedida:', data.message);
+          setSearchResults([]);
+          setShowDropdown(true);
         }
       } catch (error) {
-        console.error('Erro na busca:', error);
+        console.error('Erro completo na busca:', error);
         setSearchResults([]);
         setShowDropdown(false);
+
+        // Mostrar alerta para debug
+        alert(`Erro na busca: ${error.message}. Verifique o console.`);
       } finally {
         setIsSearching(false);
       }
@@ -74,7 +84,7 @@ const SearchBar = ({
     setSearchResults([]);
     setShowDropdown(false);
     inputRef.current?.focus();
-    
+
     if (onSearchResults) {
       onSearchResults([]);
     }
@@ -89,15 +99,15 @@ const SearchBar = ({
       const response = await fetch(
         `http://localhost:3000/api/eventos/busca-nome?query=${encodeURIComponent(searchQuery)}&limite=50`
       );
-      
+
       if (response.ok) {
         const data = await response.json();
-        
+
         // Se existe callback para resultados, chama
         if (onSearchResults && data.success) {
           onSearchResults(data.eventos || []);
         }
-        
+
         // Executa submit original se existir
         if (onSubmit) {
           onSubmit(e);
@@ -116,7 +126,7 @@ const SearchBar = ({
 
   const handleEventClick = (evento) => {
     // Navegar para a página do evento
-    window.location.href = `/evento/${evento.eventoId}`;
+    window.location.href = `/eventos/${evento.eventoId}`;
   };
 
   const formatarData = (dataString) => {
@@ -148,10 +158,37 @@ const SearchBar = ({
 
   return (
     <div className={styles.searchWrapper} ref={dropdownRef}>
+        {/* Botão de debug - remover depois */}
+  <button 
+    type="button" 
+    onClick={async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/eventos/busca-nome?query=teste&limite=5');
+        const data = await response.json();
+        console.log('Debug API Response:', data);
+        alert(`Debug: ${JSON.stringify(data, null, 2)}`);
+      } catch (error) {
+        console.error('Debug Error:', error);
+        alert(`Debug Error: ${error.message}`);
+      }
+    }}
+    style={{
+      position: 'absolute',
+      right: '-100px',
+      top: '0',
+      background: 'red',
+      color: 'white',
+      border: 'none',
+      padding: '5px',
+      fontSize: '10px'
+    }}
+  >
+    Testar API
+  </button>
       <form onSubmit={handleSubmit} className={styles.searchForm}>
         <div className={`${styles.searchBar} ${isFocused ? styles.focused : ''}`}>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className={styles.searchButton}
             disabled={isSearching}
           >
@@ -163,7 +200,7 @@ const SearchBar = ({
               </svg>
             )}
           </button>
-          
+
           <input
             ref={inputRef}
             type="text"
@@ -174,7 +211,7 @@ const SearchBar = ({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
           />
-          
+
           {searchQuery && (
             <button
               type="button"
@@ -194,32 +231,32 @@ const SearchBar = ({
         <div className={styles.dropdown}>
           <div className={styles.dropdownHeader}>
             <span>
-              {searchResults.length > 0 
+              {searchResults.length > 0
                 ? `${searchResults.length} evento(s) encontrado(s)`
                 : 'Nenhum evento encontrado'
               }
             </span>
           </div>
-          
+
           {searchResults.length > 0 ? (
             <>
               <div className={styles.resultsList}>
                 {searchResults.map((evento) => {
                   const precoMinimo = getPrecoMinimo(evento.Ingressos);
                   const temIngressoGratis = evento.Ingressos?.some(ing => parseFloat(ing.preco) === 0);
-                  const imagemUrl = evento.Midia?.[0]?.url 
+                  const imagemUrl = evento.Midia?.[0]?.url
                     ? `http://localhost:3000${evento.Midia[0].url}`
                     : '/placeholder-event.jpg';
 
                   return (
-                    <div 
-                      key={evento.eventoId} 
+                    <div
+                      key={evento.eventoId}
                       className={styles.resultItem}
                       onClick={() => handleEventClick(evento)}
                     >
                       <div className={styles.eventImage}>
-                        <img 
-                          src={imagemUrl} 
+                        <img
+                          src={imagemUrl}
                           alt={evento.nomeEvento}
                           onError={(e) => {
                             e.target.src = '/placeholder-event.jpg';
@@ -229,7 +266,7 @@ const SearchBar = ({
                           <div className={styles.gratisBadge}>Grátis</div>
                         )}
                       </div>
-                      
+
                       <div className={styles.eventInfo}>
                         <h4 className={styles.eventTitle}>{evento.nomeEvento}</h4>
                         <p className={styles.eventLocation}>
@@ -250,9 +287,9 @@ const SearchBar = ({
                   );
                 })}
               </div>
-              
+
               <div className={styles.dropdownFooter}>
-                <button 
+                <button
                   className={styles.seeAllButton}
                   onClick={handleSubmit}
                 >

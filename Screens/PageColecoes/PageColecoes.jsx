@@ -201,14 +201,7 @@ export default function PageColecoes() {
             />
           </div>
 
-          <div className={styles.collectionActions}>
-            <button 
-              onClick={() => navigate('/PageColecoes')}
-              className={styles.backButton}
-            >
-              Voltar para todas as coleções
-            </button>
-          </div>
+          
         </main>
 
         <Footer />

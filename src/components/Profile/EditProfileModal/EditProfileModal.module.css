@@ -200,12 +200,18 @@
     box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
   }
   
-  .saveButton:disabled,
-  .cancelButton:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none !important;
-  }
+  .saveButtonDisabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  background: #9ca3af !important;
+}
+
+.saveButtonDisabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  background: #9ca3af !important;
+}
   
   @media (max-width: 768px) {
     .modalContent {

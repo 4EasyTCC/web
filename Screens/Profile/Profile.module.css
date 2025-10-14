@@ -2,12 +2,14 @@
 .pageContainer {
   min-height: 100vh;
   background: #f8fafc;
+  
 }
 
 .profileContainer {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  
 }
 
 .loading {
@@ -17,6 +19,7 @@
   height: 50vh;
   font-size: 1.2rem;
   color: #64748b;
+  
 }
 
 /* Mensagens */
@@ -61,6 +64,7 @@
   padding: 2rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   border: 1px solid #e2e8f0;
+  
 }
 
 /* Responsivo */

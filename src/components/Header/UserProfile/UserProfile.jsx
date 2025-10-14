@@ -15,23 +15,9 @@ const UserProfile = ({ userData, isScrolled }) => {
     setCurrentUserData(userData);
   }, [userData]);
 
-  // ✅ CORREÇÃO: Verificar localStorage diretamente no mount
   useEffect(() => {
-    const checkLocalStorage = () => {
-      try {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-          const user = JSON.parse(storedUser);
-          console.log('📦 UserProfile - Dados do localStorage:', user);
-          setCurrentUserData(user);
-        }
-      } catch (error) {
-        console.error('Erro ao ler localStorage:', error);
-      }
-    };
+    
 
-    // Verificar imediatamente
-    checkLocalStorage();
 
     // Escutar eventos de atualização
     const handleStorageChange = () => {
@@ -159,14 +145,7 @@ const UserProfile = ({ userData, isScrolled }) => {
     return currentUserData.nome.split(' ')[0];
   };
 
-  // ✅ DEBUG: Log do estado atual
-  console.log('🎯 UserProfile - Estado final:', {
-    currentUserData,
-    hasAvatarUrl: !!currentUserData?.avatarUrl,
-    avatarUrl: currentUserData?.avatarUrl,
-    finalAvatarUrl: getAvatarUrl()
-  });
-
+ 
   return (
     <div className={styles.userProfile} ref={dropdownRef}>
       <button 

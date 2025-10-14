@@ -16,6 +16,7 @@ import PageSponsor from "../Screens/PageSponsor/PageSponsor.jsx";
 import PageColecoes from "../Screens/PageColecoes/PageColecoes.jsx";
 import Eventos from "../Screens/Eventos/Eventos.jsx";
 import SearchEvents from "../Screens/SearchEvents/SearchEvents.jsx";
+import SearchResults from "../Screens/SearchResults/SearchResults.jsx";
 import PageWrapper from "@/components/PageWrapper/PageWrapper";
 import Terms from "../Screens/Terms/Terms.jsx";
 import PageTransition from "@/components/PageTransition/PageTransition";
@@ -180,6 +181,14 @@ function AnimatedRoutes() {
             element={
               <PageWrapper>
                 <SearchEvents />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              <PageWrapper>
+                <SearchResults />
               </PageWrapper>
             }
           />

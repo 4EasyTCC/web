@@ -1,5 +1,5 @@
 // components/Profile/EditProfileModal.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './EditProfileModal.module.css';
 
 const EditProfileModal = ({ 
@@ -10,22 +10,156 @@ const EditProfileModal = ({
   carregando 
 }) => {
   const [formData, setFormData] = useState({
-    nome: userData?.nome || '',
-    sobreMim: userData?.sobreMim || '',
-    telefone: userData?.telefone || '',
-    genero: userData?.genero || '',
-    dataNascimento: userData?.dataNascimento || '',
-    endereco: userData?.endereco || '',
-    cidade: userData?.cidade || '',
-    cep: userData?.cep || '',
+    nome: '',
+    sobreMim: '',
+    telefone: '',
+    genero: '',
+    dataNascimento: '',
+    endereco: '',
+    cidade: '',
+    cep: '',
     senha: '',
     confirmarSenha: ''
   });
 
   const [errors, setErrors] = useState({});
+  const [hasChanges, setHasChanges] = useState(false); // NOVO: Estado para controlar mudanças
+  const [initialData, setInitialData] = useState({}); // NOVO: Dados iniciais para comparação
+
+  // CORREÇÃO: Inicializar formData quando userData mudar
+  useEffect(() => {
+    if (userData && isOpen) {
+      const dadosIniciais = {
+        nome: userData?.nome || '',
+        sobreMim: userData?.sobreMim || '',
+        telefone: formatPhone(userData?.telefone || ''),
+        genero: userData?.genero || '',
+        dataNascimento: userData?.dataNascimento || '',
+        endereco: userData?.endereco || '',
+        cidade: userData?.cidade || '',
+        cep: formatCEP(userData?.cep || ''),
+        senha: '',
+        confirmarSenha: ''
+      };
+
+      setFormData(dadosIniciais);
+      setInitialData(dadosIniciais); // NOVO: Guardar dados iniciais para comparação
+      setErrors({});
+      setHasChanges(false); // NOVO: Resetar mudanças ao abrir modal
+    }
+  }, [userData, isOpen]);
+
+  // NOVO: Função para verificar se houve mudanças
+  const checkForChanges = (currentData) => {
+    if (!initialData || Object.keys(initialData).length === 0) return false;
+
+    // Comparar cada campo (ignorando senhas vazias)
+    const camposParaComparar = [
+      'nome', 'sobreMim', 'telefone', 'genero', 
+      'dataNascimento', 'endereco', 'cidade', 'cep'
+    ];
+
+    const mudancasDetectadas = camposParaComparar.some(campo => {
+      const valorOriginal = initialData[campo] || '';
+      const valorAtual = currentData[campo] || '';
+      
+      // Normalizar valores para comparação (remover formatação de telefone/CEP)
+      if (campo === 'telefone' || campo === 'cep') {
+        const normalizadoOriginal = valorOriginal.replace(/\D/g, '');
+        const normalizadoAtual = valorAtual.replace(/\D/g, '');
+        return normalizadoOriginal !== normalizadoAtual;
+      }
+      
+      return valorOriginal.toString() !== valorAtual.toString();
+    });
+
+    // Verificar se há senha nova (considera mudança se senha não estiver vazia)
+    const senhaPreenchida = currentData.senha && currentData.senha.trim() !== '';
+    
+    return mudancasDetectadas || senhaPreenchida;
+  };
+
+  // CORREÇÃO: Funções de formatação movidas para fora do return
+  const formatPhone = (value) => {
+    if (!value || value === 'null' || value === 'undefined') return '';
+    
+    // Se já está formatado, mantém
+    if (value.includes('(') && value.includes(')')) {
+      return value;
+    }
+    
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length === 11) {
+      return numbers.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    } else if (numbers.length === 10) {
+      return numbers.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+    } else if (numbers.length > 0) {
+      return value;
+    }
+    
+    return '';
+  };
+
+  const formatCEP = (value) => {
+    if (!value || value === 'null' || value === 'undefined') return '';
+    
+    // Se já está formatado, mantém
+    if (value.includes('-')) {
+      return value;
+    }
+    
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length === 8) {
+      return numbers.replace(/(\d{5})(\d{3})/, '$1-$2');
+    } else if (numbers.length > 0) {
+      return value;
+    }
+    
+    return '';
+  };
+
+  // CORREÇÃO: Funções de formatação em tempo real
+  const handlePhoneChange = (value) => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 11) {
+      if (numbers.length <= 10) {
+        return numbers.replace(/(\d{2})(\d{0,4})(\d{0,4})/, '($1) $2-$3');
+      } else {
+        return numbers.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+      }
+    }
+    return value;
+  };
+
+  const handleCEPChange = (value) => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 8) {
+      let formatted = numbers.replace(/(\d{0,5})(\d{0,3})/, '$1-$2');
+      // Remove hífen do início se existir
+      if (formatted.startsWith('-')) {
+        formatted = formatted.substring(1);
+      }
+      return formatted;
+    }
+    return value;
+  };
 
   const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    let valorFormatado = value;
+    
+    // CORREÇÃO: Aplicar formatação em tempo real
+    if (field === 'telefone') {
+      valorFormatado = handlePhoneChange(value);
+    } else if (field === 'cep') {
+      valorFormatado = handleCEPChange(value);
+    }
+    
+    const novosDados = { ...formData, [field]: valorFormatado };
+    setFormData(novosDados);
+    
+    // NOVO: Verificar mudanças após atualização
+    setHasChanges(checkForChanges(novosDados));
+    
     // Limpar erro do campo quando usuário começar a digitar
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
@@ -40,13 +174,19 @@ const EditProfileModal = ({
       newErrors.nome = 'Nome é obrigatório';
     }
 
-    // Validações de formato
-    if (formData.telefone && !/^\(\d{2}\) \d{4,5}-\d{4}$/.test(formData.telefone)) {
-      newErrors.telefone = 'Telefone deve estar no formato (11) 99999-9999';
+    // CORREÇÃO: Validações de formato mais flexíveis
+    if (formData.telefone && formData.telefone.trim() !== '') {
+      const telefoneNumeros = formData.telefone.replace(/\D/g, '');
+      if (telefoneNumeros.length !== 10 && telefoneNumeros.length !== 11) {
+        newErrors.telefone = 'Telefone deve ter 10 ou 11 dígitos';
+      }
     }
 
-    if (formData.cep && !/^\d{5}-\d{3}$/.test(formData.cep)) {
-      newErrors.cep = 'CEP deve estar no formato 12345-678';
+    if (formData.cep && formData.cep.trim() !== '') {
+      const cepNumeros = formData.cep.replace(/\D/g, '');
+      if (cepNumeros.length !== 8) {
+        newErrors.cep = 'CEP deve ter 8 dígitos';
+      }
     }
 
     if (formData.dataNascimento) {
@@ -87,8 +227,14 @@ const EditProfileModal = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // NOVO: Não submeter se não houver mudanças
+    if (!hasChanges) {
+      return;
+    }
+    
     if (validateForm()) {
-      // Formatar dados antes de enviar
+      // CORREÇÃO: Formatar dados antes de enviar (apenas números)
       const dataToSend = { 
         ...formData,
         telefone: formData.telefone?.replace(/\D/g, "") || null,
@@ -105,18 +251,12 @@ const EditProfileModal = ({
     }
   };
 
-  const formatPhone = (value) => {
-    const numbers = value.replace(/\D/g, '');
-    if (numbers.length <= 10) {
-      return numbers.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-    } else {
-      return numbers.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
-    }
-  };
-
-  const formatCEP = (value) => {
-    const numbers = value.replace(/\D/g, '');
-    return numbers.replace(/(\d{5})(\d{0,3})/, '$1-$2');
+  // NOVO: Handler para cancelar - resetar para dados iniciais
+  const handleCancel = () => {
+    setFormData(initialData);
+    setHasChanges(false);
+    setErrors({});
+    onClose();
   };
 
   const opcoesGenero = [
@@ -131,11 +271,11 @@ const EditProfileModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={styles.modalOverlay} onClick={handleCancel}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <h2>Editar Perfil</h2>
-          <button className={styles.closeButton} onClick={onClose}>×</button>
+          <button className={styles.closeButton} onClick={handleCancel}>×</button>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -207,7 +347,7 @@ const EditProfileModal = ({
                 <input
                   type="text"
                   value={formData.telefone}
-                  onChange={(e) => handleChange('telefone', formatPhone(e.target.value))}
+                  onChange={(e) => handleChange('telefone', e.target.value)}
                   className={errors.telefone ? styles.inputError : ''}
                   placeholder="(11) 99999-9999"
                   maxLength={15}
@@ -248,7 +388,7 @@ const EditProfileModal = ({
                   <input
                     type="text"
                     value={formData.cep}
-                    onChange={(e) => handleChange('cep', formatCEP(e.target.value))}
+                    onChange={(e) => handleChange('cep', e.target.value)}
                     className={errors.cep ? styles.inputError : ''}
                     placeholder="12345-678"
                     maxLength={9}
@@ -291,7 +431,7 @@ const EditProfileModal = ({
           <div className={styles.formActions}>
             <button 
               type="button" 
-              onClick={onClose}
+              onClick={handleCancel}
               className={styles.cancelButton}
               disabled={carregando}
             >
@@ -299,8 +439,8 @@ const EditProfileModal = ({
             </button>
             <button 
               type="submit" 
-              className={styles.saveButton}
-              disabled={carregando}
+              className={`${styles.saveButton} ${!hasChanges ? styles.saveButtonDisabled : ''}`}
+              disabled={carregando || !hasChanges} // NOVO: Desabilitar se não houver mudanças
             >
               {carregando ? 'Salvando...' : 'Salvar Alterações'}
             </button>
