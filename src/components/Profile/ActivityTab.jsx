@@ -1,15 +1,45 @@
 // components/Profile/ActivityTab.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './ActivityTab.module.css';
 
 const ActivityTab = () => {
-  // Dados mockados - você pode substituir por dados reais
-  const atividades = [
-    { tipo: 'evento', acao: 'participou do', nome: 'Festival de Verão 2024', data: '2024-02-15', icon: '🎪' },
-    { tipo: 'avaliacao', acao: 'avaliou', nome: 'Show da Banda X', data: '2024-02-10', icon: '⭐' },
-    { tipo: 'amizade', acao: 'adicionou', nome: 'Maria Silva', data: '2024-02-05', icon: '👥' },
-    { tipo: 'evento', acao: 'confirmou presença em', nome: 'Workshop de Gastronomia', data: '2024-01-28', icon: '🎪' },
-  ];
+  const [atividades, setAtividades] = useState([]);
+
+  const carregarAtividades = () => {
+    const storedPurchases = JSON.parse(localStorage.getItem('purchases') || '[]');
+    // Cada purchase pode ter quantidade; agregamos por evento para mostrar quantidade total por evento
+    const aggregated = storedPurchases.reduce((acc, p) => {
+      const key = p.eventoId ? `${p.eventoId}` : `ingresso-${p.ingressoId}`;
+      if (!acc[key]) {
+        acc[key] = {
+          tipo: 'evento',
+          acao: 'comprou',
+          nome: p.nome,
+          data: p.compradoEm,
+          quantidade: p.quantidade || 1,
+          icon: '🎫',
+        };
+      } else {
+        acc[key].quantidade += p.quantidade || 1;
+        // manter a data mais recente como referência
+        if (new Date(p.compradoEm) > new Date(acc[key].data)) {
+          acc[key].data = p.compradoEm;
+        }
+      }
+      return acc;
+    }, {});
+
+    const a = Object.values(aggregated);
+    // ordenar por data (mais recente primeiro)
+    a.sort((x, y) => new Date(y.data) - new Date(x.data));
+    setAtividades(a);
+  };
+
+  useEffect(() => {
+    carregarAtividades();
+    window.addEventListener('purchasesChanged', carregarAtividades);
+    return () => window.removeEventListener('purchasesChanged', carregarAtividades);
+  }, []);
 
   const formatarData = (data) => {
     return new Date(data).toLocaleDateString('pt-BR', {
@@ -32,6 +62,9 @@ const ActivityTab = () => {
             <div className={styles.activityContent}>
               <div className={styles.activityText}>
                 <strong>Você</strong> {atividade.acao} <strong>{atividade.nome}</strong>
+                {atividade.quantidade && atividade.quantidade > 1 && (
+                  <span> — {atividade.quantidade} unidades</span>
+                )}
               </div>
               <div className={styles.activityDate}>
                 {formatarData(atividade.data)}
@@ -41,10 +74,12 @@ const ActivityTab = () => {
         ))}
       </div>
 
-      <div className={styles.emptyState}>
-        <p>🎯 Suas atividades aparecerão aqui</p>
-        <small>Participe de eventos e interaja com outros usuários para ver sua atividade</small>
-      </div>
+      {atividades.length === 0 && (
+        <div className={styles.emptyState}>
+          <p>🎯 Suas atividades aparecerão aqui</p>
+          <small>Participe de eventos e interaja com outros usuários para ver sua atividade</small>
+        </div>
+      )}
     </div>
   );
 };
