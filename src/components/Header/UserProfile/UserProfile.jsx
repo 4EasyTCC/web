@@ -68,6 +68,7 @@ const UserProfile = ({ userData, isScrolled }) => {
   };
 
   const handleProfileClick = () => {
+    // Voltar ao comportamento original: navegar para /profile sem state
     navigate('/profile');
     setIsDropdownOpen(false);
   };

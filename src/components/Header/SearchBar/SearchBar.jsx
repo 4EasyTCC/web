@@ -40,36 +40,27 @@ const SearchBar = ({
 
       setIsSearching(true);
       try {
-        console.log('Buscando eventos por:', searchQuery);
-
         const response = await fetch(
           `http://localhost:3000/api/eventos/busca-nome?query=${encodeURIComponent(searchQuery)}&limite=5`
         );
-
-        console.log('Status da resposta:', response.status);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
-        console.log('Dados recebidos:', data);
 
         if (data.success) {
           setSearchResults(data.eventos || []);
           setShowDropdown(true);
         } else {
-          console.error('Busca não foi bem-sucedida:', data.message);
           setSearchResults([]);
           setShowDropdown(true);
         }
       } catch (error) {
-        console.error('Erro completo na busca:', error);
+        // Erro silencioso no componente de busca; manter UX simples
         setSearchResults([]);
         setShowDropdown(false);
-
-        // Mostrar alerta para debug
-        alert(`Erro na busca: ${error.message}. Verifique o console.`);
       } finally {
         setIsSearching(false);
       }
@@ -158,33 +149,7 @@ const SearchBar = ({
 
   return (
     <div className={styles.searchWrapper} ref={dropdownRef}>
-        {/* Botão de debug - remover depois */}
-  <button 
-    type="button" 
-    onClick={async () => {
-      try {
-        const response = await fetch('http://localhost:3000/api/eventos/busca-nome?query=teste&limite=5');
-        const data = await response.json();
-        console.log('Debug API Response:', data);
-        alert(`Debug: ${JSON.stringify(data, null, 2)}`);
-      } catch (error) {
-        console.error('Debug Error:', error);
-        alert(`Debug Error: ${error.message}`);
-      }
-    }}
-    style={{
-      position: 'absolute',
-      right: '-100px',
-      top: '0',
-      background: 'red',
-      color: 'white',
-      border: 'none',
-      padding: '5px',
-      fontSize: '10px'
-    }}
-  >
-    Testar API
-  </button>
+      {/* Debugging removido */}
       <form onSubmit={handleSubmit} className={styles.searchForm}>
         <div className={`${styles.searchBar} ${isFocused ? styles.focused : ''}`}>
           <button

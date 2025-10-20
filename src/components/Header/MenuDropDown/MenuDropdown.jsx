@@ -190,7 +190,7 @@ const MenuDropdown = ({ isOpen, onClose }) => {
             {isLoggedIn ? (
               <>
                 <button
-                  onClick={() => navigateTo('/profile')}
+                  onClick={() => { navigate('/profile'); onClose(); }}
                   className={styles.menuProfileButton}
                 >
                   Meu Perfil

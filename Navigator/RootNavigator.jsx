@@ -148,14 +148,7 @@ function AnimatedRoutes() {
           />
           
           {/* Rota principal de eventos */}
-          <Route
-            path="/Eventos"
-            element={
-              <PageWrapper>
-                <Eventos />
-              </PageWrapper>
-            }
-          />
+         
           
           {/* Rota dinâmica para detalhes do evento */}
           <Route

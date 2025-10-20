@@ -3,6 +3,7 @@ import styles from "./Eventos.module.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import { useParams, useNavigate } from "react-router-dom";
+import FavoriteButton from '@/components/FavoriteButton/FavoriteButton';
 
 // Função auxiliar para resolver o caminho da imagem
 const resolveImageUrl = (url) => {
@@ -22,6 +23,7 @@ const Eventos = () => {
   const [evento, setEvento] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isFavorited, setIsFavorited] = useState(false);
 
   useEffect(() => {
     const fetchEventoData = async () => {
@@ -118,6 +120,25 @@ const Eventos = () => {
       }
     };
     fetchEventoData();
+    // Verifica se já está favoritado
+    const fetchFavoritoStatus = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        const res = await fetch('http://localhost:3000/favoritos', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data && Array.isArray(data.eventosFavoritos)) {
+          const found = data.eventosFavoritos.some(f => f.eventoId == eventoId || f.evento?.eventoId == eventoId);
+          setIsFavorited(found);
+        }
+      } catch (err) {
+        console.error('Erro ao verificar favorito:', err);
+      }
+    };
+    fetchFavoritoStatus();
   }, [eventoId]);
 
   const handleComprarIngresso = (ingresso) => {
@@ -223,7 +244,12 @@ const Eventos = () => {
               <button onClick={() => navigate(-1)} className={styles.backButton}>
                 ← Voltar
               </button>
-              <h1 className={styles.eventTitle}>{evento.nomeEvento}</h1>
+              <div className={styles.titleRow}>
+                <h1 className={styles.eventTitle}>{evento.nomeEvento}</h1>
+                <div className={styles.heroFavorite} onClick={(e) => e.stopPropagation()}>
+                  <FavoriteButton eventoId={evento.eventoId || eventoId} initialFavorited={isFavorited} size={36} />
+                </div>
+              </div>
               <h2 className={styles.eventCity}>
                 {evento.localizacao
                   ? `${evento.localizacao.cidade}, ${evento.localizacao.estado}`

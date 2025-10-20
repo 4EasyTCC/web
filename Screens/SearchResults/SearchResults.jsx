@@ -58,7 +58,7 @@ export default function SearchResults() {
                 <p className={styles.description}>Use filtros na barra de busca para refinar os resultados.</p>
                 <button
                   className={styles.ctaButton}
-                  onClick={() => navigate('/Eventos')}
+                  onClick={() => navigate('/SearchEvents')}
                 >
                   Ver todos os eventos
                   <span className={styles.buttonArrow}>→</span>

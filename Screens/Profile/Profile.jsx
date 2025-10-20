@@ -1,5 +1,6 @@
 // Profile.jsx - PÁGINA PRINCIPAL ATUALIZADA
 import React, { useEffect, useState } from "react";
+import { useLocation } from 'react-router-dom';
 import axios from "axios";
 import styles from "./Profile.module.css";
 import Header from "@/components/Header/Header";
@@ -23,6 +24,26 @@ export default function Profile() {
   useEffect(() => {
     carregarPerfil();
   }, []);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    // Preferir state de navegação quando disponível (e.g. navigate('/profile', { state: { tab: 'preferencias' } }))
+    try {
+      if (location && location.state && location.state.tab) {
+        setActiveTab(location.state.tab);
+        return;
+      }
+
+      // Fallback: se a URL for /profile/evento ou contiver esse segmento, abrir Preferências
+      const pathnames = location.pathname.split('/').filter(Boolean);
+      if (pathnames[0] === 'profile' && pathnames[1] === 'evento') {
+        setActiveTab('preferencias');
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [location]);
 
   const garantirUrlCompleta = (avatarUrl) => {
     if (!avatarUrl) return null;

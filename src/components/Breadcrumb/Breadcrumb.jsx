@@ -85,6 +85,14 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
           isLast: false
         });
       }
+      // Se veio do perfil (ex.: clicou no evento a partir de Preferências), garantir que ao voltar abra Preferências
+      else if (previousPathnames[0] === 'profile') {
+        breadcrumbPaths.push({
+          to: { pathname: '/profile', state: { tab: 'preferencias' } },
+          displayName: 'Perfil',
+          isLast: false
+        });
+      }
       // Se veio de uma coleção específica
       else if (previousPath.startsWith('/PageColecoes/')) {
         const colecaoId = previousPathnames[1];
