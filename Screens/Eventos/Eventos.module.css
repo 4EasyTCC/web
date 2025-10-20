@@ -8,6 +8,10 @@
     gap: 20px;
 }
 
+.addToCartButton{
+    color:#3a2adf;
+}
+
 .spinner {
     width: 40px;
     height: 40px;
@@ -324,6 +328,11 @@
     font-size: 0.8rem !important;
 }
 
+
+.qtyRow{
+
+    padding: 10px;
+}
 .ticketOptions {
     display: flex;
     flex-direction: column;

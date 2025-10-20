@@ -313,3 +313,41 @@
     height: 48px;
   }
 }
+
+.cartButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  margin-right: 8px;
+  position: relative;
+  cursor: pointer;
+}
+
+.cartButton:hover {
+  background: linear-gradient(135deg, rgba(40, 22, 178, 0.06) 0%, rgba(88, 71, 227, 0.08) 100%);
+  transform: translateY(-1px);
+}
+
+
+.cartBadge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: #ef4444;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}

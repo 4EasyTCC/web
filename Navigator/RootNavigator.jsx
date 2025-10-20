@@ -12,6 +12,7 @@ import Contact from "../Screens/Contact/Contact.jsx";
 import Feedback from "../Screens/Feedback/Feedback.jsx";
 import MoreQuestions from "../Screens/MoreQuestions/MoreQuestions.jsx";
 import Profile from "../Screens/Profile/Profile.jsx";
+import ShoppingCart from "../Screens/ShoppingCart/ShoppingCart.jsx";
 import PageSponsor from "../Screens/PageSponsor/PageSponsor.jsx";
 import PageColecoes from "../Screens/PageColecoes/PageColecoes.jsx";
 import Eventos from "../Screens/Eventos/Eventos.jsx";
@@ -105,6 +106,14 @@ function AnimatedRoutes() {
             element={
               <PageWrapper>
                 <Profile />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/shopping-cart"
+            element={
+              <PageWrapper>
+                <ShoppingCart />
               </PageWrapper>
             }
           />

@@ -22,6 +22,14 @@ const Eventos = () => {
   const [evento, setEvento] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [token, setToken] = useState(null);
+  const [participando, setParticipando] = useState(false);
+  const [compraLoading, setCompraLoading] = useState(false);
+  const [quantidades, setQuantidades] = useState({});
+  const [modalAberto, setModalAberto] = useState(false);
+  const [ingressoSelecionado, setIngressoSelecionado] = useState(null);
+  const [quantidadeSelecionada, setQuantidadeSelecionada] = useState(1);
+  // cart is persisted in localStorage and handled by the ShoppingCart page
 
   useEffect(() => {
     const fetchEventoData = async () => {
@@ -47,6 +55,30 @@ const Eventos = () => {
           throw new Error(data.message || "Erro ao carregar evento");
         }
         setEvento(data.evento);
+        // verificar se usuário está logado e se já participa
+        const storedToken = localStorage.getItem("token");
+        if (storedToken) setToken(storedToken);
+        // Após setEvento, verificar participação (só se token existir)
+        if (storedToken) {
+          try {
+            const respStatus = await fetch(
+              `http://localhost:3000/participacao/evento/${data.evento.eventoId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${storedToken}`,
+                },
+              }
+            );
+            if (respStatus.ok) {
+              const js = await respStatus.json();
+              if (js.status && js.status === "Participa") {
+                setParticipando(true);
+              }
+            }
+          } catch (err) {
+            console.warn("Erro ao checar participação:", err);
+          }
+        }
         setLoading(false);
       } catch (err) {
         console.error("Erro ao carregar evento:", err);
@@ -121,8 +153,110 @@ const Eventos = () => {
   }, [eventoId]);
 
   const handleComprarIngresso = (ingresso) => {
-    console.log("Comprando ingresso:", ingresso);
-    alert(`Redirecionando para compra do ingresso: ${ingresso.nome}`);
+    // Abre modal de confirmação, guarda ingresso selecionado e quantidade atual
+    if (!token) {
+      alert("Você precisa estar logado como convidado para comprar ingressos.");
+      navigate("/paginaLogin");
+      return;
+    }
+
+    const disponivel = typeof ingresso.quantidade === "number" ? ingresso.quantidade : null;
+    const selecionada = quantidades[ingresso.ingressoId] || 1;
+
+    if (disponivel !== null && disponivel <= 0) {
+      alert("Este ingresso está esgotado.");
+      return;
+    }
+
+    setIngressoSelecionado(ingresso);
+    setQuantidadeSelecionada(Math.min(selecionada, disponivel || selecionada));
+    setModalAberto(true);
+  };
+
+  const confirmarCompra = async () => {
+    if (!ingressoSelecionado) return;
+    setCompraLoading(true);
+    try {
+      const resp = await fetch(
+        `http://localhost:3000/participar/evento/${ingressoSelecionado.ingressoId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          // backend atual não consome quantidade, mas incluímos para evolução
+          body: JSON.stringify({ quantidade: quantidadeSelecionada }),
+        }
+      );
+
+      const body = await resp.json();
+      if (!resp.ok) throw new Error(body.message || "Erro ao processar compra");
+
+      setParticipando(true);
+      alert(body.message || "Participação confirmada com sucesso!");
+
+      // tentar aderir ao grupo
+      if (body.eventoId) {
+        try {
+          await fetch("http://localhost:3000/grupos/aderir", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ eventoId: body.eventoId }),
+          });
+        } catch (err) {
+          console.warn("Falha ao aderir ao grupo:", err);
+        }
+      }
+      setModalAberto(false);
+    } catch (err) {
+      console.error("Erro confirmar compra:", err);
+      alert(err.message || "Erro ao confirmar compra");
+    } finally {
+      setCompraLoading(false);
+    }
+  };
+
+  const fecharModal = () => {
+    setModalAberto(false);
+    setIngressoSelecionado(null);
+  };
+
+  const handleQuantidadeChange = (ingressoId, value) => {
+    const q = Math.max(1, parseInt(value || 1, 10));
+    setQuantidades((prev) => ({ ...prev, [ingressoId]: q }));
+  };
+
+  // Carrinho: adicionar item
+  const adicionarAoCarrinho = (ingresso) => {
+    // Only persist to localStorage and notify the app; the ShoppingCart page owns the cart UI
+    const qtd = quantidades[ingresso.ingressoId] || 1;
+    try {
+      const current = JSON.parse(localStorage.getItem('cart') || '[]');
+      const existing = current.find((c) => c.ingressoId === ingresso.ingressoId);
+      let next;
+      if (existing) {
+        next = current.map((c) =>
+          c.ingressoId === ingresso.ingressoId
+            ? { ...c, quantidade: Math.min((c.quantidade || 0) + qtd, ingresso.quantidade || 9999) }
+            : c
+        );
+      } else {
+        next = [
+          ...current,
+          { ingressoId: ingresso.ingressoId, nome: ingresso.nome, preco: ingresso.preco, quantidade: Math.min(qtd, ingresso.quantidade || qtd), ingresso },
+        ];
+      }
+      localStorage.setItem('cart', JSON.stringify(next));
+      window.dispatchEvent(new Event('cartChanged'));
+      alert(`${qtd} x ${ingresso.nome} adicionados ao carrinho`);
+    } catch (err) {
+      console.error('Erro ao adicionar ao carrinho:', err);
+      alert('Não foi possível adicionar ao carrinho.');
+    }
   };
 
   const formatarData = (dataString) => {
@@ -367,62 +501,81 @@ const Eventos = () => {
                     src={resolveImageUrl(evento.organizador.avatarUrl)}
                     alt={evento.organizador.nome}
                     onError={(e) => {
-                      e.target.src = "/placeholder-avatar.jpg";
-                    }}
-                  />
-                ) : (
-                  <span className={styles.organizerInitial}>
-                    {evento.organizador?.nome?.charAt(0).toUpperCase() || "O"}
-                  </span>
-                )}
-              </div>
-              <div className={styles.organizerDetails}>
-                <h4>{evento.organizador?.nome || "Organizador"}</h4>
-                <p>Responsável pelo evento</p>
-                {evento.organizador?.email && (
-                  <p className={styles.organizerEmail}>
-                    {evento.organizador.email}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-          {evento.Ingressos?.length > 0 && (
-            <div className={styles.ticketCard}>
-              <h3 className={styles.sidebarTitle}>🎫 Ingressos</h3>
-              <div className={styles.ticketOptions}>
-                {evento.Ingressos.map((ingresso, index) => (
-                  <div
-                    key={ingresso.ingressoId || index}
-                    className={styles.ticketOption}
-                  >
-                    <div className={styles.ticketHeader}>
-                      <div className={styles.ticketName}>{ingresso.nome}</div>
-                      <div className={styles.ticketPrice}>
-                        {formatarPreco(ingresso.preco)}
-                      </div>
+                        e.target.src = "/placeholder-avatar.jpg";
+                      }}
+                      />
+                    ) : (
+                      <span className={styles.organizerInitial}>
+                      {evento.organizador?.nome?.charAt(0).toUpperCase() || "O"}
+                      </span>
+                    )}
                     </div>
-                    {ingresso.descricao && (
-                      <div className={styles.ticketDescription}>
-                        {ingresso.descricao}
-                      </div>
+                    <div className={styles.organizerDetails}>
+                    <h4>{evento.organizador?.nome || "Organizador"}</h4>
+                    <p>Responsável pelo evento</p>
+                    {evento.organizador?.email && (
+                      <p className={styles.organizerEmail}>
+                      {evento.organizador.email}
+                      </p>
                     )}
-                    {ingresso.dataLimite && (
-                      <div className={styles.ticketDeadline}>
-                        Venda até: {formatarData(ingresso.dataLimite)}
-                      </div>
-                    )}
-                    <button
-                      className={styles.buyButton}
-                      onClick={() => handleComprarIngresso(ingresso)}
-                    >
-                      Comprar Ingresso
-                    </button>
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
+                  </div>
+                  {evento.Ingressos?.length > 0 && (
+                  <div className={styles.ticketCard}>
+                    <h3 className={styles.sidebarTitle}>🎫 Ingressos</h3>
+                    <div className={styles.ticketOptions}>
+                    {evento.Ingressos.map((ingresso, index) => (
+                      <div
+                      key={ingresso.ingressoId || index}
+                      className={styles.ticketOption}
+                      >
+                      <div className={styles.ticketHeader}>
+                        <div className={styles.ticketName}>{ingresso.nome}</div>
+                        <div className={styles.ticketPrice}>
+                        {formatarPreco(ingresso.preco)}
+                        </div>
+                      </div>
+                      {ingresso.descricao && (
+                        <div className={styles.ticketDescription}>
+                        {ingresso.descricao}
+                        </div>
+                      )}
+                      {ingresso.dataLimite && (
+                        <div className={styles.ticketDeadline}>
+                        Venda até: {formatarData(ingresso.dataLimite)}
+                        </div>
+                      )}
+                      <div className={styles.qtyRow}>
+                        <label className="textQ">Quantidade:</label>
+                        <input
+                        type="number"
+                        min={1}
+                        max={ingresso.quantidade || 9999}
+                        value={quantidades[ingresso.ingressoId] || 1}
+                        onChange={(e) =>
+                          handleQuantidadeChange(ingresso.ingressoId, e.target.value)
+                        }
+                        className={styles.qtyInput}
+                        style={{ marginLeft: 8 }}
+                        />
+                      </div>
+
+                      <div className={styles.ticketActionsRow}>
+                        <button
+                        className={styles.addToCartButton}
+                        onClick={() => adicionarAoCarrinho(ingresso)}
+                        >
+                        Adicionar ao carrinho
+                        </button>
+                        
+                      </div>
+                      </div>
+                    ))}
+                    </div>
+                  </div>
+                  )}
+          
           {evento.localizacao && (
             <div className={styles.locationCard}>
               <h3 className={styles.sidebarTitle}>📍 Localização</h3>
@@ -463,6 +616,27 @@ const Eventos = () => {
         </div>
       </div>
       <Footer />
+      {/* Modal de confirmação de compra (simples) */}
+      {modalAberto && ingressoSelecionado && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h3>Confirmar compra</h3>
+            <p>
+              Você está prestes a comprar <strong>{quantidadeSelecionada}</strong> x{' '}
+              <strong>{ingressoSelecionado.nome}</strong> por{' '}
+              <strong>{formatarPreco(ingressoSelecionado.preco)}</strong> cada.
+            </p>
+            <div className={styles.modalActions}>
+              <button onClick={fecharModal} className={styles.cancelButton}>
+                Cancelar
+              </button>
+              <button onClick={confirmarCompra} className={styles.confirmButton} disabled={compraLoading}>
+                {compraLoading ? 'Aguarde...' : 'Confirmar compra'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

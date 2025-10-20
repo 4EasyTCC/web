@@ -6,6 +6,7 @@ import styles from './UserProfile.module.css';
 const UserProfile = ({ userData, isScrolled }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentUserData, setCurrentUserData] = useState(userData);
+  const [cartCount, setCartCount] = useState(0);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
@@ -90,6 +91,35 @@ const UserProfile = ({ userData, isScrolled }) => {
     }, 100);
   };
 
+  // Cart badge handling: read from localStorage and listen for changes
+  useEffect(() => {
+    const updateCartCount = () => {
+      try {
+        const cartStr = localStorage.getItem('cart');
+        const cart = cartStr ? JSON.parse(cartStr) : [];
+        const count = Array.isArray(cart) ? cart.reduce((s, it) => s + (it.quantidade || 1), 0) : 0;
+        setCartCount(count);
+      } catch (err) {
+        setCartCount(0);
+      }
+    };
+
+    updateCartCount();
+
+    const onCartChanged = () => setTimeout(updateCartCount, 50);
+    window.addEventListener('cartChanged', onCartChanged);
+    window.addEventListener('storage', onCartChanged);
+
+    return () => {
+      window.removeEventListener('cartChanged', onCartChanged);
+      window.removeEventListener('storage', onCartChanged);
+    };
+  }, []);
+
+  const handleCartClick = () => {
+    navigate('/shopping-cart');
+  };
+
   // ✅ CORREÇÃO: Função MELHORADA para obter URL do avatar
   const getAvatarUrl = () => {
     if (!currentUserData) {
@@ -148,6 +178,45 @@ const UserProfile = ({ userData, isScrolled }) => {
  
   return (
     <div className={styles.userProfile} ref={dropdownRef}>
+      <button
+        className={styles.cartButton}
+        onClick={handleCartClick}
+        aria-label="Carrinho de compras"
+        title="Carrinho"
+      >
+        <svg className={styles.cartIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path
+            d="M6 6H21L20 12H8L6 6Z"
+            stroke="#2816b2"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M6 6L4 2H2"
+            stroke="#2816b2"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M10 19C10 20.1046 9.10457 21 8 21C6.89543 21 6 20.1046 6 19C6 17.8954 6.89543 17 8 17C9.10457 17 10 17.8954 10 19Z"
+            stroke="#2816b2"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M20 19C20 20.1046 19.1046 21 18 21C16.8954 21 16 20.1046 16 19C16 17.8954 16.8954 17 18 17C19.1046 17 20 17.8954 20 19Z"
+            stroke="#2816b2"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
+      </button>
+
       <button 
         className={`${styles.profileTrigger} ${isScrolled ? styles.scrolled : ''} ${isDropdownOpen ? styles.active : ''}`}
         onClick={toggleDropdown}

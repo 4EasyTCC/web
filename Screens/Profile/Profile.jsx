@@ -24,6 +24,22 @@ export default function Profile() {
     carregarPerfil();
   }, []);
 
+  useEffect(() => {
+    const updateCartCount = () => {
+      try {
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const countEl = document.getElementById('cart-count');
+        if (countEl) countEl.textContent = cart.reduce((s, it) => s + (it.quantidade || 0), 0);
+      } catch (e) {
+        // ignore
+      }
+    };
+
+    updateCartCount();
+    window.addEventListener('cartChanged', updateCartCount);
+    return () => window.removeEventListener('cartChanged', updateCartCount);
+  }, []);
+
   const garantirUrlCompleta = (avatarUrl) => {
     if (!avatarUrl) return null;
     if (avatarUrl.startsWith('http')) return avatarUrl;
@@ -219,6 +235,11 @@ export default function Profile() {
       <Header />
 
       <div className={styles.profileContainer}>
+        {/* Pequeno resumo do carrinho ao lado esquerdo do UserProfile */}
+        <div className={styles.cartSummarySmall} onClick={() => window.location.href = '/shopping-cart'}>
+          <div className={styles.cartIcon}>🛒</div>
+          <div className={styles.cartCount} id="cart-count">0</div>
+        </div>
         {/* Mensagens de feedback */}
         {erro && (
           <div className={styles.erroMensagem}>
