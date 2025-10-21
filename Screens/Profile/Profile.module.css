@@ -79,21 +79,4 @@
   }
 }
 
-/* Cart small summary */
-.cartSummarySmall {
-  position: absolute;
-  left: 24px;
-  top: 120px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  cursor:pointer;
-}
-.cartIcon { font-size: 20px }
-.cartCount {
-  background: #ef4444;
-  color: white;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-}
+/* Mini-carrinho removido do perfil - estilos excluídos */

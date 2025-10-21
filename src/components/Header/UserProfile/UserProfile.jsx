@@ -185,36 +185,7 @@ const UserProfile = ({ userData, isScrolled }) => {
         aria-label="Carrinho de compras"
         title="Carrinho"
       >
-        <svg className={styles.cartIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-          <path
-            d="M6 6H21L20 12H8L6 6Z"
-            stroke="#2816b2"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M6 6L4 2H2"
-            stroke="#2816b2"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M10 19C10 20.1046 9.10457 21 8 21C6.89543 21 6 20.1046 6 19C6 17.8954 6.89543 17 8 17C9.10457 17 10 17.8954 10 19Z"
-            stroke="#2816b2"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M20 19C20 20.1046 19.1046 21 18 21C16.8954 21 16 20.1046 16 19C16 17.8954 16.8954 17 18 17C19.1046 17 20 17.8954 20 19Z"
-            stroke="#2816b2"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <span className={styles.cartIcon} aria-hidden>🛒</span>
         {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
       </button>
 

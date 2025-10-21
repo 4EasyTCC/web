@@ -333,6 +333,29 @@
   transform: translateY(-1px);
 }
 
+/* Forçar visibilidade do ícone do carrinho e permitir controlar cor via currentColor */
+.cartIcon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  color: var(--primary-color) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
+.cartButton:active .cartIcon,
+.cartButton:focus .cartIcon {
+  outline: none;
+  opacity: 0.95;
+}
+/* Ensure SVG paths use the visible stroke color even if other rules override */
+.cartIcon path {
+  stroke: var(--primary-color) !important;
+  stroke-opacity: 1 !important;
+  visibility: visible !important;
+}
+
 
 .cartBadge {
   position: absolute;

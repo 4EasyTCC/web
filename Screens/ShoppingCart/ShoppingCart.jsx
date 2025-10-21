@@ -44,8 +44,6 @@ const ShoppingCart = () => {
 
     setLoading(true);
     try {
-      const purchases = JSON.parse(localStorage.getItem('purchases') || '[]');
-
       for (const item of cart) {
         const resp = await fetch(`http://localhost:3000/participar/evento/${item.ingressoId}`, {
           method: 'POST',
@@ -62,14 +60,21 @@ const ShoppingCart = () => {
         }
 
         const body = await resp.json().catch(() => ({}));
-        purchases.unshift({
-          eventoId: item.ingresso?.eventoId || body.eventoId || null,
-          ingressoId: item.ingressoId,
-          nome: item.nome,
-          quantidade: item.quantidade || 1,
-          preco: item.preco,
-          compradoEm: new Date().toISOString(),
-        });
+
+        // Se o backend retornou um registro de compra, usamos ele; senão, mantemos fallback mínimo
+        const compraData = body.participacao?.compra || null;
+
+        // Notificar que houve compra para atualizar ActivityTab via evento
+        window.dispatchEvent(new CustomEvent('purchaseRecorded', {
+          detail: {
+            eventoId: item.ingresso?.eventoId || body.eventoId || null,
+            ingressoId: item.ingressoId,
+            nome: item.nome,
+            quantidade: item.quantidade || 1,
+            preco: item.preco,
+            compradoEm: compraData ? compraData.createdAt : new Date().toISOString(),
+          }
+        }));
 
         try {
           const eventoId = body.eventoId || item.ingresso?.eventoId;
@@ -88,10 +93,9 @@ const ShoppingCart = () => {
         }
       }
 
-      localStorage.setItem('purchases', JSON.stringify(purchases));
-      localStorage.removeItem('cart');
-      window.dispatchEvent(new Event('cartChanged'));
-      window.dispatchEvent(new Event('purchasesChanged'));
+  // Limpar carrinho local e notificar mudança
+  localStorage.removeItem('cart');
+  window.dispatchEvent(new Event('cartChanged'));
 
       alert('Compra confirmada com sucesso!');
       navigate('/profile');

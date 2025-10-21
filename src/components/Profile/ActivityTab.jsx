@@ -1,73 +1,110 @@
-// components/Profile/ActivityTab.jsx
 import React, { useEffect, useState } from 'react';
 import styles from './ActivityTab.module.css';
+import { useNavigate } from 'react-router-dom';
 
 const ActivityTab = () => {
   const [atividades, setAtividades] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const carregarAtividades = () => {
-    const storedPurchases = JSON.parse(localStorage.getItem('purchases') || '[]');
-    // Cada purchase pode ter quantidade; agregamos por evento para mostrar quantidade total por evento
-    const aggregated = storedPurchases.reduce((acc, p) => {
-      const key = p.eventoId ? `${p.eventoId}` : `ingresso-${p.ingressoId}`;
-      if (!acc[key]) {
-        acc[key] = {
-          tipo: 'evento',
-          acao: 'comprou',
-          nome: p.nome,
-          data: p.compradoEm,
-          quantidade: p.quantidade || 1,
-          icon: '🎫',
-        };
-      } else {
-        acc[key].quantidade += p.quantidade || 1;
-        // manter a data mais recente como referência
-        if (new Date(p.compradoEm) > new Date(acc[key].data)) {
-          acc[key].data = p.compradoEm;
-        }
+  const carregarAtividadesBackend = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setAtividades([]);
+        setLoading(false);
+        return;
       }
-      return acc;
-    }, {});
 
-    const a = Object.values(aggregated);
-    // ordenar por data (mais recente primeiro)
-    a.sort((x, y) => new Date(y.data) - new Date(x.data));
-    setAtividades(a);
+      const res = await fetch('http://localhost:3000/perfil/convidado', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) {
+        throw new Error('Erro ao carregar atividades do servidor');
+      }
+
+      const body = await res.json();
+      const compras = body.comprasHistorico || [];
+
+      const mapped = compras.map(c => ({
+        key: `compra-${c.compraId}`,
+        tipo: 'compra',
+        acao: 'comprou',
+        nome: c.ingresso?.nome || c.ingressoId || 'Ingresso',
+        eventoNome: c.ingresso?.eventoNome,
+        quantidade: c.quantidade || 1,
+        data: c.compradoEm || c.compradoEm || c.compradoEm,
+        preco: c.valorTotal,
+        ingressoId: c.ingressoId,
+        eventoId: c.ingresso?.eventoId || c.eventoId,
+      }));
+
+      mapped.sort((a, b) => new Date(b.data) - new Date(a.data));
+      setAtividades(mapped);
+    } catch (err) {
+      console.error('Erro ao carregar atividades do backend:', err);
+      setError(err.message || 'Erro desconhecido');
+      setAtividades([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    carregarAtividades();
-    window.addEventListener('purchasesChanged', carregarAtividades);
-    return () => window.removeEventListener('purchasesChanged', carregarAtividades);
+    carregarAtividadesBackend();
+
+    const handler = (e) => {
+      carregarAtividadesBackend();
+    };
+
+    window.addEventListener('purchaseRecorded', handler);
+    return () => window.removeEventListener('purchaseRecorded', handler);
   }, []);
 
   const formatarData = (data) => {
-    return new Date(data).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+    try {
+      return new Date(data).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } catch (e) {
+      return '';
+    }
   };
+
+  if (loading) return <div className={styles.loading}>Carregando atividades...</div>;
 
   return (
     <div className={styles.activityContainer}>
       <h2>Atividade Recente</h2>
-      
+
+      {error && (
+        <div className={styles.errorBox}>
+          <strong>Erro:</strong> {error}
+        </div>
+      )}
+
       <div className={styles.activityList}>
-        {atividades.map((atividade, index) => (
-          <div key={index} className={styles.activityItem}>
-            <div className={styles.activityIcon}>
-              {atividade.icon}
-            </div>
+        {atividades.map((atividade) => (
+          <div key={atividade.key} className={styles.activityItem} onClick={() => atividade.eventoId && navigate(`/Eventos/${atividade.eventoId}`)} role="button" tabIndex={0}>
+            <div className={styles.activityIcon}>🎫</div>
             <div className={styles.activityContent}>
               <div className={styles.activityText}>
-                <strong>Você</strong> {atividade.acao} <strong>{atividade.nome}</strong>
+                <strong>Você</strong> {atividade.acao} <strong>{atividade.eventoNome || atividade.nome}</strong>
                 {atividade.quantidade && atividade.quantidade > 1 && (
                   <span> — {atividade.quantidade} unidades</span>
                 )}
               </div>
-              <div className={styles.activityDate}>
-                {formatarData(atividade.data)}
+              <div className={styles.activityMeta}>
+                <span className={styles.activityDate}>{formatarData(atividade.data)}</span>
+                {atividade.preco !== undefined && (
+                  <span className={styles.activityPrice}>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(atividade.preco)}</span>
+                )}
               </div>
             </div>
           </div>
@@ -76,8 +113,9 @@ const ActivityTab = () => {
 
       {atividades.length === 0 && (
         <div className={styles.emptyState}>
-          <p>🎯 Suas atividades aparecerão aqui</p>
-          <small>Participe de eventos e interaja com outros usuários para ver sua atividade</small>
+          <div className={styles.emptyIcon}>🎯</div>
+          <h3>Você ainda não realizou compras</h3>
+          <p>Compre ingressos nos eventos para ver sua atividade aqui.</p>
         </div>
       )}
     </div>

@@ -255,11 +255,7 @@ export default function Profile() {
       <Header />
 
       <div className={styles.profileContainer}>
-        {/* Pequeno resumo do carrinho ao lado esquerdo do UserProfile */}
-        <div className={styles.cartSummarySmall} onClick={() => window.location.href = '/shopping-cart'}>
-          <div className={styles.cartIcon}>🛒</div>
-          <div className={styles.cartCount} id="cart-count">0</div>
-        </div>
+        {/* Mini-carrinho removido daqui para manter apenas o carrinho no header */}
         {/* Mensagens de feedback */}
         {erro && (
           <div className={styles.erroMensagem}>
