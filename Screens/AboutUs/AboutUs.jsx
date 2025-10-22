@@ -1,7 +1,7 @@
 import React from 'react';
 import Footer from '@/components/Footer/Footer';
 import styles from "./AboutUs.module.css";
-import AlternativeHeader from '@/components/AlternativeHeader/AlternativeHeader';
+import Header from '@/components/Header/Header';
 import Rafael from '@images/team/Rafael.png';
 import Jorge from '@images/team/Jorge.png'
 import Leandro from '@images/team/Lele.png';
@@ -43,7 +43,7 @@ export default function AboutUs() {
 
   return (
     <>
-      <AlternativeHeader />
+      <Header />
 
       <main className={styles.mainContainer}>
         {/* Banner Hero Section */}

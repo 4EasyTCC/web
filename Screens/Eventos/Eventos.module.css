@@ -105,9 +105,10 @@
 
 .eventTitle {
     font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 3rem;
     font-weight: bold;
     line-height: 1.2;
+    color: #ffffff;
 }
 
 .eventCity {
@@ -282,6 +283,22 @@
     padding: 1.5rem;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.organizerCard[role="button"] {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.organizerCard[role="button"]:hover,
+.organizerCard[role="button"]:focus {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    outline: none;
+}
+
+.organizerCard[role="button"]:focus {
+    box-shadow: 0 0 0 4px rgba(74,58,255,0.12);
 }
 
 .organizerInfo {

@@ -16,6 +16,7 @@ import ShoppingCart from "../Screens/ShoppingCart/ShoppingCart.jsx";
 import PageSponsor from "../Screens/PageSponsor/PageSponsor.jsx";
 import PageColecoes from "../Screens/PageColecoes/PageColecoes.jsx";
 import Eventos from "../Screens/Eventos/Eventos.jsx";
+import Organizer from "../Screens/Organizer/Organizer.jsx";
 import SearchEvents from "../Screens/SearchEvents/SearchEvents.jsx";
 import SearchResults from "../Screens/SearchResults/SearchResults.jsx";
 import PageWrapper from "@/components/PageWrapper/PageWrapper";
@@ -165,6 +166,15 @@ function AnimatedRoutes() {
             element={
               <PageWrapper>
                 <Eventos />
+              </PageWrapper>
+            }
+          />
+
+          <Route
+            path="/Organizador/:id"
+            element={
+              <PageWrapper>
+                <Organizer />
               </PageWrapper>
             }
           />

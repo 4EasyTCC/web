@@ -4,7 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 const API_BASE = 'http://localhost:3000';
 
-const FavoriteButton = ({ eventoId, initialFavorited = false, size = 32 }) => {
+const FavoriteButton = ({ eventoId, initialFavorited = false, size = 32, targetId, targetType = 'evento', onToggle }) => {
+  // Backwards compatibility: if eventoId passed, use it as targetId and type 'evento'
+  const resolvedTargetId = targetId || eventoId;
+  const resolvedTargetType = targetType || (eventoId ? 'evento' : 'evento');
   const [favorited, setFavorited] = useState(initialFavorited);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -23,24 +26,49 @@ const FavoriteButton = ({ eventoId, initialFavorited = false, size = 32 }) => {
 
     setLoading(true);
     try {
-      if (!favorited) {
-        const res = await fetch(`${API_BASE}/favoritos`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ eventoId }),
-        });
-        if (!res.ok) throw new Error('Falha ao favoritar');
-        setFavorited(true);
+      if (!resolvedTargetId) throw new Error('Target ID não informado');
+
+  if (!favorited) {
+        // Create favorite depending on type
+        if (resolvedTargetType === 'organizador') {
+          const res = await fetch(`${API_BASE}/favoritos/organizadores`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ organizadorId: resolvedTargetId }),
+          });
+          if (!res.ok) throw new Error('Falha ao favoritar organizador');
+        } else {
+          const res = await fetch(`${API_BASE}/favoritos`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ eventoId: resolvedTargetId }),
+          });
+          if (!res.ok) throw new Error('Falha ao favoritar evento');
+        }
+  setFavorited(true);
+  if (typeof onToggle === 'function') onToggle(true);
       } else {
-        const res = await fetch(`${API_BASE}/favoritos/${eventoId}`, {
-          method: 'DELETE',
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (!res.ok) throw new Error('Falha ao remover favorito');
-        setFavorited(false);
+        if (resolvedTargetType === 'organizador') {
+          const res = await fetch(`${API_BASE}/favoritos/organizadores/${resolvedTargetId}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!res.ok) throw new Error('Falha ao remover favorito organizador');
+        } else {
+          const res = await fetch(`${API_BASE}/favoritos/${resolvedTargetId}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!res.ok) throw new Error('Falha ao remover favorito');
+        }
+  setFavorited(false);
+  if (typeof onToggle === 'function') onToggle(false);
       }
     } catch (err) {
       console.error(err);

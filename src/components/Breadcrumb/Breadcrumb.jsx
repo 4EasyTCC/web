@@ -51,6 +51,8 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
 
   // Verifica se estamos em uma página de evento individual
   const isEventPage = location.pathname.startsWith('/Eventos/') && pathnames.length === 2;
+  // Verifica se estamos em uma página de organizador individual
+  const isOrganizerPage = location.pathname.startsWith('/Organizador/') && pathnames.length === 2;
   
   // Verifica se estamos em uma subpágina de coleções
   const isColecaoSubPage = location.pathname.startsWith('/PageColecoes/') && pathnames.length >= 2;
@@ -123,7 +125,7 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
           });
         }
       }
-      // Se veio da lista geral de eventos
+    
       else if (previousPath === '/Eventos') {
         breadcrumbPaths.push({
           to: '/Eventos',
@@ -131,9 +133,9 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
           isLast: false
         });
       }
-      // Se veio do home ou outra página, não adicionamos nada extra
+      
       else if (previousPath === '/' || previousPath === '/home') {
-        // Mantém apenas Home > Detalhes do Evento
+        
       }
       // Se veio de outra página não mapeada
       else if (previousPathnames[0] && routeNames[previousPathnames[0]]) {
@@ -145,10 +147,79 @@ const Breadcrumb = ({ additionalPaths = [] }) => {
       }
     }
     
-    // Último item: Detalhes do Evento
+    
     breadcrumbPaths.push({
       to: location.pathname,
       displayName: 'Detalhes do Evento',
+      isLast: true
+    });
+  }
+  // Para páginas de organizador individual - comportamento similar ao evento
+  else if (isOrganizerPage) {
+    const organizerId = pathnames[1];
+    const previousPage = getPreviousValidPage ? getPreviousValidPage() : null;
+
+    if (previousPage && previousPage.pathname) {
+      const previousPath = previousPage.pathname;
+      const previousPathnames = previousPath.split('/').filter((x) => x);
+
+      if (previousPath === '/SearchEvents' || previousPath.startsWith('/SearchEvents?')) {
+        breadcrumbPaths.push({
+          to: previousPath,
+          displayName: 'Buscar Eventos',
+          isLast: false
+        });
+      } else if (previousPathnames[0] === 'profile') {
+        breadcrumbPaths.push({
+          to: { pathname: '/profile', state: { tab: 'preferencias' } },
+          displayName: 'Perfil',
+          isLast: false
+        });
+      } else if (previousPath.startsWith('/PageColecoes/')) {
+        const colecaoId = previousPathnames[1];
+        const subId = previousPathnames[2];
+
+        breadcrumbPaths.push({
+          to: '/PageColecoes',
+          displayName: 'Coleções',
+          isLast: false
+        });
+
+        if (colecaoId && dynamicData.PageColecoes[colecaoId]) {
+          breadcrumbPaths.push({
+            to: `/PageColecoes/${colecaoId}`,
+            displayName: dynamicData.PageColecoes[colecaoId],
+            isLast: false
+          });
+        }
+
+        if (subId) {
+          breadcrumbPaths.push({
+            to: `/PageColecoes/${colecaoId}/${subId}`,
+            displayName: 'Eventos',
+            isLast: false
+          });
+        }
+      } else if (previousPath === '/Eventos') {
+        breadcrumbPaths.push({
+          to: '/Eventos',
+          displayName: 'Eventos',
+          isLast: false
+        });
+      } else if (previousPath === '/' || previousPath === '/home') {
+        // nothing
+      } else if (previousPathnames[0] && routeNames[previousPathnames[0]]) {
+        breadcrumbPaths.push({
+          to: previousPath,
+          displayName: routeNames[previousPathnames[0]],
+          isLast: false
+        });
+      }
+    }
+
+    breadcrumbPaths.push({
+      to: location.pathname,
+      displayName: 'Detalhes do Organizador',
       isLast: true
     });
   }

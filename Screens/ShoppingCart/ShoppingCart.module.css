@@ -1,10 +1,24 @@
-/* ShoppingCart.module.css - Versão Sofisticada */
 .pageContainer {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f8f9fa;
 }
+
+.pageContainer::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("../../src/assets/images/placeholders/pattern.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  opacity: 0.1;
+  z-index: -1;
+}
+
 
 .mainContent {
   flex: 1;
@@ -289,7 +303,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Responsividade */
+
 @media (max-width: 968px) {
   .cartContent {
     grid-template-columns: 1fr;

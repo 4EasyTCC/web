@@ -55,21 +55,21 @@
 .carouselSection {
   width: 100%;
   display: flex;
-  justify-content: center; /* centraliza o bloco de 70% */
+  justify-content: center; 
   margin-bottom: 30px;
 }
 
 .carouselHeader {
-  width: 70%;               /* ocupa 70% do espaço */
+  width: 70%;              
   display: flex;
-  align-items: center;       /* alinha verticalmente */
-  justify-content: flex-start; /* fica à esquerda dentro dos 70% */
+  align-items: center;       
+  justify-content: flex-start; 
   gap: 12px;
 }
 
 
 
-/* Feature Section Styles */
+
 .featureSection {
   display: flex;
   justify-content: center;
@@ -204,7 +204,7 @@
   transform: translateY(-2px);
 }
 
-/* Responsive Styles */
+
 @media (max-width: 1024px) {
   .featureSection {
     flex-direction: column;
@@ -285,9 +285,7 @@
   }
 }
 
-/* ===================== */
-/* Estilos para Dropdown */
-/* ===================== */
+
 .periodoDropdown {
   display: inline-flex;
   align-items: center;
@@ -345,19 +343,19 @@
   color: #2816b2;
 }
 
-/* Ícone de check ao lado da opção */
+
 .periodoOption svg {
   margin-left: 8px;
   color: #2816b2;
 }
 
-/* Animação suave */
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-5px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsividade para o dropdown */
+
 @media (max-width: 480px) {
   .periodoDropdown {
     min-width: 100%;
