@@ -296,10 +296,9 @@ const Eventos = () => {
     }
   };
 
-  const formatarHora = (horaString) => {
-        if (!horaString) return "";
-        try {
-          const data = new Date(horaString);
+   if (!horaString) return "";
+        try {
+          const data = new Date(horaString);
     
           if (isNaN(data.getTime())) {
             const [hours, minutes] = horaString.split(":");
@@ -309,13 +308,13 @@ const Eventos = () => {
             return horaString;
           }
     
-          return data.toLocaleTimeString("pt-BR", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }) + 'h'; 
+          return data.toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }) + 'h'; 
     
-        } catch (error) {
-          console.error("Erro ao formatar hora:", error, horaString);
+        } catch (error) {
+          console.error("Erro ao formatar hora:", error, horaString);
           try {
             const [hours, minutes] = horaString.split(":");
             if (hours && minutes) {
@@ -325,8 +324,9 @@ const Eventos = () => {
           } catch (e) {
             return horaString;
           }
-        }
-      };
+        }
+      };
+      
   const formatarPreco = (preco) => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -435,34 +435,6 @@ const Eventos = () => {
 
       <div className={styles.container}>
         <div className={styles.mainContent}>
-          <section className={styles.descriptionSection}>
-            <h2 className={styles.sectionTitle}>Sobre o evento</h2>
-            <p className={styles.eventDescription}>
-              {evento.descEvento ||
-                "Este evento ainda não possui uma descrição detalhada."}
-            </p>
-            {evento.Midia && evento.Midia.length > 0 && (
-              <div className={styles.mediaGallery}>
-                <h3 className={styles.galleryTitle}>Galeria</h3>
-                <div className={styles.galleryGrid}>
-                  {evento.Midia.map((midia, index) => (
-                    <div
-                      key={midia.midiaId || index}
-                      className={styles.galleryItem}
-                    >
-                      <img
-                        src={resolveImageUrl(midia.url)}
-                        alt={`${evento.nomeEvento} - Imagem ${index + 1}`}
-                        onError={(e) => {
-                          e.target.src = "/placeholder-event.jpg";
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </section>
 
           <section className={styles.infoSection}>
             <h2 className={styles.sectionTitle}>Informações</h2>
@@ -538,7 +510,27 @@ const Eventos = () => {
         </div>
 
         <div className={styles.sidebar}>
-          <div className={styles.organizerCard}>
+          <div
+            className={styles.organizerCard}
+            role="button"
+            tabIndex={0}
+            aria-label={evento.organizador?.nome ? `Ver página do organizador ${evento.organizador.nome}` : 'Ver página do organizador'}
+            onClick={() => {
+              const orgId = evento.organizador?.organizadorId;
+              if (orgId) {
+                // navegar para o endereço completo conforme solicitado
+                window.location.href = `http://localhost:5173/Organizador/${orgId}`;
+              }
+            }}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                const orgId = evento.organizador?.organizadorId;
+                if (orgId) {
+                  window.location.href = `http://localhost:5173/Organizador/${orgId}`;
+                }
+              }
+            }}
+          >
             <h3 className={styles.sidebarTitle}>🎤 Produtor</h3>
             <div className={styles.organizerInfo}>
               <div className={styles.organizerLogo}>
@@ -547,26 +539,26 @@ const Eventos = () => {
                     src={resolveImageUrl(evento.organizador.avatarUrl)}
                     alt={evento.organizador.nome}
                     onError={(e) => {
-                        e.target.src = "/placeholder-avatar.jpg";
-                      }}
-                      />
-                    ) : (
-                      <span className={styles.organizerInitial}>
-                      {evento.organizador?.nome?.charAt(0).toUpperCase() || "O"}
-                      </span>
-                    )}
-                    </div>
-                    <div className={styles.organizerDetails}>
-                    <h4>{evento.organizador?.nome || "Organizador"}</h4>
-                    <p>Responsável pelo evento</p>
-                    {evento.organizador?.email && (
-                      <p className={styles.organizerEmail}>
-                      {evento.organizador.email}
-                      </p>
-                    )}
-                    </div>
-                  </div>
-                  </div>
+                      e.target.src = "/placeholder-avatar.jpg";
+                    }}
+                  />
+                ) : (
+                  <span className={styles.organizerInitial}>
+                    {evento.organizador?.nome?.charAt(0).toUpperCase() || "O"}
+                  </span>
+                )}
+              </div>
+              <div className={styles.organizerDetails}>
+                <h4>{evento.organizador?.nome || "Organizador"}</h4>
+                <p>Responsável pelo evento</p>
+                {evento.organizador?.email && (
+                  <p className={styles.organizerEmail}>
+                    {evento.organizador.email}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
                   {evento.Ingressos?.length > 0 && (
                   <div className={styles.ticketCard}>
                     <h3 className={styles.sidebarTitle}>🎫 Ingressos</h3>
