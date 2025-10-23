@@ -81,12 +81,11 @@ export default function Home() {
             { nome: "Games e Geek", valor: "Games e Geek" },
             { nome: "Infantil", valor: "Infantil" },
             { nome: "Moda e Beleza", valor: "Moda e Beleza" },
-            { nome: "Passeios e Tours", valor: "Passeios e Tours" },
+            { nome: "Arte, Cultura e Lazer", valor: "Arte, Cultura e Lazer" },
             {
-              nome: "Religião e Espiritualidade",
-              valor: "Religião e Espiritualidade",
+              nome: "Teatros e Espetáculos",
+              valor: "Teatros e Espetáculos",
             },
-            { nome: "Teatros e Espetáculos", valor: "Teatros e Espetáculos" },
           ].map((categoria) => (
             <div key={categoria.valor} className={styles.carouselWrapper}>
               <CategoryCarousel

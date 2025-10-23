@@ -10,7 +10,6 @@ const FiltroEventos = ({
   const categorias = [
     "Arte, Cultura e Lazer",
     "Congressos e Palestras",
-    "Cursos e Workshops",
     "Esporte",
     "Festas e Shows",
     "Gastronomia",
@@ -18,9 +17,6 @@ const FiltroEventos = ({
     "Grátis",
     "Infantil",
     "Moda e Beleza",
-    "Passeios e Tours",
-    "Religião e Espiritualidade",
-    "Saúde e Bem-Estar",
     "Teatros e Espetáculos",
   ];
 
@@ -42,13 +38,6 @@ const FiltroEventos = ({
     onFiltroChange({ tipo });
   };
 
-  
-
-
-
-  // A LÓGICA DE 'handleClickOutside' E 'useEffect' FOI REMOVIDA
-  // Pois o componente pai já gerencia o estado 'mostrarSugestoes'
-  // de forma eficiente.
 
   return (
     <div className={styles.filtroContainer}>

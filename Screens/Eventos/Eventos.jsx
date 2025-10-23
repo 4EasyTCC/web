@@ -296,37 +296,40 @@ const Eventos = () => {
     }
   };
 
-   if (!horaString) return "";
-        try {
-          const data = new Date(horaString);
-    
-          if (isNaN(data.getTime())) {
-            const [hours, minutes] = horaString.split(":");
-            if (hours && minutes) {
-              return `${hours}:${minutes}h`;
-            }
-            return horaString;
-          }
-    
-          return data.toLocaleTimeString("pt-BR", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }) + 'h'; 
-    
-        } catch (error) {
-          console.error("Erro ao formatar hora:", error, horaString);
-          try {
-            const [hours, minutes] = horaString.split(":");
-            if (hours && minutes) {
-              return `${hours}:${minutes}h`;
-            }
-            return horaString;
-          } catch (e) {
-            return horaString;
-          }
-        }
-      };
-      
+
+const formatarHora = (horaString) => {
+  if (!horaString) return "";
+  try {
+    const data = new Date(horaString);
+
+    if (isNaN(data.getTime())) {
+      const [hours, minutes] = horaString.split(":");
+      if (hours && minutes) {
+        return `${hours}:${minutes}h`;
+      }
+      return horaString;
+    }
+
+    return (
+      data.toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }) + "h"
+    );
+  } catch (error) {
+    console.error("Erro ao formatar hora:", error, horaString);
+    try {
+      const [hours, minutes] = horaString.split(":");
+      if (hours && minutes) {
+        return `${hours}:${minutes}h`;
+      }
+      return horaString;
+    } catch (e) {
+      return horaString;
+    }
+  }
+};
+
   const formatarPreco = (preco) => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",

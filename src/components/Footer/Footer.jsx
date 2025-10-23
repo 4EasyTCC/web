@@ -26,11 +26,9 @@ export default function Footer() {
     return () => window.removeEventListener('scroll', toggleVisible);
   }, []);
 
-  // Mapeamento de categorias para IDs (baseado no PageColecoes)
   const categoryToIdMap = {
     'Arte, Cultura e Lazer': 1,
     'Congressos e Palestras': 2,
-    'Cursos e Workshops': 3,
     'Esporte': 4,
     'Festas e Shows': 5,
     'Gastronomia': 6,
@@ -38,9 +36,6 @@ export default function Footer() {
     'Grátis': 8,
     'Infantil': 9,
     'Moda e Beleza': 10,
-    'Passeios e Tours': 11,
-    'Religião e Espiritualidade': 12,
-    'Saúde e Bem-Estar': 13,
     'Teatros e Espetáculos': 14
   };
 
@@ -113,7 +108,6 @@ export default function Footer() {
               {[
                 'Arte, Cultura e Lazer',
                 'Congressos e Palestras',
-                'Cursos e Workshops',
                 'Esporte',
                 'Festas e Shows',
                 'Gastronomia',
@@ -121,9 +115,6 @@ export default function Footer() {
                 'Grátis',
                 'Infantil',
                 'Moda e Beleza',
-                'Passeios e Tours',
-                'Religião e Espiritualidade',
-                'Saúde e Bem-Estar',
                 'Teatros e Espetáculos'
               ].map((category, index) => {
                 const categoryId = categoryToIdMap[category];

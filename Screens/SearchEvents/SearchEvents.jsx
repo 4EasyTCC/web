@@ -176,16 +176,33 @@ const SearchEvents = () => {
     }
   };
 
-  const formatarHora = (horaString) => {
-    if (!horaString) return "";
-    try {
-      const [hours, minutes] = horaString.split(":");
-      return `${hours}:${minutes}h`;
-    } catch (error) {
-      console.error("Erro ao formatar hora:", error);
-      return "";
-    }
-  };
+const formatarHora = (horaString) => {
+    if (!horaString) return "";
+    try {
+      // Cria um objeto Date a partir da string
+      const data = new Date(horaString);
+
+      // Se a data for inválida, tenta o split simples como fallback
+      if (isNaN(data.getTime())) {
+        const [hours, minutes] = horaString.split(":");
+        if (hours && minutes) {
+          return `${hours}:${minutes}h`;
+        }
+        return horaString; // Retorna a string original se tudo falhar
+      }
+
+      return (
+        data.toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }) + "h"
+      );
+    } catch (error) {
+      console.error("Erro ao formatar hora:", error, horaString);
+      return horaString; // Retorna a string original em caso de erro
+    }
+  };
+
 
   const getPrecoMinimo = (ingressos) => {
     if (!ingressos || !Array.isArray(ingressos) || ingressos.length === 0) {
@@ -417,9 +434,6 @@ const SearchEvents = () => {
                               }}
                               loading="lazy"
                             />
-                            <div className={styles.eventId}>
-                              ID: {evento.eventoId}
-                            </div>
                             {temIngressoGratis && (
                               <div className={styles.gratisBadge}>Grátis</div>
                             )}
