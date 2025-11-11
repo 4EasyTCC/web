@@ -137,6 +137,23 @@ export default function PageCadastro() {
     }
   };
 
+  const preencherExemplo = () => {
+    // Preenche o formulário com dados de exemplo (formato já formatado)
+    setFormData({
+      nome: "João da Silva",
+      cpf: "123.456.789-09",
+      email: "joao.silva@example.com",
+      senha: "Senha123",
+      confirmarSenha: "Senha123",
+      telefone: "(11) 91234-5678",
+      genero: "Masculino",
+      dataNascimento: "1990-05-15",
+      endereco: "Rua Exemplo, 123",
+      cidade: "São Paulo",
+      cep: "01234-567",
+    });
+  };
+
   return (
     <div className={styles.pageContainer}>
       <Header />
@@ -301,13 +318,24 @@ export default function PageCadastro() {
 
               {error && <div className={styles.errorMessage}>{error}</div>}
 
-              <button
-                type="submit"
-                className={styles.cadastroButton}
-                disabled={loading}
-              >
-                {loading ? "Cadastrando..." : "Cadastrar"}
-              </button>
+              <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                <button
+                  type="button"
+                  onClick={preencherExemplo}
+                  className={styles.loginLink}
+                  aria-label="Preencher formulário com exemplo"
+                >
+                  Preencher Exemplo
+                </button>
+
+                <button
+                  type="submit"
+                  className={styles.cadastroButton}
+                  disabled={loading}
+                >
+                  {loading ? "Cadastrando..." : "Cadastrar"}
+                </button>
+              </div>
 
               <div className={styles.loginContainer}>
                 <span>Já tem conta? </span>

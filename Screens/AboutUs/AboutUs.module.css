@@ -3,6 +3,7 @@
 .mainContainer {
   padding: 0;
   overflow-x: hidden;
+  margin-top: 2rem;
 }
 
 /* Hero Section */

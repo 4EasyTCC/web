@@ -2,10 +2,9 @@ import React, { useRef } from "react";
 import styles from "./FiltroEventos.module.css";
 
 const FiltroEventos = ({
-  filtros,
-  onFiltroChange,
-  onLimparFiltros,
-  
+  filtros = { categoria: [], preco: 'qualquer', tipo: 'qualquer' },
+  onFiltroChange = () => {},
+  onLimparFiltros = () => {},
 }) => {
   const categorias = [
     "Arte, Cultura e Lazer",
@@ -23,19 +22,36 @@ const FiltroEventos = ({
 
 
   const handleCategoriaChange = (categoria) => {
-    const novasCategorias = filtros.categoria.includes(categoria)
-      ? filtros.categoria.filter((c) => c !== categoria)
-      : [...filtros.categoria, categoria];
+    const atual = Array.isArray(filtros.categoria) ? filtros.categoria : [];
+    const set = new Set(atual);
+    if (set.has(categoria)) set.delete(categoria);
+    else set.add(categoria);
 
-    onFiltroChange({ categoria: novasCategorias });
+    // If the user toggles the special "Grátis" category, keep the preco filter in sync
+    const novoArray = Array.from(set);
+    if (categoria === "Grátis") {
+      if (set.has("Grátis")) {
+        // foi marcado -> garantir que preco esteja em 'gratis'
+        onFiltroChange({ categoria: novoArray, preco: "gratis" });
+      } else {
+        // foi desmarcado -> só resetar preco se o preco atual for 'gratis'
+        if (String(filtros.preco) === "gratis") {
+          onFiltroChange({ categoria: novoArray, preco: "qualquer" });
+        } else {
+          onFiltroChange({ categoria: novoArray });
+        }
+      }
+    } else {
+      onFiltroChange({ categoria: novoArray });
+    }
   };
 
   const handlePrecoChange = (preco) => {
-    onFiltroChange({ preco });
+    onFiltroChange({ preco: String(preco) });
   };
 
   const handleTipoChange = (tipo) => {
-    onFiltroChange({ tipo });
+    onFiltroChange({ tipo: String(tipo) });
   };
 
 
@@ -51,7 +67,7 @@ const FiltroEventos = ({
             <label key={categoria} className={styles.checkboxLabel}>
               <input
                 type="checkbox"
-                checked={filtros.categoria.includes(categoria)}
+                checked={Array.isArray(filtros.categoria) && filtros.categoria.includes(categoria)}
                 onChange={() => handleCategoriaChange(categoria)}
                 aria-label={`Filtrar por ${categoria}`}
               />
@@ -71,8 +87,8 @@ const FiltroEventos = ({
               type="radio"
               name="preco"
               value="qualquer"
-              checked={filtros.preco === "qualquer"}
-              onChange={() => handlePrecoChange("qualquer")}
+              checked={String(filtros.preco) === "qualquer"}
+              onChange={(e) => handlePrecoChange(e.target.value)}
             />
             <span className={styles.radioCustom}></span>
             Qualquer preço
@@ -82,8 +98,8 @@ const FiltroEventos = ({
               type="radio"
               name="preco"
               value="gratis"
-              checked={filtros.preco === "gratis"}
-              onChange={() => handlePrecoChange("gratis")}
+              checked={String(filtros.preco) === "gratis"}
+              onChange={(e) => handlePrecoChange(e.target.value)}
             />
             <span className={styles.radioCustom}></span>
             Grátis
@@ -93,8 +109,8 @@ const FiltroEventos = ({
               type="radio"
               name="preco"
               value="pago"
-              checked={filtros.preco === "pago"}
-              onChange={() => handlePrecoChange("pago")}
+              checked={String(filtros.preco) === "pago"}
+              onChange={(e) => handlePrecoChange(e.target.value)}
             />
             <span className={styles.radioCustom}></span>
             Pago
@@ -111,8 +127,8 @@ const FiltroEventos = ({
               type="radio"
               name="tipo"
               value="qualquer"
-              checked={filtros.tipo === "qualquer"}
-              onChange={() => handleTipoChange("qualquer")}
+              checked={String(filtros.tipo) === "qualquer"}
+              onChange={(e) => handleTipoChange(e.target.value)}
             />
             <span className={styles.radioCustom}></span>
             Qualquer tipo
@@ -122,8 +138,8 @@ const FiltroEventos = ({
               type="radio"
               name="tipo"
               value="presencial"
-              checked={filtros.tipo === "presencial"}
-              onChange={() => handleTipoChange("presencial")}
+              checked={String(filtros.tipo) === "presencial"}
+              onChange={(e) => handleTipoChange(e.target.value)}
             />
             <span className={styles.radioCustom}></span>
             Presencial
@@ -133,8 +149,8 @@ const FiltroEventos = ({
               type="radio"
               name="tipo"
               value="online"
-              checked={filtros.tipo === "online"}
-              onChange={() => handleTipoChange("online")}
+              checked={String(filtros.tipo) === "online"}
+              onChange={(e) => handleTipoChange(e.target.value)}
             />
             <span className={styles.radioCustom}></span>
             Online
@@ -143,6 +159,7 @@ const FiltroEventos = ({
       </div>
 
       <button
+        type="button"
         className={styles.limparBtn}
         onClick={onLimparFiltros}
         aria-label="Limpar todos os filtros"

@@ -91,16 +91,7 @@ export default function Footer() {
 
         {/* Seção de links */}
         <div className={styles.linksGrid}>
-          <div className={styles.linksColumn}>
-            <h4>Cidades</h4>
-            <ul>
-              {['São Paulo', 'Rio de Janeiro', 'Belo Horizonte', 'Brasília', 'Curitiba'].map((city, index) => (
-                <li key={index}>
-                  <a href="#" className={styles.link}>{city}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
+
 
           <div className={styles.linksColumn}>
             <h4>Categorias</h4>
@@ -143,7 +134,7 @@ export default function Footer() {
                 <Link to="/Terms" className={styles.link}>Termos de Uso</Link>
               </li>
               <li>
-                <Link to="/Contact" className={styles.link}>Contato</Link>
+                <Link to="/PageSponsor" className={styles.link}>Parcerias</Link>
               </li>
               <li>
                 <Link to="/Feedback" className={styles.link}>SAC</Link>

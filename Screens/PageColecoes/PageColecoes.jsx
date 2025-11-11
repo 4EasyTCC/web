@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from "./PageColecoes.module.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 import CategoryCarousel from "@/components/CategoryCarousel/CategoryCarousel";
 
 export default function PageColecoes() {
@@ -17,7 +16,6 @@ export default function PageColecoes() {
   const collections = [
     { id: 1, name: "Arte, Cultura e Lazer", category: "Arte, Cultura e Lazer" },
     { id: 2, name: "Congressos e Palestras", category: "Congressos e Palestras" },
-    { id: 3, name: "Cursos e Workshops", category: "Cursos e Workshops" },
     { id: 4, name: "Esporte", category: "Esporte" },
     { id: 5, name: "Festas e Shows", category: "Festas e Shows" },
     { id: 6, name: "Gastronomia", category: "Gastronomia" },
@@ -25,9 +23,6 @@ export default function PageColecoes() {
     { id: 8, name: "Grátis", category: "Grátis" },
     { id: 9, name: "Infantil", category: "Infantil" },
     { id: 10, name: "Moda e Beleza", category: "Moda e Beleza" },
-    { id: 11, name: "Passeios e Tours", category: "Passeios e Tours" },
-    { id: 12, name: "Religião e Espiritualidade", category: "Religião e Espiritualidade" },
-    { id: 13, name: "Saúde e Bem-Estar", category: "Saúde e Bem-Estar" },
     { id: 14, name: "Teatros e Espetáculos", category: "Teatros e Espetáculos" }
   ];
 
@@ -59,14 +54,6 @@ export default function PageColecoes() {
           <path d="M2 3h20"></path>
           <path d="M21 3v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"></path>
           <rect x="1" y="13" width="22" height="8" rx="2"></rect>
-        </svg>
-      ),
-      "Cursos e Workshops": (
-        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-          <line x1="12" y1="7" x2="12" y2="13"></line>
-          <line x1="9" y1="10" x2="15" y2="10"></line>
         </svg>
       ),
       "Esporte": (
@@ -128,29 +115,6 @@ export default function PageColecoes() {
           <path d="M8 11V6a4 4 0 0 1 8 0v5" />
         </svg>
       ),
-      "Passeios e Tours": (
-        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 13v8" />
-          <path d="M12 3v3" />
-          <path d="M4 6a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h13a2 2 0 0 0 1.152-.365l3.424-2.317a1 1 0 0 0 0-1.635l-3.424-2.318A2 2 0 0 0 17 6z" />
-        </svg>
-      ),
-      "Religião e Espiritualidade": (
-        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M10 9h4" />
-          <path d="M12 7v5" />
-          <path d="M14 22v-4a2 2 0 0 0-4 0v4" />
-          <path d="M18 22V5.618a1 1 0 0 0-.553-.894l-4.553-2.277a2 2 0 0 0-1.788 0L6.553 4.724A1 1 0 0 0 6 5.618V22" />
-          <path d="m18 7 3.447 1.724a1 1 0 0 1 .553.894V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9.618a1 1 0 0 1 .553-.894L6 7" />
-        </svg>
-      ),
-      "Saúde e Bem-Estar": (
-        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M12 8v8"></path>
-          <path d="M8 12h8"></path>
-        </svg>
-      ),
       "Teatros e Espetáculos": (
         <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -173,8 +137,7 @@ export default function PageColecoes() {
   if (isDetailView && currentCollection) {
     return (
       <div className={styles.pageContainer}>
-        <Header />
-        <Breadcrumb additionalPaths={[
+        <Header customBreadcrumbs={[
           { displayName: currentCollection?.name || `Coleção ${id}`, to: `/PageColecoes/${id}` }
         ]} />
         <div className={styles.backgroundPattern}></div>
@@ -213,7 +176,6 @@ export default function PageColecoes() {
   return (
     <div className={styles.pageContainer}>
       <Header />
-      <Breadcrumb />
       <div className={styles.backgroundPattern}></div>
 
       <main className={styles.mainContent}>

@@ -16,7 +16,7 @@ const SearchEvents = () => {
 
   const initialCategory = searchParams.get("categoria");
   const initialFilters = {
-    categoria: initialCategory ? initialCategory.split(",") : [],
+    categoria: initialCategory ? initialCategory.split("|") : [],
     preco: searchParams.get("preco") || "qualquer",
     tipo: searchParams.get("tipo") || "qualquer",
     localizacao: searchParams.get("localizacao") || "",
@@ -43,7 +43,8 @@ const SearchEvents = () => {
         const queryParams = new URLSearchParams();
 
         if (filtros.categoria.length > 0) {
-          queryParams.append("categoria", filtros.categoria.join(","));
+          // Use | as separator to avoid splitting on category names with commas
+          queryParams.append("categoria", filtros.categoria.join("|"));
         }
         if (filtros.preco !== "qualquer")
           queryParams.append("preco", filtros.preco);
@@ -125,7 +126,8 @@ const SearchEvents = () => {
     const params = new URLSearchParams();
 
     if (filtros.categoria.length > 0) {
-      params.set("categoria", filtros.categoria.join(","));
+      // Use | as separator to avoid splitting on category names with commas
+      params.set("categoria", filtros.categoria.join("|"));
     }
     if (filtros.preco !== "qualquer") params.set("preco", filtros.preco);
     if (filtros.tipo !== "qualquer") params.set("tipo", filtros.tipo);
@@ -312,10 +314,6 @@ const formatarHora = (horaString) => {
     <>
       <Header />
       <div className={styles.pageContainer}>
-        <div className={styles.breadcrumb}>
-          <span>Home</span> &gt; <span>Encontre eventos</span>
-        </div>
-
         <div className={styles.mainContent}>
           <h1 className={styles.title}>Encontre eventos</h1>
 

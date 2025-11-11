@@ -114,10 +114,6 @@ const ShoppingCart = () => {
       <Header />
       
       <main className={styles.mainContent}>
-        <div className={styles.breadcrumb}>
-          <span>Home</span> &gt; <span>Carrinho</span>
-        </div>
-
         <div className={styles.cartContainer}>
           <div className={styles.cartHeader}>
             <h1 className={styles.title}>Meu Carrinho</h1>
